@@ -23,6 +23,7 @@ I'm always open to collaboration and networking. Feel free to reach out to me on
 - [LinkedIn](https://www.linkedin.com/in/tri-tac-le-a918a2236/)
 - [Instagram](https://www.instagram.com/tri_le4/)
 ## 📫 Contact
-You can email me at: tritac.le@gmail.com
+Email: tritac.le@gmail.com
+Phone: +47xxxxxxxx
 
 Thanks for stopping by! 😊
