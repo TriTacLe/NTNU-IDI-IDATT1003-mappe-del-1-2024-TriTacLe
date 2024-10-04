@@ -25,4 +25,5 @@ I'm always open to collaboration and networking. Feel free to reach out to me on
 ## 📫 Contact
 - Email: tritac.le@gmail.com
 - Phone: +47XXXXXXXX
+
 Thanks for stopping by! 😊
