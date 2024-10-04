@@ -3,7 +3,6 @@ public class test {
         System.err.println("hello world");
         
         System.err.println("hello world");
-        System.err.println("hello world");
 
     }
 }
