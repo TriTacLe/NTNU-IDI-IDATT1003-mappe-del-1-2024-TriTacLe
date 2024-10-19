@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class Vare {
+public class Ingredient {
     // Attributter
     private final String name;
     private double quantity;
@@ -16,7 +16,7 @@ public class Vare {
      * @param bestBeforDate
      * @param pricePerUnit
      */
-    public Vare (String name, double quantity, String unit, Date bestBeforDate, double pricePerUnit) {
+    public Ingredient (String name, double quantity, String unit, Date bestBeforDate, double pricePerUnit) {
         if(name == null || name.isEmpty()) {throw new IllegalArgumentException("Navn kan ikke være tomt");}
         if(quantity < 0) {throw new IllegalArgumentException("Mengden kan ikke være tomt");}
         if(unit == null || unit.isEmpty()) {throw new IllegalArgumentException("Enheten kan ikke være tomt");}
