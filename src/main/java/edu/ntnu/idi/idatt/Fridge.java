@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Fridge {
@@ -46,8 +47,15 @@ public class Fridge {
         System.out.println(items);
     }
 
-    public void printExpiredItems(){
-
+    public ArrayList printExpiredItems(){
+        ArrayList<Item> expiredItems = new ArrayList<Item>();;
+        for (Item item : items) {
+            if (item.getExpirationDate().isBefore(LocalDate.now())){
+                expiredItems.add(item);
+                System.out.println(item.getName() + " " + item.getExpirationDate());
+            }
+        }
+        return expiredItems;
     }
 
     public double totalValue(){

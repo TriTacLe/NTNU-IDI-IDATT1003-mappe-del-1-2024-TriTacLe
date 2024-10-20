@@ -6,12 +6,10 @@ public class test {
     public static void main(String[] args) {
 
         Fridge fridge = new Fridge();
-
-        /*DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDate date = LocalDate.parse(userInput, dateFormat);    
-        */
         
         fridge.addItem(new Item("Melk", 4, "liter", LocalDate.of(2024, 12, 15), 30));
+        //expired item
+        fridge.addItem(new Item("Eple", 2, "stk", LocalDate.of(2, 12, 15), 20));
         //fridge.addItem(new Item("Ost", 2, "Kg", 20));
 
         System.out.println("Dato idag " + LocalDate.now());
@@ -25,7 +23,9 @@ public class test {
         //remove item
         double quantity = 1;
         fridge.removeItem("Melk", quantity);
-        System.err.print("Fridge etter å ha fjernet melk: "); fridge.printFridge();
+        System.err.print("Fridge etter å ha fjernet 1 melk: "); fridge.printFridge();
+
+        System.out.println("utgåtte varer: " + fridge.printExpiredItems());
 
         //total price
         System.err.println("Total pris: " + fridge.totalValue());

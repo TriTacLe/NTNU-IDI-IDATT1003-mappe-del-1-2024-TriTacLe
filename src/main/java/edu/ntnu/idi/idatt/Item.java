@@ -30,10 +30,12 @@ public class Item {
         if(unit == null || unit.isEmpty()) {
             throw new IllegalArgumentException("Unit cannot be empty");
         }
+        /*
         if(expirationDate == null || expirationDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Best before date cannot be in the past");
         }
-        
+        */
+
         if(pricePerUnit < 0) {
             throw new IllegalArgumentException("Price per unit cannot be negative");
         }
@@ -55,7 +57,6 @@ public class Item {
     //oppdaterer mengden
     public void setQuantity(double quantity){
         this.quantity = quantity;
-
     }
 
     public LocalDate getExpirationDate(){
@@ -76,5 +77,4 @@ public class Item {
         return name + " " + quantity + " " + unit + " " + expirationDate + " " + pricePerUnit;
         
     }
-    
 }
