@@ -1,22 +1,27 @@
 //import static org.junit.Assert.assertEquals;
 //import org.junit.Test;
-import java.time.LocalDate;
 
 
 public class test {
     public static void main(String[] args) {
-        // Get today's date
-        LocalDate today = LocalDate.now();
-        System.out.println("Today's date: " + today);  // Debugging output
 
-        // Set best before date as 10 days from today
-        LocalDate bestBeforeDate = today.plusDays(1200);
-        System.out.println("Best before date: " + bestBeforeDate);  // Debugging output
+        Fridge fridge = new Fridge();
 
-        // Create a new Item object
-        Item apple = new Item("Apple", 12, "pieces", bestBeforeDate, 3.0);
+        fridge.addItem(new Item("Melk", 4, "liter", 30));
+        fridge.addItem(new Item("Ost", 2, "Kg", 20));
 
-        // Output the object and its attributes
-        System.out.println(apple);
+        //add
+        System.out.print("Fridge: ");fridge.printFridge();
+
+        //find
+        System.out.println("Melk: " + fridge.findItem("Melk"));
+        
+        //remove item
+        double quantity = 1;
+        fridge.removeItem("Melk", quantity);
+        System.err.print("Fridge etter å ha fjernet melk: "); fridge.printFridge();
+
+        //total price
+        System.err.println("Total pris: " + fridge.totalValue());
     }
 }   
