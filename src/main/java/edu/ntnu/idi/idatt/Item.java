@@ -1,13 +1,13 @@
 //import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Item {
     // Attributter
     private final String name;
     private double quantity;
     private final String unit;
-    //private LocalDate expirationDate;
-    private Date expirationDate;
+    private LocalDate expirationDate;
+    //private Date expirationDate;
     private double pricePerUnit;
 
     /**
@@ -18,8 +18,8 @@ public class Item {
      * @param expirationDate
      * @param pricePerUnit
      */
-    //public Item (String name, double quantity, String unit,/*  Date expirationDate */, double pricePerUnit) {
-    public Item (String name, double quantity, String unit, double pricePerUnit) {
+    public Item (String name, double quantity, String unit, LocalDate expirationDate, double pricePerUnit) {
+    //public Item (String name, double quantity, String unit, double pricePerUnit) {
         //Input validering
         if(name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty");
@@ -30,17 +30,17 @@ public class Item {
         if(unit == null || unit.isEmpty()) {
             throw new IllegalArgumentException("Unit cannot be empty");
         }
-        /*if(expirationDate == null || expirationDate.isBefore(Date.now())) {
+        if(expirationDate == null || expirationDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Best before date cannot be in the past");
         }
-        */
+        
         if(pricePerUnit < 0) {
             throw new IllegalArgumentException("Price per unit cannot be negative");
         }
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
-        //this.expirationDate = expirationDate;
+        this.expirationDate = expirationDate;
         this.pricePerUnit = pricePerUnit;
     }
     //getters
@@ -58,7 +58,7 @@ public class Item {
 
     }
 
-    public Date getExpirationDate(){
+    public LocalDate getExpirationDate(){
         return expirationDate;
     }
 
@@ -73,8 +73,8 @@ public class Item {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return name + " " + quantity + " " + unit + " " + pricePerUnit;
-        //return name + quantity + expirationDate + unit + pricePerUnit;
+        return name + " " + quantity + " " + unit + " " + expirationDate + " " + pricePerUnit;
+        
     }
     
 }
