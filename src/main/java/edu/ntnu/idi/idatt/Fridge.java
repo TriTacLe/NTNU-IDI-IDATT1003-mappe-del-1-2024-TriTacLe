@@ -12,7 +12,7 @@ public class Fridge {
     public ArrayList<Item> getItems(){
         return items;
     }
-
+    
     //metoder for å legge til varer
     public void addItem(Item item){  
         items.add(item);
@@ -57,7 +57,7 @@ public class Fridge {
         for (Item item : items) {
             if (item.getExpirationDate().isBefore(LocalDate.now())){
                 expiredItems.add(item);
-                System.out.println(item.getName() + " " + item.getExpirationDate());
+                System.out.println("Utgåtte varer: " + item.getName() + ": " + item.getExpirationDate());
             }
         }
         return expiredItems;

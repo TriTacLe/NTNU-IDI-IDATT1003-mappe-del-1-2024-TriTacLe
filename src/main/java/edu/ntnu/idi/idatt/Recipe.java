@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Recipe {
     private final String name;
     private final String description; 
-    private ArrayList<Item> ingredients;
+    private ArrayList<Item> ingredients; 
 
     public Recipe(String name, String description){
         this.name = name;
@@ -18,8 +18,15 @@ public class Recipe {
     public String getDescription(){
         return description;
     }
-    
-    //Sjekke om fridge har nok varer til å lage retten
+
+    public ArrayList<Item> getItems(){
+        return ingredients;
+    }
+
+    /**
+     * Sjekke om fridge har nok varer til å lage retten
+     * @param fridge
+     */
     public void quantityFridge(Fridge fridge){
         boolean found = true;
         for (Item ingredient : ingredients) {
@@ -53,4 +60,16 @@ public class Recipe {
     }
 
     //fremgangsmåte på hvordan man lager retten
+    public void procedure(){
+        /*
+         * Skriv tekst i string format. bruk getQuantity for mengde ingrediens
+         * 
+         */
+        
+        System.out.println("Oversikt over ingredienser og dens mengde: ");
+        for (Item ingredient : ingredients){
+            System.out.println(ingredient.getName() + " antall: " + ingredient.getQuantity() + " " + ingredient.getUnit());
+        }
+        System.out.println(getDescription());
+    }
 }
