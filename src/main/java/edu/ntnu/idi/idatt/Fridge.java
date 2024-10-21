@@ -12,7 +12,7 @@ public class Fridge {
     public ArrayList<Item> getItems(){
         return items;
     }
-    
+
     //metoder for å legge til varer
     public void addItem(Item item){  
         items.add(item);
@@ -53,13 +53,16 @@ public class Fridge {
     }
 
     public ArrayList printExpiredItems(){
-        ArrayList<Item> expiredItems = new ArrayList<Item>();;
+        ArrayList<Item> expiredItems = new ArrayList<Item>();
+        double totalValue = 0;
         for (Item item : items) {
             if (item.getExpirationDate().isBefore(LocalDate.now())){
                 expiredItems.add(item);
-                System.out.println("Utgåtte varer: " + item.getName() + ": " + item.getExpirationDate());
+                System.out.println("Utgåtte varer: " + item.getQuantity() + " " + item.getUnit() + " " + item.getName() + ": " + item.getExpirationDate());
+                totalValue += item.getPrice();
             }
         }
+        System.out.println("Kostnad for utgåttevarene: " + totalValue + " kr");
         return expiredItems;
     }
 

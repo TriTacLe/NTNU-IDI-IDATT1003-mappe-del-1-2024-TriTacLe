@@ -14,7 +14,7 @@ public class CookingBook{
     } 
 
     public void printCookingBook(){
-        System.out.println("Kokeboken: ");
+        System.out.println("Oppskrifen kokeboken inneholder: ");
         for (Recipe recipe : recipes) {
             System.out.println(recipe.getName());
         }
