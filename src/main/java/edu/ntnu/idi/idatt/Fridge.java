@@ -8,6 +8,11 @@ public class Fridge {
         this.items = new ArrayList<>();
     }
 
+    //getter
+    public ArrayList<Item> getItems(){
+        return items;
+    }
+
     //metoder for å legge til varer
     public void addItem(Item item){  
         items.add(item);

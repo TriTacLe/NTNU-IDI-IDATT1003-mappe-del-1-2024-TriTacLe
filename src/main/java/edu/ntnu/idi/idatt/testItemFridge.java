@@ -2,7 +2,7 @@
 //import org.junit.Test;
 import java.time.LocalDate;
 
-public class test {
+public class testItemFridge {
     public static void main(String[] args) {
 
         Fridge fridge = new Fridge();
@@ -29,5 +29,15 @@ public class test {
 
         //total price
         System.err.println("Total pris: " + fridge.totalValue());
+
+        //tester andre klassene
+        String desription = "kake";
+        Recipe recipe = new Recipe("Kake", desription);
+
+        recipe.addItemForRecipe(new Item("Melk", 2, "Liter", LocalDate.of(2024, 12, 12), 12));
+
+        recipe.quantityFridge(fridge);
+
+        recipe.printIngredientsRecipe();
     }
-}   
+}
