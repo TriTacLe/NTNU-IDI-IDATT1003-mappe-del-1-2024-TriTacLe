@@ -41,7 +41,7 @@ public class Recipe {
             }
         }
         if (found == true){
-            System.out.println("Fridge har nok ingredienser");
+            System.out.println("Fridge har nok ingredienser av til å lage retten" + this.getName());
         }
     }
 

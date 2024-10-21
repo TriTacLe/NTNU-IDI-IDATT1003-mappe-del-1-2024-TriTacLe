@@ -19,31 +19,16 @@ public class CookingBook{
             System.out.println(recipe.getName());
         }
     }
-
-    //Få forslag til hvilke retter som kan lages fra rettene i kokeboken med varene/ingrediensene som finnes i kjøleskapet. (Avansert!)
-    /*
-    public void suggestionRecipe() {
-        if (recipes.isEmpty()) {
-            System.out.println("No recipes available in the CookingBook.");
-        }
-        Random rand = new Random();
-        int randomSuggestion = rand.nextInt(recipes.size());
-        
-        Recipe suggestedRecipe = recipes.get(randomSuggestion);
-        // Print the procedure of the suggested recipe
-        System.out.println("Suggested Recipe: " + suggestedRecipe.getName());
-        suggestedRecipe.procedure();   
-    }
-    */
-
-    public void suggestionRecipe(Fridge fridge){
-        //looper over alle ingredienser i fridge
+    /**
+     * //looper over alle ingredienser i fridge
         //sjekker om ingredienser i recipe finnes i fridge
         //hvis ja, sjekk om antallet av hver ingrediens i recipe 
         //er mindre eller lik antallet ingredienser i fridge
         //Hvis ja kan man lage det -> anbefal det
         //hvis nei kan man ikke lage det
-        
+     * @param fridge
+     */
+    public void suggestionRecipe(Fridge fridge){
         ArrayList<Recipe> suggestedRecipes = new ArrayList<Recipe>();
         
         for (Recipe recipe : recipes) {
