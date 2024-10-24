@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 import java.util.Scanner;
-//meny
+//meny eeeeee
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
