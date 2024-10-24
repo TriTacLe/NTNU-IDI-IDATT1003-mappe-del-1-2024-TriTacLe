@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 import java.util.Scanner;
-
+//meny
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -34,7 +34,7 @@ public class Main {
             System.out.print("Choose an option (1-9): ");
             
             int choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+            scanner.nextLine(); //consume newline
 
             switch (choice) {
                 case 1:
