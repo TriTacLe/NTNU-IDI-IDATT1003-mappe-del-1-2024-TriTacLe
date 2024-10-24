@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 import java.util.Scanner;
-//meny eeeeee
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -21,7 +21,7 @@ public class Main {
         boolean exit = false;
 
         while (!exit) {
-            System.out.println("\n### Fridge Menu ###");
+            System.out.println("\nFridge Menu");
             System.out.println("1. Print fridge contents");
             System.out.println("2. Add item to fridge");
             System.out.println("3. Remove item from fridge");
