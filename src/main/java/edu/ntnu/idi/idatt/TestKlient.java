@@ -81,6 +81,7 @@ public class TestKlient {
         FoodStorage foodStorage = new FoodStorage();
         foodStorage.addItem(new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30));
         foodStorage.addItem(new Item("Eple", 2, "Stykker", LocalDate.of(2000, 12, 15), 20));
+        foodStorage.addItem(new Item("Eple", 4, "Stykker", LocalDate.of(2026, 6, 7), 18));
 
         foodStorage.findItemByName("Mel");
         foodStorage.removeItem("Mel",300);
@@ -88,5 +89,7 @@ public class TestKlient {
         System.out.println(foodStorage.toString());
 
         foodStorage.getExpiredItemsBeforeDate(LocalDate.of(2026,4,30));
+        foodStorage.getExpiredItems();
+        System.out.println(foodStorage.toString());
     }
 }

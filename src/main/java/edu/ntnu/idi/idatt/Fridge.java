@@ -2,7 +2,7 @@ package edu.ntnu.idi.idatt;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+//gamle klassen, oppdaterte klassen er FoodStoragae
 public class Fridge {
     private ArrayList<Item> items;
 
