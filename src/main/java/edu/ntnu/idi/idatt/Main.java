@@ -5,6 +5,10 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        UI ui = new UI();
+        ui.start();
+        ui.init();
+        /*
         Scanner scanner = new Scanner(System.in);
         Fridge fridge = new Fridge();
         
@@ -113,5 +117,7 @@ public class Main {
         vaffelRecipe.addItemForRecipe(new Item("Sukker", 10, "gram", LocalDate.of(2027, 7, 4), 20));
 
         return vaffelRecipe;
+
+         */
     }
 }

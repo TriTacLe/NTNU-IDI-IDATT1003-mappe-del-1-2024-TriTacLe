@@ -75,11 +75,4 @@ public class Fridge {
             }
         return value;
     }
-
-
-    
-
-
-
-
 }   

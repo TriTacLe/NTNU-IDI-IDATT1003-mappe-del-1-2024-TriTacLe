@@ -53,59 +53,50 @@ public class Item {
         this.expirationDate = expirationDate;
         this.pricePerUnit = pricePerUnit;
     }
-
     /***
      * Gets the name of the item
      * @return name of the item
      */
-    public String getName(){
-        return name;
-    }
-
+    public String getName(){return name;}
     /***
      * Gets the quantity of the item
      * @return quantity of the item
      */
-    public double getQuantity(){
-        return quantity;
-    }
-
-    /***
-     * Sets the quantity of the item
-     * @param quantity new quantity of the item
-     */
-    public void setQuantity(double quantity){
-        this.quantity = quantity;
-    }
-
-    /***
-     * Sets the expiration date of the item
+    public double getQuantity(){return quantity;}
+    /**
+     * Gets the expiration date of the item
      * @return new expiration date
      */
-    public LocalDate getExpirationDate(){
-        return expirationDate;
-    }
+    public LocalDate getExpirationDate(){return expirationDate;}
 
     /***
      * gets the unit of quantity
      * @return unit of quantity
      */
-    public String getUnit(){
-        return unit;
-    }
-
+    public String getUnit(){return unit;}
     /***
      * gets the price of the item
      * @return
      */
-    public double getPerUnitPrice(){
-        return pricePerUnit;
-    }
+    public double getPerUnitPrice(){return pricePerUnit;}
+    /***
+     * Sets the quantity of the item
+     * @param quantity new quantity of the item
+     */
+    public void setQuantity(double quantity){this.quantity = quantity;}
+    /**
+     * Sets the expirations date of the item
+     * @param expirationDate
+     */
+    public void setExpirationDate(LocalDate expirationDate){this.expirationDate = expirationDate;}
 
+    /**
+     * Skriver ut detaljene fra en vare (fra hint)
+     * @return detaljene
+     */
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return name + " " + quantity + " " + unit + " " + expirationDate + " " + pricePerUnit;
-        
+        return name + " (" + quantity + " " + unit + ") - Expires: " + expirationDate + ", Price: " + pricePerUnit;
     }
 }
