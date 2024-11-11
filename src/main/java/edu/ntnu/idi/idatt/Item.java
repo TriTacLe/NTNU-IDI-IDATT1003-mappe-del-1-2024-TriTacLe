@@ -3,6 +3,7 @@ package edu.ntnu.idi.idatt;
 //import java.time.LocalDate;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Class represent an item/grocery/ingredient
@@ -104,6 +105,6 @@ public class Item {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return /*name*/ "(" + quantity + " " + unit + ") Expires: " + expirationDate + " Price: " + pricePerUnit;// + ". Todays date: " + LocalDate.now();
+        return name + "(" + quantity + " " + unit + ") Expires: " + expirationDate + " Price: " + pricePerUnit;// + ". Todays date: " + LocalDate.now();
     }
 }

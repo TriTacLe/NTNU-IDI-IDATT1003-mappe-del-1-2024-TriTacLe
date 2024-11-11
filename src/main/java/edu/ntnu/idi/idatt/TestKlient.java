@@ -85,6 +85,8 @@ public class TestKlient {
         foodStorage.findItemByName("Mel");
         foodStorage.removeItem("Mel",300);
 
-        foodStorage.printFoodStorage();
+        System.out.println(foodStorage.toString());
+
+        foodStorage.getExpiredItemsBeforeDate(LocalDate.of(2026,4,30));
     }
 }

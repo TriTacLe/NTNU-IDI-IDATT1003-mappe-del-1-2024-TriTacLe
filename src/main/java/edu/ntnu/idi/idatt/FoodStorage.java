@@ -1,5 +1,7 @@
 package edu.ntnu.idi.idatt;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Name, getName, as key and Item object as the value
@@ -86,10 +88,57 @@ public class FoodStorage {
         }
     }
 
-    public void printFoodStorage(){
-        System.out.println(items);
+    /**
+     * prints out all expired items plus how much it costs
+     * @return
+     */
+    public ArrayList printExpiredItems(){
+        ArrayList<Item> expiredItems = new ArrayList<Item>();
+        double totalValue = 0;
+        for (Item item : items.values()) {
+            if (item.getExpirationDate().isBefore(LocalDate.now())){
+                expiredItems.add(item);
+                System.out.println("Expired items: " + item.getQuantity() + " " + item.getUnit() + " " + item.getName() + ": " + item.getExpirationDate());
+                System.out.println("Expired items: " + item);
+                totalValue += item.getPerUnitPrice();
+            }
+        }
+        System.out.println("Total cost for the expired items: " + totalValue + " kr");
+        return expiredItems;
     }
 
+    /**
+     * Using streams to find every item with a expirationdate before input date
+     * @param date items date
+     */
+    public void getExpiredItemsBeforeDate(LocalDate date){
+        System.out.println("Every item with expiration date before: " + date);
+        List<Item> expiredItems = items.values().stream()
+                .filter(item -> item.getExpirationDate().isBefore(date))
+                .collect(Collectors.toList());
+        expiredItems.forEach(System.out::println);
+    }
 
+    public double totalValue(){
+        double value = 0;
+        for (Item item : items.values()) {
+            value += item.getPerUnitPrice();
+        }
+        return value;
+    }
+
+    /**
+     * returns every items in items map, food storage
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        //stringBuilder.append("Items in storage:\n");
+        for (Map.Entry<String, Item> entry : items.entrySet()) {
+            stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue().toString()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
 }
 
