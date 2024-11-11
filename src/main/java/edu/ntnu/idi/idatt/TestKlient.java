@@ -1,4 +1,4 @@
-//import static org.junit.Assert.assertEquals;
+package edu.ntnu.idi.idatt;//import static org.junit.Assert.assertEquals;
 //import org.junit.Test;
 import java.time.LocalDate;
 

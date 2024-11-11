@@ -1,3 +1,5 @@
+package edu.ntnu.idi.idatt;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -29,7 +31,7 @@ public class Fridge {
     }
     /**
      * fjerne en spesifikk vare
-     * @param item
+     * @param name quantity
      */
     public void removeItem(String name, double quantity){
         Item item = findItem(name);
@@ -59,7 +61,7 @@ public class Fridge {
             if (item.getExpirationDate().isBefore(LocalDate.now())){
                 expiredItems.add(item);
                 System.out.println("Utgåtte varer: " + item.getQuantity() + " " + item.getUnit() + " " + item.getName() + ": " + item.getExpirationDate());
-                totalValue += item.getPrice();
+                totalValue += item.getPerUnitPrice();
             }
         }
         System.out.println("Kostnad for utgåttevarene: " + totalValue + " kr");
@@ -69,7 +71,7 @@ public class Fridge {
     public double totalValue(){
         double value = 0;
             for (Item item : items) {
-                value += item.getPrice();
+                value += item.getPerUnitPrice();
             }
         return value;
     }

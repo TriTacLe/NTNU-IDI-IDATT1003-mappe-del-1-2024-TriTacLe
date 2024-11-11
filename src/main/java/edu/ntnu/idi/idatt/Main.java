@@ -1,3 +1,5 @@
+package edu.ntnu.idi.idatt;
+
 import java.time.LocalDate;
 import java.util.Scanner;
 

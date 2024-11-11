@@ -1,6 +1,13 @@
+package edu.ntnu.idi.idatt;
+
 //import java.time.LocalDate;
+
 import java.time.LocalDate;
 
+/**
+ * Class represent an item/grocery/ingredient
+ * Consist of attributes name, quantity, unit for the quantity, expiration date and the price per unit
+ */
 public class Item {
     // Attributter
     private final String name;
@@ -11,12 +18,13 @@ public class Item {
     private double pricePerUnit;
 
     /**
-     * konstruktør, med validering av inndata/input
-     * @param name
-     * @param quantity
-     * @param unit
-     * @param expirationDate
-     * @param pricePerUnit
+     * konstruktør to make an item (object) with (attributes) name, quantity, unit, expirations date price per unit
+     * I also implemented input control
+     * @param name items name
+     * @param quantity quanity of item
+     * @param unit unit for the quantity (SI-unit) ex: Kg
+     * @param expirationDate expiration date for the item
+     * @param pricePerUnit price per unit of item
      */
     public Item (String name, double quantity, String unit, LocalDate expirationDate, double pricePerUnit) {
     //public Item (String name, double quantity, String unit, double pricePerUnit) {
@@ -45,29 +53,52 @@ public class Item {
         this.expirationDate = expirationDate;
         this.pricePerUnit = pricePerUnit;
     }
-    //getters
+
+    /***
+     * Gets the name of the item
+     * @return name of the item
+     */
     public String getName(){
         return name;
     }
 
+    /***
+     * Gets the quantity of the item
+     * @return quantity of the item
+     */
     public double getQuantity(){
         return quantity;
     }
 
-    //oppdaterer mengden
+    /***
+     * Sets the quantity of the item
+     * @param quantity new quantity of the item
+     */
     public void setQuantity(double quantity){
         this.quantity = quantity;
     }
 
+    /***
+     * Sets the expiration date of the item
+     * @return new expiration date
+     */
     public LocalDate getExpirationDate(){
         return expirationDate;
     }
 
+    /***
+     * gets the unit of quantity
+     * @return unit of quantity
+     */
     public String getUnit(){
         return unit;
     }
 
-    public double getPrice(){
+    /***
+     * gets the price of the item
+     * @return
+     */
+    public double getPerUnitPrice(){
         return pricePerUnit;
     }
 

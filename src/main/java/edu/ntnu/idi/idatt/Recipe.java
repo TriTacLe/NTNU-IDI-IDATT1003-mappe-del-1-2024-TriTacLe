@@ -1,4 +1,6 @@
-    import java.util.ArrayList;
+package edu.ntnu.idi.idatt;
+
+import java.util.ArrayList;
 
 public class Recipe {
     private final String name;
