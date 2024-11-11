@@ -2,9 +2,19 @@ package edu.ntnu.idi.idatt;
 
 import java.time.LocalDate;
 
+/**
+ * attributtes are the outer layer classes: CookingBook and FoodStorage
+ */
 public class UI {
-    public void init(){
+    private FoodStorage foodStorage;
+    private CookingBook cookingBook;
 
+    /**
+     *Initalizes cookingbook and foodStorage
+     */
+    public void init(){
+        foodStorage = new FoodStorage();
+        cookingBook = new CookingBook();
     }
     public void start(){
         new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30);

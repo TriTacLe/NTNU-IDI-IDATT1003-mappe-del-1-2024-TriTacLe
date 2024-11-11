@@ -8,6 +8,7 @@ public class Main {
         UI ui = new UI();
         ui.start();
         ui.init();
+
         /*
         Scanner scanner = new Scanner(System.in);
         Fridge fridge = new Fridge();
