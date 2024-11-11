@@ -8,9 +8,6 @@ public class TestKlient {
         
         fridge.addItem(new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30));
         fridge.addItem(new Item("Melk", 100, "Milliliter", LocalDate.of(2024, 12, 15), 30));
-        fridge.addItem(new Item("Egg", 10, "Stykker", LocalDate.of(2025, 12, 24), 3));
-        fridge.addItem(new Item("Margarin", 1000, "gram", LocalDate.of(2025, 12, 24), 30));
-        fridge.addItem(new Item("Sukker", 3000, "gram", LocalDate.of(2025, 12, 24), 40));
         //expired item eple
         fridge.addItem(new Item("Eple", 2, "Stykker", LocalDate.of(2000, 12, 15), 20));
         fridge.addItem(new Item("Appelsin", 5, "Stykker", LocalDate.of(1900, 12, 15), 20));
@@ -79,5 +76,15 @@ public class TestKlient {
         System.out.println(); //mellomrom 
 
         cookingBook.suggestionRecipe(fridge);
+
+        //Test del 2
+        FoodStorage foodStorage = new FoodStorage();
+        foodStorage.addItem(new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30));
+        foodStorage.addItem(new Item("Eple", 2, "Stykker", LocalDate.of(2000, 12, 15), 20));
+
+        foodStorage.findItemByName("Mel");
+        foodStorage.removeItem("Mel",300);
+
+        foodStorage.printFoodStorage();
     }
 }

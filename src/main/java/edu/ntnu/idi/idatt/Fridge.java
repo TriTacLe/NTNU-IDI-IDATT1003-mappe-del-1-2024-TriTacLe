@@ -16,8 +16,18 @@ public class Fridge {
     }
 
     //metoder for å legge til varer
-    public void addItem(Item item){  
-        items.add(item);
+    public void addItem(Item item){
+        boolean found = false;
+        for (Item item1 : items){
+            if (item.equals(item1)){
+                item.increaseQuantity(item.getQuantity());
+                found = true;
+                return;
+            }
+        }
+        if (!found){
+            items.add(item);
+        }
     }
 
     //finne en spesifikk vare
@@ -33,22 +43,23 @@ public class Fridge {
      * fjerne en spesifikk vare
      * @param name quantity
      */
-    public void removeItem(String name, double quantity){
+    public void removeItem(String name, double quantity) {
         Item item = findItem(name);
-        //hvis ingrediens ikke er null og antall ingrediens > enn antall ingrent ønsket
-        if (item != null){
+        //hvis ingrediens ikke er null, altså finnes
+        if (item != null) {
+            //antall ingrediens > enn antall ingrent ønsket fjernet
             if (item.getQuantity() > quantity) {
-               item.setQuantity(item.getQuantity() - quantity);
+                item.setQuantity(item.getQuantity() - quantity);//hvis item quantity er null
             } else {
-                items.remove(item);
-            } 
-        } else {
+                items.remove((item));
+            }
+        } else{
             System.out.println("Varen finnes ikke");
         }
     }
     /**
     * //printer listen
-    * @param item
+    * @param
     */
     public void printFridge(){
         System.out.println(items);

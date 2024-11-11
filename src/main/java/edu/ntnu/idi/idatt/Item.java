@@ -90,6 +90,13 @@ public class Item {
      */
     public void setExpirationDate(LocalDate expirationDate){this.expirationDate = expirationDate;}
 
+    public void increaseQuantity(double quantity){
+        if (quantity < 0){
+            throw new IllegalArgumentException("INcreased quantity cannot be negative");
+        } else {
+            this.quantity += quantity;
+        }
+    }
     /**
      * Skriver ut detaljene fra en vare (fra hint)
      * @return detaljene
@@ -97,6 +104,6 @@ public class Item {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return name + " (" + quantity + " " + unit + ") - Expires: " + expirationDate + ", Price: " + pricePerUnit;
+        return /*name*/ "(" + quantity + " " + unit + ") Expires: " + expirationDate + " Price: " + pricePerUnit;// + ". Todays date: " + LocalDate.now();
     }
 }
