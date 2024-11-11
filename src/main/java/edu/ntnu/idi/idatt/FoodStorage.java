@@ -109,7 +109,7 @@ public class FoodStorage {
                 .sum();
         System.out.println("Expired items");
         expiredItems.forEach(System.out::println);
-        System.out.printf("Total cost of expired items: %.3f kr%n", totalValue); //3 desimaler
+        System.out.printf("Total cost of expired items: %.2f kr%n", totalValue); //2 desimaler
 
         /*
         for (Item item : items.values()) {
