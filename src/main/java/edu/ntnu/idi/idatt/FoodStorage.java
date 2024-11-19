@@ -1,7 +1,8 @@
 package edu.ntnu.idi.idatt;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
 import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Name, getName, as key, and Item object as the value

@@ -91,5 +91,8 @@ public class TestKlient {
         foodStorage.getExpiredItemsBeforeDate(LocalDate.of(2026,4,30));
         foodStorage.getExpiredItems();
         System.out.println(foodStorage.toString());
+        foodStorage.totalValue();
+        foodStorage.sortAlphabetically();
+
     }
 }
