@@ -1,10 +1,10 @@
 package edu.ntnu.idi.idatt;//import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class CookingBook{
+public class Cookbook{
     private ArrayList<Recipe> recipes;
 
-    public CookingBook(){
+    public Cookbook(){
         this.recipes = new ArrayList<>();
     }
 
