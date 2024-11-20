@@ -71,6 +71,7 @@ public class FoodStorage {
     public void findItemByName(String nameItem) {
         if (items.containsKey(nameItem)){
             System.out.println("Item found: " + items.get(nameItem));
+            items.get(nameItem).forEach(System.out::println);
         } else {
             System.out.println("Item do not exist");
         }
@@ -85,7 +86,7 @@ public class FoodStorage {
      * @param quantity quantity of the item
      */
     public void removeItem(String name, double quantity) {
-        if (!items.containsKey(name)){
+        if (!items.containsKey(name)) {
             System.out.println(name + " does not exist in the food storage");
         }
 
@@ -97,22 +98,44 @@ public class FoodStorage {
                 .sorted(Comparator.comparing(Item::getExpirationDate)) //Sort by expiration date
                 .collect(Collectors.toList());
 
-        if (nonExpiredItems.isEmpty()){
+        if (nonExpiredItems.isEmpty()) {
             System.out.println("No non-expired items of " + name);
         }
 
+        Iterator<Item> iterator = nonExpiredItems.iterator();
+
+        while (iterator.hasNext()) {
+            Item item = iterator.next();
+            if (quantity <= 0) {
+                break;
+            }
+
+            if (item.getQuantity() > quantity) {
+                item.setQuantity(item.getQuantity() - quantity);
+                System.out.println(quantity + " removed from " + name + " (non-expired, oldest).");
+                return;
+            } else {
+                quantity -= item.getQuantity();
+                itemArrayList.remove(item);
+            }
+            if (itemArrayList.isEmpty()) {
+                items.remove(name);
+            }
+        }
     }
+
 
     /**
      * prints out all expired items plus how much it costs
      * @return
      */
-    public void getExpiredItems(){
-        //ArrayList<Item> expiredItems = new ArrayList<Item>();
-        //double totalValue = 0;
+    public void getExpiredItems() {
+        //Convert Stream<ArrayList<Item>> into Stream<Item>
         List<Item> expiredItems = items.values().stream()
+                .flatMap(List::stream) //Flatten nested ArrayList
                 .filter(item -> item.getExpirationDate().isBefore(LocalDate.now()))
                 .collect(Collectors.toList());
+
         if (expiredItems.isEmpty()){
             System.out.println("No items is expired! Nice!");
             return;
@@ -125,20 +148,8 @@ public class FoodStorage {
         System.out.println("Expired items");
         expiredItems.forEach(System.out::println);
         System.out.printf("Total cost of expired items: %.2f kr%n", totalValue); //2 desimaler
-
-        /*
-        for (Item item : items.values()) {
-            if (item.getExpirationDate().isBefore(LocalDate.now())){
-                expiredItems.add(item);
-                System.out.println("Expired items: " + item.getQuantity() + " " + item.getUnit() + " " + item.getName() + ": " + item.getExpirationDate());
-                System.out.println("Expired items: " + item);
-                totalValue += item.getPerUnitPrice();
-            }
-        }
-        System.out.println("Total cost for the expired items: " + totalValue + " kr");
-        return expiredItems;
-         */
     }
+
 
     /**
      * Using streams to find every item with a expirationdate before input date
@@ -146,10 +157,16 @@ public class FoodStorage {
      */
     public void getExpiredItemsBeforeDate(LocalDate date){
         System.out.println("Every item with expiration date before: " + date);
-        List<Item> expiredItems = items.values().stream()
-                .filter(item -> item.getExpirationDate().isBefore(date))
-                .collect(Collectors.toList());
-        expiredItems.forEach(System.out::println);
+
+        List<Item> expiredItemsBefore = items.values().stream()
+                        .flatMap(List::stream)
+                        .filter(item -> item.getExpirationDate().isBefore(date))
+                        .collect(Collectors.toList());
+        if (expiredItemsBefore.isEmpty()){
+            System.out.println("No items expire before: " + date);
+        } else{
+            expiredItemsBefore.forEach(System.out::println);
+        }
     }
 
     /**
@@ -161,7 +178,8 @@ public class FoodStorage {
             return;
         }
         double totalValue = items.values().stream()
-                .mapToDouble(Item::getPerUnitPrice)
+                .flatMap(List::stream)
+                .mapToDouble(item->item.getQuantity()*item.getPerUnitPrice())
                 .sum();
         System.out.println("The total value of the food storage is: " + totalValue + " kr");
     }
@@ -171,13 +189,18 @@ public class FoodStorage {
      */
     public void sortAlphabetically(){
         System.out.println("Food storage sorted out alphabetically by name:");
+        items.keySet().stream()
+                .sorted() //sort key alphabetically
+                .forEach(key-> {
+                    System.out.println(key + ":");
+                    items.get(key).forEach(System.out::println);
+                });
+        /*
         items.values().stream()
+                .flatMap(List::stream)
                 .sorted(Comparator.comparing(Item::getName))
                 .forEach(System.out::println);
-        /*
-        items.keySet().stream()
-                .sorted(Comparator.comparing(String::toString))
-                .forEach(System.out::println);
+
          */
     }
 
@@ -189,7 +212,7 @@ public class FoodStorage {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();//Saves all
         stringBuilder.append("Items in storage:\n");
-        for (Map.Entry<String, Item> entry : items.entrySet()) {
+        for (Map.Entry<String, ArrayList<Item>> entry : items.entrySet()) {
             stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue().toString()).append("\n");
         }
         return stringBuilder.toString();
