@@ -4,19 +4,23 @@ import java.time.LocalDate;
 
 public class TestKlient {
     public static void main(String[] args) {
+        //test del 1
+        /*
         Fridge fridge = new Fridge();
-        
         fridge.addItem(new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30));
         fridge.addItem(new Item("Melk", 100, "Milliliter", LocalDate.of(2024, 12, 15), 30));
         //expired item eple
         fridge.addItem(new Item("Eple", 2, "Stykker", LocalDate.of(2000, 12, 15), 20));
         fridge.addItem(new Item("Appelsin", 5, "Stykker", LocalDate.of(1900, 12, 15), 20));
 
-        System.out.println(); //mellomrom 
+        System.out.println(); //mellomrom
 
-        System.out.println("Dato idag " + LocalDate.now());
+         */
+
+        System.out.println("Date today: " + LocalDate.now());
         
         System.out.println(); //mellomrom 
+        /*
         //add
         System.out.print("Fridge: ");fridge.printFridge();
 
@@ -28,7 +32,8 @@ public class TestKlient {
         //remove item
         double quantity = 1;
         fridge.removeItem("Melk", quantity);
-        System.out.print("Fridge etter å ha fjernet 1 melk: "); fridge.printFridge();
+        System.out.print("Fridge etter å ha fjernet 1 melk: ");
+        fridge.printFridge();
 
         System.out.println(); //mellomrom 
 
@@ -37,6 +42,8 @@ public class TestKlient {
         System.out.println(); //mellomrom 
         //total price
         System.out.println("Total pris: " + fridge.totalValue() + " kr");
+
+
 
         //tester andre klassene
         
@@ -77,22 +84,24 @@ public class TestKlient {
 
         cookingBook.suggestionRecipe(fridge);
 
+         */
+
         //Test del 2
         FoodStorage foodStorage = new FoodStorage();
-        foodStorage.addItem(new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30));
-        foodStorage.addItem(new Item("Eple", 2, "Stykker", LocalDate.of(2000, 12, 15), 20));
-        foodStorage.addItem(new Item("Eple", 4, "Stykker", LocalDate.of(2026, 6, 7), 18));
+        foodStorage.addItem(new Item("Mel", 2000, "Gram", LocalDate.of(2028, 2, 19), 30));
+        foodStorage.addItem(new Item("Eple", 2, "Stk", LocalDate.of(2000, 12, 15), 20));
+        foodStorage.addItem(new Item("Eple", 4, "Stk", LocalDate.of(2026, 6, 7), 18));
 
         foodStorage.findItemByName("Mel");
         foodStorage.removeItem("Mel",300);
 
-        System.out.println(foodStorage.toString());
 
-        foodStorage.getExpiredItemsBeforeDate(LocalDate.of(2026,4,30));
+        foodStorage.getItemsExpirationDateBefore(LocalDate.of(2026,4,30));
         foodStorage.getExpiredItems();
-        System.out.println(foodStorage.toString());
-        foodStorage.totalValue();
-        foodStorage.sortAlphabetically();
 
+        System.out.println(foodStorage.toString());
+        foodStorage.sortAlphabetically();
+        System.out.println(); //Space
+        foodStorage.totalValue();
     }
 }

@@ -70,8 +70,8 @@ public class FoodStorage {
      */
     public void findItemByName(String nameItem) {
         if (items.containsKey(nameItem)){
-            System.out.println("Item found: " + items.get(nameItem));
-            items.get(nameItem).forEach(System.out::println);
+            System.out.println("Item found: "); //+ items.get(nameItem));
+            items.get(nameItem).forEach(item-> System.out.println("- " + item)); //lamda so each item has a -
         } else {
             System.out.println("Item do not exist");
         }
@@ -112,18 +112,17 @@ public class FoodStorage {
 
             if (item.getQuantity() > quantity) {
                 item.setQuantity(item.getQuantity() - quantity);
-                System.out.println(quantity + " removed from " + name + " (non-expired, oldest).");
+                System.out.println(quantity + " " + item.getUnit() + " removed from " + name);
                 return;
             } else {
                 quantity -= item.getQuantity();
                 itemArrayList.remove(item);
             }
-            if (itemArrayList.isEmpty()) {
-                items.remove(name);
-            }
+        }
+        if (itemArrayList.isEmpty()) {
+            items.remove(name);
         }
     }
-
 
     /**
      * prints out all expired items plus how much it costs
@@ -146,8 +145,8 @@ public class FoodStorage {
                 .mapToDouble(Item::getPerUnitPrice)
                 .sum();
         System.out.println("Expired items");
-        expiredItems.forEach(System.out::println);
-        System.out.printf("Total cost of expired items: %.2f kr%n", totalValue); //2 desimaler
+        expiredItems.forEach(item -> System.out.println("- " + item));
+        System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
     }
 
 
@@ -155,7 +154,7 @@ public class FoodStorage {
      * Using streams to find every item with a expirationdate before input date
      * @param date items date
      */
-    public void getExpiredItemsBeforeDate(LocalDate date){
+    public void getItemsExpirationDateBefore(LocalDate date){
         System.out.println("Every item with expiration date before: " + date);
 
         List<Item> expiredItemsBefore = items.values().stream()
@@ -179,7 +178,8 @@ public class FoodStorage {
         }
         double totalValue = items.values().stream()
                 .flatMap(List::stream)
-                .mapToDouble(item->item.getQuantity()*item.getPerUnitPrice())
+                //.mapToDouble(item->item.getQuantity()*item.getPerUnitPrice())
+                .mapToDouble(Item::getPerUnitPrice)
                 .sum();
         System.out.println("The total value of the food storage is: " + totalValue + " kr");
     }
@@ -189,20 +189,24 @@ public class FoodStorage {
      */
     public void sortAlphabetically(){
         System.out.println("Food storage sorted out alphabetically by name:");
+
         items.keySet().stream()
                 .sorted() //sort key alphabetically
                 .forEach(key-> {
-                    System.out.println(key + ":");
-                    items.get(key).forEach(System.out::println);
+                    Double quantity = items.get(key).stream()
+                            .mapToDouble(Item::getQuantity)
+                            .sum();
+                    System.out.println(key + " (Quantity: " + quantity + "):");
+                    items.get(key).forEach(item -> System.out.println("- " + item));
                 });
         /*
         items.values().stream()
                 .flatMap(List::stream)
                 .sorted(Comparator.comparing(Item::getName))
                 .forEach(System.out::println);
-
          */
     }
+
 
     /**
      * returns every items in items map, food storage
@@ -212,8 +216,11 @@ public class FoodStorage {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();//Saves all
         stringBuilder.append("Items in storage:\n");
+
         for (Map.Entry<String, ArrayList<Item>> entry : items.entrySet()) {
-            stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue().toString()).append("\n");
+            //stringBuilder.append(entry.getKey()).append(":\n").append(entry.getValue().toString()).append("\n");
+
+            entry.getValue().forEach(item -> stringBuilder.append("  - ").append(item).append("\n"));
         }
         return stringBuilder.toString();
     }
