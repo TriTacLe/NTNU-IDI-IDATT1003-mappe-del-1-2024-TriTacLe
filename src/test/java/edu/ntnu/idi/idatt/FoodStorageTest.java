@@ -70,7 +70,6 @@ void testFindItemByName() {
   Item bread = new Item("Bread", 1.0, "kg", LocalDate.now().plusDays(5), 25.0);
   foodStorage.addItem(bread);
   
-  // Capturing System Output for testing
   foodStorage.findItemByName("Bread");
   
   ArrayList<Item> items = foodStorage.getItems().get("Bread");
@@ -86,7 +85,6 @@ void testGetExpiredItems() {
   foodStorage.addItem(cheese);
   foodStorage.addItem(yogurt);
   
-  // Simulating expired item check
   foodStorage.getExpiredItems();
   
   assertTrue(foodStorage.getItems().get("Yogurt") != null);
@@ -116,7 +114,6 @@ void testSortAlphabetically() {
   
   foodStorage.sortAlphabetically();
   
-  // Checking alphabetical order
   ArrayList<Item> appleItems = foodStorage.getItems().get("Apple");
   assertNotNull(appleItems);
   
@@ -134,7 +131,6 @@ void testTotalValue() {
   
   double expectedTotalValue = rice.getPerUnitPrice() + wheat.getPerUnitPrice();
   
-  // Capturing System Output for testing
   foodStorage.totalValue();
   
   assertEquals(expectedTotalValue, 90.0, 0.01);
