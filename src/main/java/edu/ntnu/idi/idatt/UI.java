@@ -7,14 +7,14 @@ import java.time.LocalDate;
  */
 public class UI {
     private FoodStorage foodStorage;
-    private CookingBook cookingBook;
+    private Cookbook cookingBook;
 
     /**
      *Initalizes cookingbook and foodStorage
      */
     public void init(){
         foodStorage = new FoodStorage();
-        cookingBook = new CookingBook();
+        cookingBook = new Cookbook();
     }
     public void start(){
         new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30);

@@ -5,7 +5,14 @@ import java.util.stream.Collectors;
 import java.util.*;
 
 /**
+ * The FoodStorage class manages a collection of items,
+ * allowing operations such as....
+ *
+ * <p>p>
  * Name, getName, as key, and Item object as the value
+ * @author Tri Tac Le
+ * @version
+ * @since
  */
 public class FoodStorage {
 //    private HashMap<String, Item> items;
@@ -137,7 +144,6 @@ public class FoodStorage {
 
         if (expiredItems.isEmpty()){
             System.out.println("No items is expired! Nice!");
-            return;
         }
 
         double totalValue = expiredItems.stream()
