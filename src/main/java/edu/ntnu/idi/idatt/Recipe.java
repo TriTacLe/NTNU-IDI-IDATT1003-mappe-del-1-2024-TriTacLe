@@ -1,77 +1,119 @@
 package edu.ntnu.idi.idatt;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class Recipe {
-    private final String name;
-    private final String description; 
-    private ArrayList<Item> ingredients; 
-
-    public Recipe(String name, String description){
-        this.name = name;
-        this.description = description;
-        this.ingredients = new ArrayList<>();
+  private final String name;
+  private final String description;
+  private final String procedure;
+  private final int recipeServes;
+  private final ArrayList<Item> itemsList;
+  
+  public Recipe(String name, String description, String procedure, int recipeServes) {
+    validateStringParameter(name, "name");
+    validateStringParameter(description, "description");
+    validateStringParameter(procedure, "procedure");
+    validateIntParameter(recipeServes, "recipe serves");
+    this.name = name;
+    this.description = description;
+    this.procedure = procedure;
+    this.recipeServes = recipeServes;
+    this.itemsList = new ArrayList<>();
+  }
+  
+  public String getName() {
+    return name;
+  }
+  
+  public String getDescription() {
+    return description;
+  }
+  
+  public String getProcedure() {
+    return procedure;
+  }
+  
+  public List<Item> getItemsList() {
+    return itemsList;
+  }
+  
+  private void validateStringParameter(String value, String parameterName)
+      throws IllegalArgumentException {
+    if (value == null || value.isBlank()) {
+      throw new IllegalArgumentException("Argument: " + parameterName + " cannot be blank/empty");
     }
-
-    public String getName(){
-        return name;
+  }
+  
+  private void validateIntParameter(int value, String parameterName)
+      throws IllegalArgumentException {
+    if (value <= 0) {
+      throw new IllegalArgumentException("Argument: " + parameterName + " cannot be zero or negative");
     }
-
-    public String getDescription(){
-        return description;
+  }
+  
+  /**
+   * Check if fridge has enough items to make the recipe.
+   *
+   * @param foodStorage the storage to check against
+   */
+  public void hasEnoughItemsForRecipe(FoodStorage foodStorage) {
+    boolean enoughItems = itemsList.stream()
+        .allMatch(recipeItem ->
+            foodStorage.getItems().values().stream()
+                .flatMap(List::stream)
+                .anyMatch(storageItem -> storageItem.getName().equals(recipeItem.getName())
+                    && storageItem.getQuantity() >= recipeItem.getQuantity()
+                )
+        );
+    
+    if (enoughItems) {
+      System.out.println("There is enough items in the storage to make this recipe: " + getName());
+      itemsList.forEach(recipeItem -> foodStorage.getItems().values().stream()
+          .flatMap(List::stream)
+          .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
+          .forEach(storageItem -> {
+            System.out.println((" - " + recipeItem.getName() + ": Required = " + recipeItem.getQuantity()
+                + ", Available: " + storageItem.getQuantity()));
+          }));
+    } else {
+      System.out.println("There is not enough to make this recipe: " + getName());
+      itemsList.forEach(recipeItem -> {
+        Optional<Item> missingItems = foodStorage.getItems().values().stream()
+            .flatMap(List::stream)
+            .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
+            .findAny();
+        System.out.println(" - " + recipeItem.getName() + ": Required = " + recipeItem.getQuantity()
+            + ", Available: " + missingItems.map(Item::getQuantity).orElse(0.0)
+        );
+      });
     }
-
-    public ArrayList<Item> getItems(){
-        return ingredients;
+  }
+  
+  // Adds an item to the ingredients list
+  public void addItemToRecipe(Item item) {
+    itemsList.add(item);
+  }
+  
+  // Displays recipe ingredients
+  public void printIngredientsRecipe() {
+    System.out.println(itemsList);
+  }
+  
+  // Shows procedure for making the recipe
+  public void procedure() {
+    System.out.println("Overview of ingredients and their quantities: ");
+    for (Item ingredient : itemsList) {
+      System.out.println(ingredient.getName() + " quantity: " + ingredient.getQuantity() + " " + ingredient.getUnit());
     }
-
-    /**
-     * Sjekke om fridge har nok varer til å lage retten
-     * @param fridge
-     */
-    public void quantityFridge(Fridge fridge){
-        boolean found = true;
-        for (Item ingredient : ingredients) {
-            for (Item fridgeItem : fridge.getItems()) {
-                //compare quantity av items (fridge) med ingredienser som trengs
-                if (fridgeItem.getName().equals(ingredient.getName())) {
-                    if (ingredient.getQuantity() > fridgeItem.getQuantity()){
-                        System.out.println("Fridge har ikke nok varer av: " + fridgeItem.getName());
-                        found = false;
-                    }   
-                }
-            }
-        }
-        if (found == true){
-            System.out.println("Fridge har nok ingredienser av til å lage retten: " + this.getName());
-        }
-    }
-
-    //legger til item til ingredienser
-    public void addItemForRecipe(Item item){  
-        ingredients.add(item);
-    }
-
-    //vis recipe ingredienser
-    public void printIngredientsRecipe(){
-        System.out.println(ingredients);
-    }
-    //getter
-    public ArrayList<Item> getIngredients(){
-        return ingredients;
-    }
-
-    //fremgangsmåte på hvordan man lager retten
-    public void procedure(){
-        /*
-         * Skriv tekst i string format. bruk getQuantity for mengde ingrediens
-         * 
-         */
-        
-        System.out.println("Oversikt over ingredienser og dens mengde: ");
-        for (Item ingredient : ingredients){
-            System.out.println(ingredient.getName() + " antall: " + ingredient.getQuantity() + " " + ingredient.getUnit());
-        }
-        System.out.println(getDescription());
-    }
+    System.out.println(getDescription());
+  }
+  
+  @Override
+  public String toString() {
+    StringBuilder stringBuilder = new StringBuilder();
+    itemsList.forEach(item -> stringBuilder.append(item));
+    return stringBuilder.toString();
+  }
 }

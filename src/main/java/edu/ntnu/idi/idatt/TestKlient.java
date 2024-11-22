@@ -113,5 +113,7 @@ public class TestKlient {
     foodStorage.sortAlphabetically();
     System.out.println(); //Space
     foodStorage.totalValue();
+    
+    
   }
 }
