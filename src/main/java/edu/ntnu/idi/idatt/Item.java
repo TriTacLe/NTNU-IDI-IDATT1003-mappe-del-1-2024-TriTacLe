@@ -128,6 +128,6 @@ public class Item {
   @Override
   public String toString() {
     // TODO Auto-generated method stub
-    return name + "(" + quantity + " " + unit + ") Expires: " + expirationDate + " Price: " + pricePerUnit;// + ". Todays date: " + LocalDate.now();
+    return name + "(" + quantity + " " + unit + ") Expires: " + expirationDate + " Price: " + pricePerUnit + " kr \n"; // + ". Todays date: " + LocalDate.now();
   }
 }

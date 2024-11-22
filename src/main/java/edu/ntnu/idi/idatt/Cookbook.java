@@ -1,24 +1,37 @@
 package edu.ntnu.idi.idatt; //import java.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Cookbook {
-  private ArrayList<Recipe> recipes;
+  //private ArrayList<Recipe> recipes;
+  private HashMap<String, ArrayList<Recipe>> recipes;
   
   public Cookbook() {
-    this.recipes = new ArrayList<>();
+    this.recipes = new HashMap<>();
   }
   
-  //legg til oppskrift (instans av Recipe) til kokebok recipes
+  
   public void addRecipe(Recipe recipe) {
-    recipes.add(recipe);
+    recipes.putIfAbsent(recipe.getName(), new ArrayList<>());
+    ArrayList<Recipe> recipeArrayList = recipes.get(recipe.getName());
+    
+    if (!recipeArrayList.contains(recipe)) {
+      recipeArrayList.add(recipe);
+      System.out.println("Recipe added: " + recipe);
+    } else {
+      System.out.println("Recipe for " + recipe.getName() + " already exist");
+    }
   }
   
-  public void printCookingBook() {
-    System.out.println("Oppskrifen kokeboken inneholder: ");
-    for (Recipe recipe : recipes) {
-      System.out.println(recipe.getName());
+  public void displayCookbook() {
+    if (recipes.isEmpty()) {
+      System.out.println("The cookbook does not contain any recipes");
+    } else {
+      System.out.println("Recipes in the cookbook: ");
+      recipes.forEach((key, value) -> System.out.println(" - " + key + ": " + value));
     }
+    
   }
   
   /**

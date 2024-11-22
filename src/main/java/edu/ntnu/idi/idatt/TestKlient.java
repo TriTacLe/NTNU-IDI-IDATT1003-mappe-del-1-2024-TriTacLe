@@ -126,10 +126,18 @@ public class TestKlient {
     
     recipeFiletMignon.addItemToRecipe(new Item("Filet mignon", 200, "Grams", LocalDate.of(2024, 12, 19), 100));
     
-    System.out.println(recipeFiletMignon.toString());
+    System.out.println("-" + recipeFiletMignon.toString());
     
     recipeForChicken.hasEnoughItemsForRecipe(foodStorage);
     recipeFiletMignon.hasEnoughItemsForRecipe(foodStorage);
+    
+    System.out.println(recipeFiletMignon);
+    
+    
+    cookBook.addRecipe(recipeFiletMignon);
+    cookBook.addRecipe(recipeForChicken);
+    
+    cookBook.displayCookbook();
     
     
   }

@@ -64,8 +64,10 @@ public class Recipe {
           .filter(existingItem -> existingItem.getName().equals(item.getName()))
           .findAny()
           .ifPresent(existingItem -> existingItem.increaseQuantity(item.getQuantity()));
+      System.out.println(item + " already exist in recipe for " + getName());
     } else {
       itemsList.add(item);
+      System.out.println(item + " added to the recipe");
     }
   }
   
