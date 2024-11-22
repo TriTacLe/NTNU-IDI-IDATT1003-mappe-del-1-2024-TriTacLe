@@ -26,7 +26,6 @@ public class Item {
    * @param pricePerUnit   price per unit of item
    */
   public Item(String name, double quantity, String unit, LocalDate expirationDate, double pricePerUnit) {
-    //public Item (String name, double quantity, String unit, double pricePerUnit)
     //Input validering
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException("Name cannot be empty");
@@ -43,6 +42,27 @@ public class Item {
     }
     
      */
+    
+    if (pricePerUnit < 0) {
+      throw new IllegalArgumentException("Price per unit cannot be negative");
+    }
+    this.name = name;
+    this.quantity = quantity;
+    this.unit = unit;
+    this.expirationDate = expirationDate;
+    this.pricePerUnit = pricePerUnit;
+  }
+  
+  public Item(String name, double quantity, String unit, double pricePerUnit) {
+    if (name == null || name.isEmpty()) {
+      throw new IllegalArgumentException("Name cannot be empty");
+    }
+    if (quantity < 0) {
+      throw new IllegalArgumentException("Quantity cannot be negative");
+    }
+    if (unit == null || unit.isEmpty()) {
+      throw new IllegalArgumentException("Unit cannot be empty");
+    }
     
     if (pricePerUnit < 0) {
       throw new IllegalArgumentException("Price per unit cannot be negative");
@@ -128,6 +148,9 @@ public class Item {
   @Override
   public String toString() {
     // TODO Auto-generated method stub
-    return name + "(" + quantity + " " + unit + ") Expires: " + expirationDate + " Price: " + pricePerUnit + " kr \n"; // + ". Todays date: " + LocalDate.now();
+    //if else forenklet
+    String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
+    
+    return name + "(" + quantity + " " + unit + ")" + expirationDateOutput + " Price: " + pricePerUnit + " kr \n"; // + ". Todays date: " + LocalDate.now();
   }
 }

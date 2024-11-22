@@ -120,11 +120,11 @@ public class TestKlient {
     Recipe recipeFiletMignon = new Recipe("Filet mignon", "decription decription decription", "procedure procedure procedure", 4);
     
     
-    recipeForChicken.addItemToRecipe(new Item("Honey", 200, "Grams", LocalDate.of(2028, 2, 19), 30));
-    recipeFiletMignon.addItemToRecipe(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
-    recipeFiletMignon.addItemToRecipe(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
+    recipeForChicken.addItemToRecipe(new Item("Honey", 200, "Grams", 30));
+    recipeFiletMignon.addItemToRecipe(new Item("Margarine", 1000, "Grams", 30));
+    recipeFiletMignon.addItemToRecipe(new Item("Margarine", 1000, "Grams", 30));
     
-    recipeFiletMignon.addItemToRecipe(new Item("Filet mignon", 200, "Grams", LocalDate.of(2024, 12, 19), 100));
+    recipeFiletMignon.addItemToRecipe(new Item("Filet mignon", 200, "Grams", 100));
     
     System.out.println("-" + recipeFiletMignon.toString());
     
@@ -132,8 +132,6 @@ public class TestKlient {
     recipeFiletMignon.hasEnoughItemsForRecipe(foodStorage);
     
     System.out.println(recipeFiletMignon);
-    
-    
     cookBook.addRecipe(recipeFiletMignon);
     cookBook.addRecipe(recipeForChicken);
     

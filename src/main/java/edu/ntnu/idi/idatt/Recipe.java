@@ -59,15 +59,18 @@ public class Recipe {
    * @param item
    */
   public void addItemToRecipe(Item item) {
-    if (itemsList.contains(item)) {
-      itemsList.stream()
-          .filter(existingItem -> existingItem.getName().equals(item.getName()))
-          .findAny()
-          .ifPresent(existingItem -> existingItem.increaseQuantity(item.getQuantity()));
-      System.out.println(item + " already exist in recipe for " + getName());
+    Optional<Item> existingItem = itemsList.stream()
+        .filter(itemInRegister -> itemInRegister.getName().equals(item.getName()))
+        .findAny();
+    
+    if (existingItem.isPresent()) {
+      existingItem.get().increaseQuantity(item.getQuantity());
+      System.out.println(item + "already exist in recipe: " + getName());
+      System.out.println("New quantity of item " + item + " is:" + existingItem.get().getQuantity());
     } else {
       itemsList.add(item);
-      System.out.println(item + " added to the recipe");
+      System.out.println(item + " added to the recipe.");
+      
     }
   }
   
@@ -140,7 +143,24 @@ public class Recipe {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
-    itemsList.forEach(item -> stringBuilder.append(item));
+    
+    // Append description if available
+    if (description != null && !description.isEmpty()) {
+      stringBuilder.append("Description: ").append(description).append("\n");
+    }
+    
+    // Append procedure if available
+    if (procedure != null && !procedure.isEmpty()) {
+      stringBuilder.append("Procedure: ").append(procedure).append("\n");
+    }
+    
+    // Append items list if available
+    if (itemsList != null && !itemsList.isEmpty()) {
+      stringBuilder.append("Items: \n");
+      for (Item item : itemsList) {
+        stringBuilder.append(" - ").append(item); // This will use Item's toString
+      }
+    }
     return stringBuilder.toString();
   }
 }

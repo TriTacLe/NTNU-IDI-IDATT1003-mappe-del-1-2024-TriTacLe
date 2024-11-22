@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt; //import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Cookbook {
   //private ArrayList<Recipe> recipes;
@@ -26,12 +27,18 @@ public class Cookbook {
   
   public void displayCookbook() {
     if (recipes.isEmpty()) {
-      System.out.println("The cookbook does not contain any recipes");
+      System.out.println("The cookbook does not contain any recipes.");
     } else {
       System.out.println("Recipes in the cookbook: ");
-      recipes.forEach((key, value) -> System.out.println(" - " + key + ": " + value));
+      
+      for (Map.Entry<String, ArrayList<Recipe>> entry : recipes.entrySet()) {
+        System.out.println("Recipe Name: " + entry.getKey());
+        
+        for (Recipe recipe : entry.getValue()) {
+          System.out.println(recipe);
+        }
+      }
     }
-    
   }
   
   /**
