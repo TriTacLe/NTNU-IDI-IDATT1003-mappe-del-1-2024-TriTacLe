@@ -1,9 +1,6 @@
 package edu.ntnu.idi.idatt; //import java.time.LocalDate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Cookbook {
@@ -43,18 +40,35 @@ public class Cookbook {
   }
   
   
-  public void suggestionRecipe(FoodStorage foodStorage) {
+  public ArrayList<Recipe> suggestionRecipe(FoodStorage foodStorage) {
     /*compare all the items and quantity of the items in recipes in the cookbook
     with
-    the items and quantity of the items in foodStorage
+    the items and quantity of the items in foodStorage*/
+    ArrayList<Recipe> suggestedRecipes = new ArrayList<>();
     
-    //Iterate over each recipe
-      //check if foodstorage has this item
-      
-      //check if the quantity is enough
-     
-    
-     */
+    recipes.forEach((recipeName, recipeList) -> {
+      //Iterate over each recipe
+      recipeList.forEach(recipe -> {
+        boolean canMakeRecepe = recipe.getItemsList().stream()
+            .allMatch(recipeItem -> {
+              String itemName = recipeItem.getName();
+              Double neededQuantity = recipeItem.getQuantity();
+              
+              //check if foodstorage has this item
+              List<Item> storageItems = foodStorage.getItems().get(itemName);
+              //sum quantities of the same item
+              double availableQuantity = storageItems.stream()
+                  .mapToDouble(Item::getQuantity)
+                  .sum();
+              
+              return availableQuantity >= neededQuantity;
+            });
+        if (canMakeRecepe) {
+          suggestedRecipes.add(recipe);
+        }
+      });
+    });
+    return suggestedRecipes;
   }
   
 }

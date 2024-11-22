@@ -136,6 +136,9 @@ public class Recipe {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
+    if (name != null && !name.isBlank()) {
+      stringBuilder.append("Name: ").append(name).append("\n");
+    }
     if (description != null && !description.isEmpty()) {
       stringBuilder.append("Description: ").append(description).append("\n");
     }
@@ -145,9 +148,10 @@ public class Recipe {
     if (itemsList != null && !itemsList.isEmpty()) {
       stringBuilder.append("Items: \n");
       for (Item item : itemsList) {
-        stringBuilder.append(" - ").append(item);
+        stringBuilder.append(" - ").append(item).append("\n");
       }
     }
     return stringBuilder.toString();
   }
+  
 }

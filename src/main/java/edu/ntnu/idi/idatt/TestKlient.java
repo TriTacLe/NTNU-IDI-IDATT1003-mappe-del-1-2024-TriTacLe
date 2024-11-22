@@ -137,6 +137,9 @@ public class TestKlient {
     
     cookBook.displayCookbook();
     
+    System.out.println("Suggsted recipes");
+    System.out.println(cookBook.suggestionRecipe(foodStorage));
+    
     
   }
 }
