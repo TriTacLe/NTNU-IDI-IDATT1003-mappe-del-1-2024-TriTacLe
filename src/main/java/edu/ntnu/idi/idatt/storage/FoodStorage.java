@@ -1,4 +1,6 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.storage;
+
+import edu.ntnu.idi.idatt.model.Item;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class FoodStorage {
    *
    * @param item
    */
-  public void addItem(Item item) {
+  public void addItemToFoodStorage(Item item) {
     // Update or make a new arrayList for item arguments name
     items.putIfAbsent(item.getName(), new ArrayList<>());
     ArrayList<Item> itemArrayList = items.get(item.getName());

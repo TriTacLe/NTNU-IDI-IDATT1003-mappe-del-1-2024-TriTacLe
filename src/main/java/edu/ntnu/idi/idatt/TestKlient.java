@@ -1,6 +1,11 @@
 package edu.ntnu.idi.idatt;//import static org.junit.Assert.assertEquals;
 //import org.junit.Test;
 
+import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Recipe;
+import edu.ntnu.idi.idatt.storage.Cookbook;
+import edu.ntnu.idi.idatt.storage.FoodStorage;
+
 import java.time.LocalDate;
 
 public class TestKlient {
@@ -91,19 +96,19 @@ public class TestKlient {
     FoodStorage foodStorage = new FoodStorage();
     Cookbook cookBook = new Cookbook();
     
-    foodStorage.addItem(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
-    foodStorage.addItem(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
-    foodStorage.addItem(new Item("Apple", 4, "Pieces", LocalDate.of(2026, 6, 7), 18));
+    foodStorage.addItemToFoodStorage(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
+    foodStorage.addItemToFoodStorage(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
+    foodStorage.addItemToFoodStorage(new Item("Apple", 4, "Pieces", LocalDate.of(2026, 6, 7), 18));
     
     
-    foodStorage.addItem(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
-    foodStorage.addItem(new Item("Milk", 100, "Milliliters", LocalDate.of(2024, 12, 15), 30));
-    foodStorage.addItem(new Item("Eggs", 10, "Pieces", LocalDate.of(2025, 12, 24), 3));
-    foodStorage.addItem(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
-    foodStorage.addItem(new Item("Sugar", 3000, "Grams", LocalDate.of(2025, 12, 24), 40));
+    foodStorage.addItemToFoodStorage(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
+    foodStorage.addItemToFoodStorage(new Item("Milk", 100, "Milliliters", LocalDate.of(2024, 12, 15), 30));
+    foodStorage.addItemToFoodStorage(new Item("Eggs", 10, "Pieces", LocalDate.of(2025, 12, 24), 3));
+    foodStorage.addItemToFoodStorage(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
+    foodStorage.addItemToFoodStorage(new Item("Sugar", 3000, "Grams", LocalDate.of(2025, 12, 24), 40));
     // Expired items
-    foodStorage.addItem(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
-    foodStorage.addItem(new Item("Orange", 5, "Pieces", LocalDate.of(1900, 12, 15), 20));
+    foodStorage.addItemToFoodStorage(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
+    foodStorage.addItemToFoodStorage(new Item("Orange", 5, "Pieces", LocalDate.of(1900, 12, 15), 20));
     
     foodStorage.findItemByName("Honey");
     foodStorage.removeItem("Honey", 300);
@@ -138,8 +143,8 @@ public class TestKlient {
     cookBook.displayCookbook();
     
     System.out.println("Suggsted recipes");
-    System.out.println(cookBook.suggestionRecipe(foodStorage));
-    
-    
+    cookBook.suggestionRecipe(foodStorage).forEach(recipe -> {
+      System.out.println(recipe);
+    });
   }
 }

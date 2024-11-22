@@ -1,4 +1,6 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.model;
+
+import edu.ntnu.idi.idatt.storage.FoodStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,10 @@ public class Recipe {
   
   public String getProcedure() {
     return procedure;
+  }
+  
+  public int getRecipeServes() {
+    return recipeServes;
   }
   
   public List<Item> getItemsList() {

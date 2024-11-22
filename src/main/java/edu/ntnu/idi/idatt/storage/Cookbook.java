@@ -1,7 +1,9 @@
-package edu.ntnu.idi.idatt; //import java.time.LocalDate;
+package edu.ntnu.idi.idatt.storage; //import java.time.LocalDate;
+
+import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Recipe;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Cookbook {
   //private ArrayList<Recipe> recipes;
