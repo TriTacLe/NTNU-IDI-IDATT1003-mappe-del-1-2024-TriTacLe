@@ -114,7 +114,7 @@ public class Item {
   
   public void increaseQuantity(double quantity) {
     if (quantity < 0) {
-      throw new IllegalArgumentException("INcreased quantity cannot be negative");
+      throw new IllegalArgumentException("Increased quantity cannot be negative");
     } else {
       this.quantity += quantity;
     }
