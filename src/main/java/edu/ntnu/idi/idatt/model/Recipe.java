@@ -154,7 +154,7 @@ public class Recipe {
     if (itemsList != null && !itemsList.isEmpty()) {
       stringBuilder.append("Items: \n");
       for (Item item : itemsList) {
-        stringBuilder.append(" - ").append(item).append("\n");
+        stringBuilder.append(" - ").append(item);
       }
     }
     return stringBuilder.toString();

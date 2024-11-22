@@ -23,17 +23,18 @@ class RecipeTest {
   private static final double ITEM2_INITIAL_QUANTITY = 30;
   private static final double ITEM3_INITIAL_QUANTITY = 40;
   private static final double ITEM4_INITIAL_QUANTITY = 20;
-  private static final double ITEM1_ADDITIONAL_QUANTITY = 200;
+  private static final double ITEM1_ADDITIONAL_QUANTITY = 20;
   
   @BeforeEach
   void setUp() {
-    item1 = new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), ITEM1_INITIAL_QUANTITY);
+    //items
+    item1 = new Item("Apple", 20, "Pieces", LocalDate.of(2000, 12, 15), ITEM1_INITIAL_QUANTITY);
     item2 = new Item("Milk", 100, "Milliliters", LocalDate.of(2024, 12, 15), ITEM2_INITIAL_QUANTITY);
     item3 = new Item("Sugar", 3000, "Grams", LocalDate.of(2025, 12, 24), ITEM3_INITIAL_QUANTITY);
     item4 = new Item("Orange", 5, "Pieces", LocalDate.of(1900, 12, 15), ITEM4_INITIAL_QUANTITY);
-    
+    //recipe
     recipe = new Recipe("Cake", "Delicious chocolate cake", "Mix all ingredients and bake", 4);
-    
+    //foodstorage
     foodStorage = new FoodStorage();
     foodStorage.addItemToFoodStorage(item1);
     foodStorage.addItemToFoodStorage(item2);
@@ -63,7 +64,7 @@ class RecipeTest {
     assertTrue(recipe.getItemsList().contains(item4), "Item4 (Orange) should be added to the recipe.");
     
     // Add item1 again (should increase the quantity)
-    Item item1Duplicate = new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), ITEM1_ADDITIONAL_QUANTITY);
+    Item item1Duplicate = new Item("Apple", 20, "Pieces", LocalDate.of(2000, 12, 15), ITEM1_ADDITIONAL_QUANTITY);
     recipe.addItemToRecipe(item1Duplicate);
     assertEquals(ITEM1_INITIAL_QUANTITY + ITEM1_ADDITIONAL_QUANTITY, item1.getQuantity(),
         "Quantity of Apple should be updated to the new total.");
@@ -117,8 +118,8 @@ class RecipeTest {
         "Description: Delicious chocolate cake\n" +
         "Procedure: Mix all ingredients and bake\n" +
         "Items: \n" +
-        " - Apple: 20.0 Pieces\n" +
-        " - Milk: 30.0 Milliliters\n";
+        " - Apple(20.0 Pieces) Expires: 2000-12-15 Price: 20.0 kr \n" +
+        " - Milk(100.0 Milliliters) Expires: 2024-12-15 Price: 30.0 kr \n";
     
     assertEquals(expectedOutput, recipe.toString(), "The toString method should output the correct recipe details.");
   }
