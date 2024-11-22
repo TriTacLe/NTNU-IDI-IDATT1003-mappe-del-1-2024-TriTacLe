@@ -12,8 +12,5 @@
         <module name="mappe-tri-tac-le" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="maven" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

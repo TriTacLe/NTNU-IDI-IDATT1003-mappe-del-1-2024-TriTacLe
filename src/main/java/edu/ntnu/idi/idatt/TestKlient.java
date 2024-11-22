@@ -1,10 +1,11 @@
 package edu.ntnu.idi.idatt;//import static org.junit.Assert.assertEquals;
 //import org.junit.Test;
+
 import java.time.LocalDate;
 
 public class TestKlient {
-    public static void main(String[] args) {
-        //test del 1
+  public static void main(String[] args) {
+    //test del 1
         /*
         Fridge fridge = new Fridge();
         fridge.addItem(new Item("Mel", 2000, "gram", LocalDate.of(2028, 2, 19), 30));
@@ -16,10 +17,10 @@ public class TestKlient {
         System.out.println(); //mellomrom
 
          */
-
-        System.out.println("Date today: " + LocalDate.now());
-        
-        System.out.println(); //mellomrom 
+    
+    System.out.println("Date today: " + LocalDate.now());
+    
+    System.out.println(); //mellomrom
         /*
         //add
         System.out.print("Fridge: ");fridge.printFridge();
@@ -85,23 +86,32 @@ public class TestKlient {
         cookingBook.suggestionRecipe(fridge);
 
          */
-
-        //Test del 2
-        FoodStorage foodStorage = new FoodStorage();
-        foodStorage.addItem(new Item("Mel", 2000, "Gram", LocalDate.of(2028, 2, 19), 30));
-        foodStorage.addItem(new Item("Eple", 2, "Stk", LocalDate.of(2000, 12, 15), 20));
-        foodStorage.addItem(new Item("Eple", 4, "Stk", LocalDate.of(2026, 6, 7), 18));
-
-        foodStorage.findItemByName("Mel");
-        foodStorage.removeItem("Mel",300);
-
-
-        foodStorage.getItemsExpirationDateBefore(LocalDate.of(2026,4,30));
-        foodStorage.getExpiredItems();
-
-        System.out.println(foodStorage.toString());
-        foodStorage.sortAlphabetically();
-        System.out.println(); //Space
-        foodStorage.totalValue();
-    }
+    
+    //Test del 2
+    FoodStorage foodStorage = new FoodStorage();
+    foodStorage.addItem(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
+    foodStorage.addItem(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
+    foodStorage.addItem(new Item("Apple", 4, "Pieces", LocalDate.of(2026, 6, 7), 18));
+    
+    foodStorage.findItemByName("Honey");
+    foodStorage.removeItem("Honey", 300);
+    
+    foodStorage.addItem(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
+    foodStorage.addItem(new Item("Milk", 100, "Milliliters", LocalDate.of(2024, 12, 15), 30));
+    foodStorage.addItem(new Item("Eggs", 10, "Pieces", LocalDate.of(2025, 12, 24), 3));
+    foodStorage.addItem(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
+    foodStorage.addItem(new Item("Sugar", 3000, "Grams", LocalDate.of(2025, 12, 24), 40));
+    // Expired items
+    foodStorage.addItem(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
+    foodStorage.addItem(new Item("Orange", 5, "Pieces", LocalDate.of(1900, 12, 15), 20));
+    
+    
+    foodStorage.getItemsExpirationDateBefore(LocalDate.of(2026, 4, 30));
+    foodStorage.getExpiredItems();
+    
+    System.out.println(foodStorage.toString());
+    foodStorage.sortAlphabetically();
+    System.out.println(); //Space
+    foodStorage.totalValue();
+  }
 }
