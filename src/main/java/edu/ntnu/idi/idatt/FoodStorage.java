@@ -165,7 +165,6 @@ public class FoodStorage {
     System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
   }
   
-  
   /**
    * Using streams to find every item with a expirationdate before input date
    *

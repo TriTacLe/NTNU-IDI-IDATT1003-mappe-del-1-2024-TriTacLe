@@ -75,9 +75,17 @@ public class Recipe {
   }
   
   /**
-   * Check if fridge has enough items to make the recipe.
+   * Checks if there are enough items in the food storage to prepare the recipe.
+   * <p>
+   * This method iterates through the list of items required for the recipe and compares
+   * the total quantity available in the food storage with the quantity needed for each
+   * item. It prints out whether there are enough items in the storage and displays the
+   * required and available quantities for each item.
+   * </p>
    *
-   * @param foodStorage the storage to check against
+   * @param foodStorage The food storage containing a collection of items in the kitchen.
+   *                    This is used to check the availability of each item required for
+   *                    the recipe.
    */
   public void hasEnoughItemsForRecipe(FoodStorage foodStorage) {
     boolean enoughItems = itemsList.stream()
@@ -143,22 +151,16 @@ public class Recipe {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
-    
-    // Append description if available
     if (description != null && !description.isEmpty()) {
       stringBuilder.append("Description: ").append(description).append("\n");
     }
-    
-    // Append procedure if available
     if (procedure != null && !procedure.isEmpty()) {
       stringBuilder.append("Procedure: ").append(procedure).append("\n");
     }
-    
-    // Append items list if available
     if (itemsList != null && !itemsList.isEmpty()) {
       stringBuilder.append("Items: \n");
       for (Item item : itemsList) {
-        stringBuilder.append(" - ").append(item); // This will use Item's toString
+        stringBuilder.append(" - ").append(item);
       }
     }
     return stringBuilder.toString();
