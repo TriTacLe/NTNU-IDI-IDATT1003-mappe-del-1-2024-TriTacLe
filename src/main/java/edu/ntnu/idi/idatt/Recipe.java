@@ -133,21 +133,6 @@ public class Recipe {
     }
   }
   
-  
-  // Displays recipe ingredients
-  public void printIngredientsRecipe() {
-    System.out.println(itemsList);
-  }
-  
-  // Shows procedure for making the recipe
-  public void procedure() {
-    System.out.println("Overview of ingredients and their quantities: ");
-    for (Item ingredient : itemsList) {
-      System.out.println(ingredient.getName() + " quantity: " + ingredient.getQuantity() + " " + ingredient.getUnit());
-    }
-    System.out.println(getDescription());
-  }
-  
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
