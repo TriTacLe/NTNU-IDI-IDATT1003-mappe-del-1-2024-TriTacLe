@@ -59,8 +59,8 @@ public class FoodStorage {
      */
     Optional<Item> matchingItem = itemArrayList.stream()
         .filter(existingItem ->
-            existingItem.getExpirationDate().equals(item.getExpirationDate()) &&
-                existingItem.getPerUnitPrice() == item.getPerUnitPrice())
+            existingItem.getExpirationDate().equals(item.getExpirationDate())
+                && existingItem.getPerUnitPrice() == item.getPerUnitPrice())
         .findFirst();
     
     if (matchingItem.isPresent()) {
@@ -109,35 +109,41 @@ public class FoodStorage {
     }
     
     ArrayList<Item> itemArrayList = items.get(name);
+    List<Item> sortedList = getSorteItemsByExpirationsDate(itemArrayList);
     
-    //filter the list to exclude expired items and sort by expiration date
-    List<Item> nonExpiredItems = itemArrayList.stream()
-        .filter(item -> !item.getExpirationDate().isBefore(LocalDate.now())) //Exclude expired items
-        .sorted(Comparator.comparing(Item::getExpirationDate)) //Sort by expiration date
-        .collect(Collectors.toList());
-    
-    if (nonExpiredItems.isEmpty()) {
+    if (sortedList.isEmpty()) {
       System.out.println("No non-expired items of " + name);
     }
     
-    Iterator<Item> iterator = nonExpiredItems.iterator();
-    while (iterator.hasNext()) {
+    processItemRemoval(name, quantity, itemArrayList, sortedList);
+  }
+  
+  private List<Item> getSorteItemsByExpirationsDate(ArrayList<Item> itemArrayList) {
+    return itemArrayList.stream()
+        .sorted(Comparator.comparing(Item::getExpirationDate))
+        .collect(Collectors.toList());
+  }
+  
+  private void processItemRemoval(String name, double quantity, ArrayList<Item> itemArrayList, List<Item> sortedItems) {
+    Iterator<Item> iterator = sortedItems.iterator();
+    
+    while (iterator.hasNext() && quantity > 0) {
       Item item = iterator.next();
-      if (quantity <= 0) {
-        break;
-      }
       
       if (item.getQuantity() > quantity) {
         item.setQuantity(item.getQuantity() - quantity);
-        System.out.println(quantity + " " + item.getUnit() + " removed from " + name);
-        return;
+        System.out.println(quantity + " " + item.getUnit().getSymbol() + " removed from " + name);
       } else {
         quantity -= item.getQuantity();
         itemArrayList.remove(item);
+        System.out.println("Removed " + item.getQuantity() + " " + item.getUnit().getSymbol() + " from " + name);
       }
     }
     if (itemArrayList.isEmpty()) {
       items.remove(name);
+    }
+    if (quantity > 0) {
+      System.out.println("Not enough " + name + " to remove");
     }
   }
   
@@ -146,24 +152,38 @@ public class FoodStorage {
    *
    * @return
    */
-  public void displayExpiredItems() {
-    //Convert Stream<ArrayList<Item>> into Stream<Item>
-    List<Item> expiredItems = items.values().stream()
-        .flatMap(List::stream) //Flatten nested ArrayList
+  public List<Item> getExpiredItems() {
+    return items.values().stream()
+        .flatMap(List::stream) //Flatten nested ArrayList into stream
         .filter(item -> item.getExpirationDate().isBefore(LocalDate.now()))
         .collect(Collectors.toList());
-    
-    if (expiredItems.isEmpty()) {
-      System.out.println("No items is expired! Nice!");
-    }
-    
-    double totalValue = expiredItems.stream()
+  }
+  
+  public double calculateTotalValue(List<Item> expiredItems) {
+    return expiredItems.stream()
         //.filter(item -> item.getExpirationDate().isBefore(LocalDate.now()))
         .mapToDouble(Item::getPerUnitPrice)
         .sum();
-    System.out.println("Expired items");
-    expiredItems.forEach(item -> System.out.println("- " + item));
-    System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
+  }
+  
+  /**
+   * Prints out total value. Checks if storage is empty
+   */
+  public double totalValueOfFoodStorage() {
+    return items.values().stream()
+        .flatMap(List::stream)
+        //.mapToDouble(item->item.getQuantity()*item.getPerUnitPrice())
+        .mapToDouble(Item::getPerUnitPrice)
+        .sum();
+  }
+  
+  /**
+   * helper
+   *
+   * @return
+   */
+  public boolean isEmpty() {
+    return items.isEmpty();
   }
   
   /**
@@ -171,48 +191,24 @@ public class FoodStorage {
    *
    * @param date items date
    */
-  public void viewItemsExpirationDateBefore(LocalDate date) {
-    System.out.println("Every item with expiration date before: " + date);
-    
-    List<Item> expiredItemsBefore = items.values().stream()
+  public List<Item> getItemsExpiringBefore(LocalDate date) {
+    return items.values().stream()
         .flatMap(List::stream)
         .filter(item -> item.getExpirationDate().isBefore(date))
         .collect(Collectors.toList());
-    
-    if (expiredItemsBefore.isEmpty()) {
-      System.out.println("No items expire before: " + date);
-    } else {
-      expiredItemsBefore.forEach(System.out::println);
-    }
-  }
-  
-  /**
-   * Prints out total value. Checks if storage is empty
-   */
-  public void totalValueOfFoodStorage() {
-    if (items.isEmpty()) {
-      System.out.println("Food storage is empty");
-    }
-    double totalValue = items.values().stream()
-        .flatMap(List::stream)
-        //.mapToDouble(item->item.getQuantity()*item.getPerUnitPrice())
-        .mapToDouble(Item::getPerUnitPrice)
-        .sum();
-    System.out.println("The total value of the food storage is: " + totalValue + " kr");
   }
   
   /**
    * Method that sorts out the items map alphabetically by name using streams sorted method
    */
-  public void displayFoodStorageAlphabetically() {
-    System.out.println("Food storage sorted out alphabetically by name:");
-    
+  public void getFoodStorageAlphabetically() {
     items.keySet().stream()
         .sorted() //sort key alphabetically
         .forEach(key -> {
           Double quantity = items.get(key).stream()
               .mapToDouble(Item::getQuantity)
               .sum();
+          
           if (items.get(key).size() > 1) {
             System.out.println(key + " (Quantity: " + quantity + "):");
             items.get(key).forEach(item -> System.out.println("- " + item));

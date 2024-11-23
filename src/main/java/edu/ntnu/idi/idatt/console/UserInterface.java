@@ -6,17 +6,17 @@ import edu.ntnu.idi.idatt.storage.FoodStorage;
 import edu.ntnu.idi.idatt.model.Item;
 import edu.ntnu.idi.idatt.model.Recipe;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 /**
  * attributtes are the outer layer classes: CookingBook and FoodStorage.
  */
 public class UserInterface {
   private FoodStorage foodStorage;
-  private Cookbook cookBook;
+  private Cookbook cookbook;
   private Scanner scanner;
   
   
@@ -25,7 +25,7 @@ public class UserInterface {
    */
   public void init() {
     foodStorage = new FoodStorage();
-    cookBook = new Cookbook();
+    cookbook = new Cookbook();
     scanner = new Scanner(System.in);
     preLoadData();
   }
@@ -72,8 +72,7 @@ public class UserInterface {
   }
   
   public enum MenuOption {
-    CREATE_GROCERY("1. Create a grocery"),
-    ADD_GROCERY("2. Add a grocery (update quantity)"),
+    ADD_GROCERY_TO_FOODSTORAGE("2. Add a grocery (update quantity)"),
     SEARCH_GROCERY("3. Search for a grocery"),
     REMOVE_GROCERY("4. Remove grocery quantity"),
     VIEW_EXPIRED_GROCERIES("5. View expired groceries and get their cost"),
@@ -124,22 +123,23 @@ public class UserInterface {
     MenuOption selectedOption = options[choice - 1];
     
     switch (selectedOption) {
-      case ADD_GROCERY -> addItem();
-      case SEARCH_GROCERY -> addItemToFoodStorage();
+      case ADD_GROCERY_TO_FOODSTORAGE -> addItem();
       case REMOVE_GROCERY -> removeItem();
       case VIEW_EXPIRED_GROCERIES -> displayExpiredItems();
-      case TOTAL_VALUE -> totalValueOfFoodStorage();
-      case VIEW_GROCERIES_BEFORE_DATE -> viewItemsExpirationDateBefore();
+      case TOTAL_VALUE -> totalValue();
+      case VIEW_GROCERIES_BEFORE_DATE -> viewItemsBeforeDate();
       case VIEW_ALL_GROCERIES -> displayFoodStorageAlphabetically();
-      case CREATE_RECIPE -> createRecipe();
+      case ADD_RECIPE_TO_COOKBOOK -> addRecipeToCookbook(); //not finished
       case CHECK_INGREDIENTS -> hasEnoughItemsForRecipe();
-      case ADD_RECIPE_TO_COOKBOOK -> addRecipeToCookbook();
-      case SUGGEST_RECIPES -> suggestionRecipe();
+      case SUGGEST_RECIPES -> suggestedRecipe(); //not finished
       case VIEW_COOKBOOK -> displayCookbook();
       case EXIT -> System.out.println("Thank you for taking the effort to save food!");
     }
   }
   
+  //Methods
+  
+  //Foodstorage
   private void addItem() {
     System.out.print("Enter item name: ");
     String name = scanner.next();
@@ -169,5 +169,105 @@ public class UserInterface {
     System.out.println("Item added: " + item);
   }
   
+  public void removeItem() {
+    System.out.print("Enter the name of the item to be removed from the food storage: ");
+    String name = scanner.next();
+    
+    System.out.print("Enter how much (quantity) of the item that should be removed: ");
+    double quantity = scanner.nextDouble();
+    
+    foodStorage.removeItemFromFoodStorage(name, quantity);
+  }
+  
+  public void displayExpiredItems() {
+    /*getExpiredItems method are being called from the foodStorage class
+    And the result is being assigned to the expiredItems variable*/
+    List<Item> expiredItems = foodStorage.getExpiredItems();
+    
+    if (expiredItems.isEmpty()) {
+      System.out.println("No items is expired! Nice!");
+    }
+    
+    double totalValue = foodStorage.calculateTotalValue(expiredItems);
+    
+    System.out.println("Expired items");
+    expiredItems.forEach(item -> System.out.println("- " + item));
+    System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
+  }
+  
+  public void totalValue() {
+    if (foodStorage.isEmpty()) {
+      System.out.println("Food storage is empty");
+    }
+    double totalValue = foodStorage.totalValueOfFoodStorage();
+    System.out.println("The total value of the food storage is: " + totalValue + " kr");
+    
+    foodStorage.totalValueOfFoodStorage();
+  }
+  
+  public void viewItemsBeforeDate() {
+    System.out.print("Enter a date (yyyy-mm-dd) to view items expiring before it: ");
+    String inputDate = scanner.next();
+    LocalDate date;
+    try {
+      date = LocalDate.parse(inputDate);
+    } catch (DateTimeParseException e) {
+      System.out.println("Invalid date format. Please enter the date in yyyy-mm-dd format.");
+      return;
+    }
+    
+    List<Item> itemsBeforeDate = foodStorage.getItemsExpiringBefore(date);
+    
+    if (itemsBeforeDate.isEmpty()) {
+      System.out.println("No items expire before: " + date);
+    } else {
+      itemsBeforeDate.forEach(System.out::println);
+    }
+  }
+  
+  public void displayFoodStorageAlphabetically() {
+    System.out.println("Food storage sorted out alphabetically by name:");
+    foodStorage.getFoodStorageAlphabetically();
+  }
+  
+  //Cookbook
+  
+  /**
+   *
+   */
+  public void addRecipeToCookbook() {
+    cookbook.addRecipeToCookbook();
+  }
+  
+  public void hasEnoughItemsForRecipe() {
+  
+  }
+  
+  public void suggestedRecipe() {
+    cookbook.getSuggestedRecipes(foodStorage);
+  }
+  
+  public void displayCookbook() {
+    HashMap<String, ArrayList<Recipe>> cookbookContents = cookbook.getCookbook();
+    
+    if (cookbookContents.isEmpty()) {
+      System.out.println("The cookbook does not contain any recipes.");
+      return;
+    }
+    System.out.println("Recipes in the cookbook: ");
+    cookbookContents.forEach((recipeName, recipes) -> {
+      System.out.println("Recipe Name: " + recipeName);
+      recipes.forEach(this::displayRecipe);
+    });
+  }
+  
+  /**
+   * Helper
+   *
+   * @param recipe
+   */
+  private void displayRecipe(Recipe recipe) {
+    System.out.println(recipe.toString());
+  }
   
 }
