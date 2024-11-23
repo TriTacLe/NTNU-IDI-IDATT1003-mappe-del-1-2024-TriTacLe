@@ -1,5 +1,8 @@
 package edu.ntnu.idi.idatt.model;
 
+import edu.ntnu.idi.idatt.Utils.InputValidation;
+import edu.ntnu.idi.idatt.Utils.Unit;
+
 import java.time.LocalDate;
 
 /**
@@ -12,8 +15,8 @@ public class Item {
   private double quantity;
   private Unit unit;
   private LocalDate expirationDate;
-  //private Date expirationDate;
   private double pricePerUnit;
+  private InputValidation inputValidation;
   
   /**
    * konstruktør to make an item (object) with (attributes) name, quantity, unit, expirations date price per unit
@@ -27,25 +30,12 @@ public class Item {
    */
   public Item(String name, double quantity, Unit unit, LocalDate expirationDate, double pricePerUnit) {
     //Input validering
-    if (name == null || name.isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be empty");
-    }
-    if (quantity < 0) {
-      throw new IllegalArgumentException("Quantity cannot be negative");
-    }
-    if (unit == null || unit.) {
-      throw new IllegalArgumentException("Unit cannot be empty");
-    }
-    /*
-    if (expirationDate == null || expirationDate.isBefore(LocalDate.now())) {
-      throw new IllegalArgumentException("Expiration date cannot be null");
-    }
+    inputValidation.validateString(name, "Name");
+    inputValidation.validateNonNegative(quantity, "Quantity");
+    inputValidation.validationEnum(unit);
+    inputValidation.validateDateNotInPast(expirationDate, true, "Expiration date");
+    inputValidation.validateNonNegative(pricePerUnit, "Price");
     
-     */
-    
-    if (pricePerUnit < 0) {
-      throw new IllegalArgumentException("Price per unit cannot be negative");
-    }
     this.name = name;
     this.quantity = quantity;
     this.unit = unit;
@@ -53,20 +43,12 @@ public class Item {
     this.pricePerUnit = pricePerUnit;
   }
   
-  public Item(String name, double quantity, String unit, double pricePerUnit) {
-    if (name == null || name.isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be empty");
-    }
-    if (quantity < 0) {
-      throw new IllegalArgumentException("Quantity cannot be negative");
-    }
-    if (unit == null || unit.isEmpty()) {
-      throw new IllegalArgumentException("Unit cannot be empty");
-    }
+  public Item(String name, double quantity, Unit unit, double pricePerUnit) {
+    inputValidation.validateString(name, "Name");
+    inputValidation.validateNonNegative(quantity, "Quantity");
+    inputValidation.validationEnum(unit);
+    inputValidation.validateNonNegative(pricePerUnit, "Price");
     
-    if (pricePerUnit < 0) {
-      throw new IllegalArgumentException("Price per unit cannot be negative");
-    }
     this.name = name;
     this.quantity = quantity;
     this.unit = unit;
@@ -103,7 +85,7 @@ public class Item {
    * gets the unit of quantity
    * @return unit of quantity
    */
-  public String getUnit() {
+  public Unit getUnit() {
     return unit;
   }
   
@@ -133,12 +115,10 @@ public class Item {
   }
   
   public void increaseQuantity(double quantity) {
-    if (quantity < 0) {
-      throw new IllegalArgumentException("Increased quantity cannot be negative");
-    } else {
-      this.quantity += quantity;
-    }
+    inputValidation.validateNonNegative(quantity, "Quantity");
+    this.quantity += quantity;
   }
+  
   
   /**
    * Skriver ut detaljene fra en vare (fra hint)
@@ -150,7 +130,6 @@ public class Item {
     // TODO Auto-generated method stub
     //if else forenklet
     String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
-    
     return name + "(" + quantity + " " + unit + ")" + expirationDateOutput + " Price: " + pricePerUnit + " kr \n"; // + ". Todays date: " + LocalDate.now();
   }
 }

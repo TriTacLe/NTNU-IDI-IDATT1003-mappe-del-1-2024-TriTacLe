@@ -1,9 +1,6 @@
 package edu.ntnu.idi.idatt.Utils;
 
-import edu.ntnu.idi.idatt.model.Unit;
-
 import java.time.LocalDate;
-import java.util.stream.Stream;
 
 public class InputValidation {
   
@@ -15,7 +12,7 @@ public class InputValidation {
    * @throws IllegalArgumentException if the field is null or empty.
    */
   public static void validateString(String input, String fieldName) {
-    if (input == null || input.trim().isEmpty()) {
+    if (input == null || input.trim().isBlank()) {
       throw new IllegalArgumentException(fieldName + " cannot be empty");
     }
   }
@@ -71,17 +68,15 @@ public class InputValidation {
    * @param unit The unit string to validate
    * @throws IllegalArgumentException if the unit is null, empty, or not a valid Unit enum value.
    */
-  public static void enumValidation(String unit) {
-    
-    if (unit == null || unit.isEmpty()) {
+  public static void validationEnum(Unit unit) {
+    if (unit == null) {
       throw new IllegalArgumentException("Unit cannot be empty/null " + unit);
     }
-    
-    boolean validation = Stream.of(Unit.values())
-        .anyMatch(unit1 -> unit1.name().equalsIgnoreCase(unit));
-    
-    if (!validation) {
-      throw new IllegalArgumentException("Invalid Unit " + unit);
+  }
+  
+  public static void validationEnumUnitType(Unit.UnitType unit, Unit.UnitType targetUnit) {
+    if (unit != targetUnit) {
+      throw new IllegalArgumentException("Incompatible units to convert " + this + " to " + targetUnit);
     }
   }
   
