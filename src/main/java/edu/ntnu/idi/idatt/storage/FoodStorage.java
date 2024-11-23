@@ -85,7 +85,7 @@ public class FoodStorage {
    * @param nameItem that represent the name attribute of the item. Can be called with getName
    *                 It also represents the key for the map
    */
-  public void findItemByName(String nameItem) {
+  public void addItemToFoodStorage(String nameItem) {
     if (items.containsKey(nameItem)) {
       System.out.println("Item found: "); //+ items.get(nameItem));
       items.get(nameItem).forEach(item -> System.out.println("- " + item)); //lamda so each item has a -
@@ -121,7 +121,6 @@ public class FoodStorage {
     }
     
     Iterator<Item> iterator = nonExpiredItems.iterator();
-    
     while (iterator.hasNext()) {
       Item item = iterator.next();
       if (quantity <= 0) {
@@ -147,7 +146,7 @@ public class FoodStorage {
    *
    * @return
    */
-  public void getExpiredItems() {
+  public void displayExpiredItems() {
     //Convert Stream<ArrayList<Item>> into Stream<Item>
     List<Item> expiredItems = items.values().stream()
         .flatMap(List::stream) //Flatten nested ArrayList
@@ -172,7 +171,7 @@ public class FoodStorage {
    *
    * @param date items date
    */
-  public void getItemsExpirationDateBefore(LocalDate date) {
+  public void viewItemsExpirationDateBefore(LocalDate date) {
     System.out.println("Every item with expiration date before: " + date);
     
     List<Item> expiredItemsBefore = items.values().stream()
@@ -190,7 +189,7 @@ public class FoodStorage {
   /**
    * Prints out total value. Checks if storage is empty
    */
-  public void totalValue() {
+  public void totalValueOfFoodStorage() {
     if (items.isEmpty()) {
       System.out.println("Food storage is empty");
     }
@@ -205,7 +204,7 @@ public class FoodStorage {
   /**
    * Method that sorts out the items map alphabetically by name using streams sorted method
    */
-  public void sortAlphabetically() {
+  public void displayFoodStorageAlphabetically() {
     System.out.println("Food storage sorted out alphabetically by name:");
     
     items.keySet().stream()

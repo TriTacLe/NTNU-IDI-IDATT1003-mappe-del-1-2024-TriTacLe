@@ -13,7 +13,7 @@ public class Cookbook {
     this.recipes = new HashMap<>();
   }
   
-  public void addRecipe(Recipe recipe) {
+  public void addRecipeToCookbook(Recipe recipe) {
     recipes.putIfAbsent(recipe.getName(), new ArrayList<>());
     ArrayList<Recipe> recipeArrayList = recipes.get(recipe.getName());
     
