@@ -85,13 +85,12 @@ public class FoodStorage {
    * @param nameItem that represent the name attribute of the item. Can be called with getName
    *                 It also represents the key for the map
    */
-  public void searchForItemInFoodStorage(String nameItem) {
-    if (items.containsKey(nameItem)) {
-      System.out.println("Item found: "); //+ items.get(nameItem));
-      items.get(nameItem).forEach(item -> System.out.println("- " + item)); //lamda so each item has a -
-    } else {
-      System.out.println("Item do not exist");
-    }
+  public Item searchForItemInFoodStorage(String nameItem) {
+    return items.entrySet().stream()
+        .filter(entry -> entry.getKey().toLowerCase().equals(nameItem))
+        .flatMap(entry -> entry.getValue().stream())
+        .findAny()
+        .orElse(null);
   }
   
   /**

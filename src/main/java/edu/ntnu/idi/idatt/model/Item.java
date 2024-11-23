@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class Item {
   // Attributter
   private final String name;
+  private final String nameLowercase;
   private double quantity;
   private Unit unit;
   private LocalDate expirationDate;
@@ -37,6 +38,7 @@ public class Item {
     inputValidation.validateNonNegative(pricePerUnit, "Price");
     
     this.name = name;
+    this.nameLowercase = name.toLowerCase();
     this.quantity = quantity;
     this.unit = unit;
     this.expirationDate = expirationDate;
@@ -50,9 +52,9 @@ public class Item {
     inputValidation.validateNonNegative(pricePerUnit, "Price");
     
     this.name = name;
+    this.nameLowercase = name.toLowerCase();
     this.quantity = quantity;
     this.unit = unit;
-    this.expirationDate = expirationDate;
     this.pricePerUnit = pricePerUnit;
   }
   
@@ -130,6 +132,6 @@ public class Item {
     // TODO Auto-generated method stub
     //if else forenklet
     String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
-    return name + "(" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput + " Price: " + pricePerUnit + " kr \n"; // + ". Todays date: " + LocalDate.now();
+    return name + "(" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput + " Price: " + pricePerUnit + " kr"; // + ". Todays date: " + LocalDate.now();
   }
 }

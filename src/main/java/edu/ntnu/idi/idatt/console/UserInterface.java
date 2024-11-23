@@ -1,12 +1,12 @@
 package edu.ntnu.idi.idatt.console;
 
+import edu.ntnu.idi.idatt.Utils.DummyData;
 import edu.ntnu.idi.idatt.Utils.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
 import edu.ntnu.idi.idatt.model.Item;
 import edu.ntnu.idi.idatt.model.Recipe;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -18,6 +18,7 @@ public class UserInterface {
   private FoodStorage foodStorage;
   private Cookbook cookbook;
   private Scanner scanner;
+  private DummyData dummyData;
   
   
   /**
@@ -27,29 +28,7 @@ public class UserInterface {
     foodStorage = new FoodStorage();
     cookbook = new Cookbook();
     scanner = new Scanner(System.in);
-    preLoadData();
-  }
-  
-  private void preLoadData() {
-    foodStorage.addItemToFoodStorage(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
-    foodStorage.addItemToFoodStorage(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
-    foodStorage.addItemToFoodStorage(new Item("Apple", 4, "Pieces", LocalDate.of(2026, 6, 7), 18));
-    foodStorage.addItemToFoodStorage(new Item("Honey", 2000, "Grams", LocalDate.of(2028, 2, 19), 30));
-    foodStorage.addItemToFoodStorage(new Item("Milk", 100, "Milliliters", LocalDate.of(2024, 12, 15), 30));
-    foodStorage.addItemToFoodStorage(new Item("Eggs", 10, "Pieces", LocalDate.of(2025, 12, 24), 3));
-    foodStorage.addItemToFoodStorage(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
-    foodStorage.addItemToFoodStorage(new Item("Sugar", 3000, "Grams", LocalDate.of(2025, 12, 24), 40));
-    // Expired items
-    foodStorage.addItemToFoodStorage(new Item("Apple", 2, "Pieces", LocalDate.of(2000, 12, 15), 20));
-    foodStorage.addItemToFoodStorage(new Item("Orange", 5, "Pieces", LocalDate.of(1900, 12, 15), 20));
-    
-    Recipe recipeForChicken = new Recipe("Chicken Breast", "decription decription decription", "procedure procedure procedure", 4);
-    Recipe recipeFiletMignon = new Recipe("Filet mignon", "decription decription decription", "procedure procedure procedure", 4);
-    recipeForChicken.addItemToRecipe(new Item("Honey", 200, "Grams", LocalDate.of(2028, 2, 19), 30));
-    recipeFiletMignon.addItemToRecipe(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
-    recipeFiletMignon.addItemToRecipe(new Item("Margarine", 1000, "Grams", LocalDate.of(2025, 12, 24), 30));
-    
-    recipeFiletMignon.addItemToRecipe(new Item("Filet mignon", 200, "Grams", LocalDate.of(2024, 12, 19), 100));
+    dummyData.loadDummyData(foodStorage, cookbook);
   }
   
   /**
@@ -72,19 +51,19 @@ public class UserInterface {
   }
   
   public enum MenuOption {
-    ADD_GROCERY_TO_FOODSTORAGE("2. Add a grocery (update quantity)"),
-    SEARCH_GROCERY("3. Search for a grocery"),
-    REMOVE_GROCERY("4. Remove grocery quantity"),
-    VIEW_EXPIRED_GROCERIES("5. View expired groceries and get their cost"),
-    TOTAL_VALUE("6. Get total value of all groceries"),
-    VIEW_GROCERIES_BEFORE_DATE("7. View all groceries expiring before a date"),
-    VIEW_ALL_GROCERIES("8. View all groceries (alphabetically)"),
-    CREATE_RECIPE("9. Create a recipe"),
-    CHECK_INGREDIENTS("10. Check if the fridge has enough ingredients for a recipe"),
-    ADD_RECIPE_TO_COOKBOOK("11. Add a recipe to the cookbook"),
-    SUGGEST_RECIPES("12. View suggested recipes from the cookbook"),
-    VIEW_COOKBOOK("13. View all recipes in the cookbook"),
-    EXIT("14. Exit");
+    ADD_GROCERY_TO_FOODSTORAGE("1. Add a grocery (update quantity)"),
+    SEARCH_GROCERY("2. Search for a grocery"),
+    REMOVE_GROCERY("3. Remove grocery quantity"),
+    VIEW_EXPIRED_GROCERIES("4. View expired groceries and get their cost"),
+    TOTAL_VALUE("5. Get total value of all groceries"),
+    VIEW_GROCERIES_BEFORE_DATE("6. View all groceries expiring before a date"),
+    VIEW_ALL_GROCERIES("7. View all groceries (alphabetically)"),
+    CREATE_RECIPE("8. Create a recipe"),
+    CHECK_INGREDIENTS("9. Check if the fridge has enough ingredients for a recipe"),
+    ADD_RECIPE_TO_COOKBOOK("10. Add a recipe to the cookbook"),
+    SUGGEST_RECIPES("11. View suggested recipes from the cookbook"),
+    VIEW_COOKBOOK("12. View all recipes in the cookbook"),
+    EXIT("13. Exit");
     
     private final String description;
     
@@ -124,13 +103,15 @@ public class UserInterface {
     
     switch (selectedOption) {
       case ADD_GROCERY_TO_FOODSTORAGE -> addItem();
+      case SEARCH_GROCERY -> searchItem(); //not finished
       case REMOVE_GROCERY -> removeItem();
       case VIEW_EXPIRED_GROCERIES -> displayExpiredItems();
       case TOTAL_VALUE -> totalValue();
       case VIEW_GROCERIES_BEFORE_DATE -> viewItemsBeforeDate();
       case VIEW_ALL_GROCERIES -> displayFoodStorageAlphabetically();
+      //case CREATE_RECIPE -> ; //notfinished
       case ADD_RECIPE_TO_COOKBOOK -> addRecipeToCookbook(); //not finished
-      case CHECK_INGREDIENTS -> hasEnoughItemsForRecipe();
+      case CHECK_INGREDIENTS -> hasEnoughItemsForRecipe(); //not finished
       case SUGGEST_RECIPES -> suggestedRecipe(); //not finished
       case VIEW_COOKBOOK -> displayCookbook();
       case EXIT -> System.out.println("Thank you for taking the effort to save food!");
@@ -167,6 +148,19 @@ public class UserInterface {
     Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
     foodStorage.addItemToFoodStorage(item);
     System.out.println("Item added: " + item);
+  }
+  
+  public void searchItem() {
+    System.out.println("Name of the item: ");
+    String name = scanner.next();
+    
+    Item searchStatus = foodStorage.searchForItemInFoodStorage(name.toLowerCase());
+    if (searchStatus != null) {
+      System.out.println("Item found: ");
+      System.out.println(searchStatus);
+    } else {
+      System.out.println("Item do not exist");
+    }
   }
   
   public void removeItem() {
@@ -236,7 +230,7 @@ public class UserInterface {
    *
    */
   public void addRecipeToCookbook() {
-    cookbook.addRecipeToCookbook();
+    //cookbook.addRecipeToCookbook();
   }
   
   public void hasEnoughItemsForRecipe() {

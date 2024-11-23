@@ -93,6 +93,7 @@ public class TestKlient {
          */
     
     //Test del 2
+    /*
     FoodStorage foodStorage = new FoodStorage();
     Cookbook cookBook = new Cookbook();
     
@@ -146,5 +147,7 @@ public class TestKlient {
     cookBook.suggestionRecipe(foodStorage).forEach(recipe -> {
       System.out.println(recipe);
     });
+    
+     */
   }
 }
