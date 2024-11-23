@@ -10,7 +10,7 @@ public class Item {
   // Attributter
   private final String name;
   private double quantity;
-  private final String unit;
+  private Unit unit;
   private LocalDate expirationDate;
   //private Date expirationDate;
   private double pricePerUnit;
@@ -25,7 +25,7 @@ public class Item {
    * @param expirationDate expiration date for the item
    * @param pricePerUnit   price per unit of item
    */
-  public Item(String name, double quantity, String unit, LocalDate expirationDate, double pricePerUnit) {
+  public Item(String name, double quantity, Unit unit, LocalDate expirationDate, double pricePerUnit) {
     //Input validering
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException("Name cannot be empty");
@@ -33,7 +33,7 @@ public class Item {
     if (quantity < 0) {
       throw new IllegalArgumentException("Quantity cannot be negative");
     }
-    if (unit == null || unit.isEmpty()) {
+    if (unit == null || unit.) {
       throw new IllegalArgumentException("Unit cannot be empty");
     }
     /*
