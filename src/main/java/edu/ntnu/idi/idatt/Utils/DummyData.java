@@ -15,6 +15,7 @@ public class DummyData {
   public static void loadDummyData(FoodStorage foodStorage, Cookbook cookbook) {
     // Add dummy items to FoodStorage
     foodStorage.addItemToFoodStorage(new Item("Honey", 2000, Unit.GRAM, LocalDate.of(2028, 2, 19), 30));
+    foodStorage.addItemToFoodStorage(new Item("Honey", 2000, Unit.GRAM, LocalDate.of(1934, 2, 19), 30));
     foodStorage.addItemToFoodStorage(new Item("Apple", 5, Unit.PIECES, LocalDate.of(2026, 6, 7), 10));
     foodStorage.addItemToFoodStorage(new Item("Apple", 2, Unit.PIECES, LocalDate.of(2029, 6, 7), 15));
     foodStorage.addItemToFoodStorage(new Item("Milk", 1, Unit.LITRE, LocalDate.of(2024, 12, 15), 20));
@@ -22,10 +23,11 @@ public class DummyData {
     foodStorage.addItemToFoodStorage(new Item("Sugar", 1000, Unit.GRAM, LocalDate.of(2025, 12, 24), 15));
     foodStorage.addItemToFoodStorage(new Item("Flour", 2000, Unit.GRAM, LocalDate.of(2026, 1, 15), 12));
     foodStorage.addItemToFoodStorage(new Item("Butter", 500, Unit.GRAM, LocalDate.of(2025, 5, 10), 25));
+    foodStorage.addItemToFoodStorage(new Item("Butter", 200, Unit.GRAM, LocalDate.of(2029, 5, 10), 20));
     foodStorage.addItemToFoodStorage(new Item("Chocolate", 200, Unit.GRAM, LocalDate.of(2026, 3, 15), 40));
     foodStorage.addItemToFoodStorage(new Item("Banana", 6, Unit.PIECES, LocalDate.of(2024, 11, 30), 5));
     foodStorage.addItemToFoodStorage(new Item("Vanilla Extract", 50, Unit.MILLILITRE, LocalDate.of(2025, 10, 15), 10));
-    
+    foodStorage.addItemToFoodStorage(new Item("Vanilla Extract", 50, Unit.MILLILITRE, LocalDate.of(1925, 10, 15), 10));
     // Add dummy recipes to Cookbook
     Recipe pancakeRecipe = new Recipe(
         "Pancakes",

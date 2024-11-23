@@ -34,7 +34,7 @@ public class Item {
     inputValidation.validateString(name, "Name");
     inputValidation.validateNonNegative(quantity, "Quantity");
     inputValidation.validationEnum(unit);
-    inputValidation.validateDateNotInPast(expirationDate, true, "Expiration date");
+    //inputValidation.validateDateNotInPast(expirationDate, true, "Expiration date");
     inputValidation.validateNonNegative(pricePerUnit, "Price");
     
     this.name = name;
