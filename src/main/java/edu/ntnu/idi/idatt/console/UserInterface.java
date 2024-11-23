@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt.console;
 
+import edu.ntnu.idi.idatt.Utils.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
 import edu.ntnu.idi.idatt.model.Item;
@@ -123,8 +124,7 @@ public class UserInterface {
     MenuOption selectedOption = options[choice - 1];
     
     switch (selectedOption) {
-      case CREATE_GROCERY -> createItem();
-      case ADD_GROCERY -> addItemToFoodStorage();
+      case ADD_GROCERY -> addItem();
       case SEARCH_GROCERY -> addItemToFoodStorage();
       case REMOVE_GROCERY -> removeItem();
       case VIEW_EXPIRED_GROCERIES -> displayExpiredItems();
@@ -143,19 +143,30 @@ public class UserInterface {
   private void addItem() {
     System.out.print("Enter item name: ");
     String name = scanner.next();
+    
     System.out.print("Enter quantity: ");
     double quantity = scanner.nextDouble();
-    System.out.print("Enter unit (e.g., kg, pcs): ");
-    String unit = scanner.next();
+    
+    System.out.print("Enter unit (kg, g, L, mL, pcs): ");
+    String unitInput = scanner.next().toUpperCase();
+    Unit unit;
+    try {
+      unit = Unit.valueOf(unitInput);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Invalid unit. Please enter a valid unit (e.g., g, kg, L, mL, pcs).");
+      return;
+    }
+    
     System.out.print("Enter expiration date (yyyy-mm-dd): ");
     String dateInput = scanner.next();
     LocalDate expirationDate = LocalDate.parse(dateInput);
+    
     System.out.print("Enter price per unit: ");
     double pricePerUnit = scanner.nextDouble();
+    
     Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
-    
     foodStorage.addItemToFoodStorage(item);
-    
+    System.out.println("Item added: " + item);
   }
   
   

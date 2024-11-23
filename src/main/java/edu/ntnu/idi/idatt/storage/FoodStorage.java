@@ -55,7 +55,7 @@ public class FoodStorage {
     ArrayList<Item> itemArrayList = items.get(item.getName());
   
     /*check if item and its attributes already exist
-    Checks the attributes pricePerUnit and expirationDate
+    Checks the attributes pricePerUnit, expirationDate and unit
      */
     Optional<Item> matchingItem = itemArrayList.stream()
         .filter(existingItem ->
@@ -85,7 +85,7 @@ public class FoodStorage {
    * @param nameItem that represent the name attribute of the item. Can be called with getName
    *                 It also represents the key for the map
    */
-  public void addItemToFoodStorage(String nameItem) {
+  public void searchForItemInFoodStorage(String nameItem) {
     if (items.containsKey(nameItem)) {
       System.out.println("Item found: "); //+ items.get(nameItem));
       items.get(nameItem).forEach(item -> System.out.println("- " + item)); //lamda so each item has a -
@@ -103,7 +103,7 @@ public class FoodStorage {
    * @param name     name of the item
    * @param quantity quantity of the item
    */
-  public void removeItem(String name, double quantity) {
+  public void removeItemFromFoodStorage(String name, double quantity) {
     if (!items.containsKey(name)) {
       System.out.println(name + " does not exist in the food storage");
     }

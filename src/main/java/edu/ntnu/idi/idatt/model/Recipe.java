@@ -72,7 +72,7 @@ public class Recipe {
     if (existingItem.isPresent()) {
       existingItem.get().increaseQuantity(item.getQuantity());
       System.out.println(item + "already exist in recipe: " + getName());
-      System.out.println("New quantity of item " + item + " is:" + existingItem.get().getQuantity());
+      System.out.println("Updated quantity of item " + item + " is:" + existingItem.get().getQuantity());
     } else {
       itemsList.add(item);
       System.out.println(item + " added to the recipe.");
@@ -99,7 +99,12 @@ public class Recipe {
           double totalAvailable = foodStorage.getItems().values().stream()
               .flatMap(List::stream)
               .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
-              .mapToDouble(Item::getQuantity)
+              .mapToDouble(storageItem -> {
+                if (!storageItem.getUnit().equals(recipeItem.getUnit())) {
+                  return storageItem.getUnit().converter(storageItem.getQuantity(), recipeItem.getUnit());
+                }
+                return storageItem.getQuantity();
+              })
               .sum();
           return totalAvailable >= recipeItem.getQuantity();
         });

@@ -74,7 +74,7 @@ public class InputValidation {
     }
   }
   
-  public static void validationEnumUnitType(Unit.UnitType unit, Unit.UnitType targetUnit) {
+  public void validationEnumUnitType(Unit.UnitType unit, Unit.UnitType targetUnit) {
     if (unit != targetUnit) {
       throw new IllegalArgumentException("Incompatible units to convert " + this + " to " + targetUnit);
     }

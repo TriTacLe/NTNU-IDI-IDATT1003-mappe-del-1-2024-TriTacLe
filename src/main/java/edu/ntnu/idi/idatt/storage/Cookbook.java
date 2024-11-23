@@ -44,8 +44,7 @@ public class Cookbook {
   
   public ArrayList<Recipe> suggestionRecipe(FoodStorage foodStorage) {
     /*compare all the items and quantity of the items in recipes in the cookbook
-    with
-    the items and quantity of the items in foodStorage*/
+    with the items and quantity of the items in foodStorage*/
     ArrayList<Recipe> suggestedRecipes = new ArrayList<>();
     
     recipes.forEach((recipeName, recipeList) -> {
