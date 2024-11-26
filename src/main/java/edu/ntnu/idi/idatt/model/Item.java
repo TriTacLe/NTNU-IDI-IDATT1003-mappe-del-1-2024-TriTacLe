@@ -14,9 +14,9 @@ public class Item {
   private final String name;
   private final String nameLowercase;
   private double quantity;
-  private Unit unit;
+  private final Unit unit;
   private LocalDate expirationDate;
-  private double pricePerUnit;
+  private final double pricePerUnit;
   private InputValidation inputValidation;
   
   /**
@@ -106,6 +106,7 @@ public class Item {
   public void setQuantity(double quantity) {
     this.quantity = quantity;
   }
+  
   
   /**
    * Sets the expirations date of the item

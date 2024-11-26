@@ -2,6 +2,8 @@ package edu.ntnu.idi.idatt.Utils;
 
 import edu.ntnu.idi.idatt.model.Item;
 
+import java.util.Arrays;
+
 public enum Unit {
   GRAM("g", UnitType.MASS, 0.001),
   KILOGRAM("kg", UnitType.MASS, 1.0),
@@ -44,6 +46,20 @@ public enum Unit {
   
   public Double convertToBaseUnit(Item item) {
     return item.getQuantity() * item.getUnit().getConversionNumber();
+  }
+  
+  /**
+   * Finds the Unit enum based on a user input string.
+   *
+   * @param input The string input by the user.
+   * @return The corresponding Unit enum.
+   * @throws IllegalArgumentException if the input does not match any Unit.
+   */
+  public static Unit fromSymbol(String input) {
+    return Arrays.stream(Unit.values())
+        .filter(unit -> unit.symbol.equalsIgnoreCase(input)) //ALlow case sensitive
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Invalid unit: " + input));
   }
   
 }

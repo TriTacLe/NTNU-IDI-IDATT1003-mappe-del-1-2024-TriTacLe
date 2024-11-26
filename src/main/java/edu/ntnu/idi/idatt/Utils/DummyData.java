@@ -75,10 +75,21 @@ public class DummyData {
     chocolateCakeRecipe.addItemToRecipe(new Item("Sugar", 200, Unit.GRAM, 15));
     chocolateCakeRecipe.addItemToRecipe(new Item("Butter", 150, Unit.GRAM, 25));
     
+    Recipe chickenAndRice = new Recipe(
+        "Chikcen and Rice",
+        "Manly diet for gym",
+        "1. Fry rice. \n2. Season and steak chicken \n3. Mix it up with veggies",
+        1
+    );
+    chickenAndRice.addItemToRecipe(new Item("Chicken", 1, Unit.KILOGRAM, 90));
+    chickenAndRice.addItemToRecipe(new Item("Rice", 500, Unit.GRAM, 30));
+    chickenAndRice.addItemToRecipe(new Item("Oil", 100, Unit.MILLILITRE, 45));
+    
     cookbook.addRecipeToCookbook(pancakeRecipe);
     cookbook.addRecipeToCookbook(honeyCakeRecipe);
     cookbook.addRecipeToCookbook(bananaBreadRecipe);
     cookbook.addRecipeToCookbook(chocolateCakeRecipe);
+    cookbook.addRecipeToCookbook(chickenAndRice);
     
   }
 }

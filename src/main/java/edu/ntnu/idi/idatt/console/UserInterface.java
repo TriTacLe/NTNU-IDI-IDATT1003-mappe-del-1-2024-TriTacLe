@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.console;
 
 import edu.ntnu.idi.idatt.Utils.DummyData;
+import edu.ntnu.idi.idatt.Utils.InputValidation;
 import edu.ntnu.idi.idatt.Utils.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
@@ -103,7 +104,7 @@ public class UserInterface {
     
     switch (selectedOption) {
       case ADD_GROCERY_TO_FOODSTORAGE -> addItem();
-      case SEARCH_GROCERY -> searchItem(); //not finished
+      case SEARCH_GROCERY -> searchItem();
       case REMOVE_GROCERY -> removeItem();
       case VIEW_EXPIRED_GROCERIES -> displayExpiredItems();
       case TOTAL_VALUE -> totalValue();
@@ -122,33 +123,45 @@ public class UserInterface {
   
   //Foodstorage
   private void addItem() {
-    System.out.print("Enter item name: ");
-    String name = scanner.next();
-    
-    System.out.print("Enter quantity: ");
-    double quantity = scanner.nextDouble();
-    
-    System.out.print("Enter unit (kg, g, L, mL, pcs): ");
-    String unitInput = scanner.next().toUpperCase();
-    Unit unit;
     try {
-      unit = Unit.valueOf(unitInput);
+      System.out.print("Enter item name: ");
+      String name = scanner.next();
+      
+      System.out.print("Enter quantity: ");
+      double quantity = scanner.nextDouble();
+      
+      System.out.print("Enter unit (kg, g, L, mL, pcs): ");
+      String unitInput = scanner.next().toUpperCase();
+      Unit unit;
+      try {
+        unit = Unit.fromSymbol(unitInput);
+      } catch (IllegalArgumentException e) {
+        System.out.println("Invalid unit. Please enter a valid unit (e.g., g, kg, L, mL, pcs).");
+        return;
+      }
+      System.out.print("Enter expiration date (yyyy-mm-dd): ");
+      String dateInput = scanner.next();
+      LocalDate expirationDate;
+      try {
+        expirationDate = LocalDate.parse(dateInput);
+        System.out.println("Expiration Date: " + expirationDate);
+      } catch (DateTimeParseException e) {
+        System.out.println("Invalid date format. Please enter the date in the format yyyy-mm-dd.");
+        return; // Exit or handle further as necessary
+      }
+      
+      System.out.print("Enter price per unit: ");
+      double pricePerUnit = scanner.nextDouble();
+      
+      Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
+      foodStorage.addItemToFoodStorage(item);
+      System.out.println("Item added: " + item);
+      
     } catch (IllegalArgumentException e) {
-      System.out.println("Invalid unit. Please enter a valid unit (e.g., g, kg, L, mL, pcs).");
-      return;
+      System.err.println("Error: " + e.getMessage());
     }
-    
-    System.out.print("Enter expiration date (yyyy-mm-dd): ");
-    String dateInput = scanner.next();
-    LocalDate expirationDate = LocalDate.parse(dateInput);
-    
-    System.out.print("Enter price per unit: ");
-    double pricePerUnit = scanner.nextDouble();
-    
-    Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
-    foodStorage.addItemToFoodStorage(item);
-    System.out.println("Item added: " + item);
   }
+  
   
   public void searchItem() {
     System.out.println("Name of the item: ");
@@ -167,10 +180,22 @@ public class UserInterface {
     System.out.print("Enter the name of the item to be removed from the food storage: ");
     String name = scanner.next();
     
+    if (!foodStorage.itemExis(name)) {
+      System.out.println("Item does not exist");
+    }
+    
     System.out.print("Enter how much (quantity) of the item that should be removed: ");
     double quantity = scanner.nextDouble();
     
-    foodStorage.removeItemFromFoodStorage(name, quantity);
+    double removedQuantity = foodStorage.removeItemFromFoodStorage(name, quantity);
+    
+    ArrayList<Item> itemArrayList = foodStorage.getItems().get(name);
+    if (removedQuantity > 0 || itemArrayList != null && !itemArrayList.isEmpty()) {
+      String unit = itemArrayList.get(0).getUnit().getSymbol(); // Assuming unit has a symbol
+      System.out.println("Removed " + removedQuantity + " " + unit + " of " + name);
+    } else {
+      System.out.println("Not enough " + name + " to remove");
+    }
   }
   
   public void displayExpiredItems() {
@@ -234,7 +259,7 @@ public class UserInterface {
   }
   
   public void hasEnoughItemsForRecipe() {
-  
+    
   }
   
   public void suggestedRecipe() {

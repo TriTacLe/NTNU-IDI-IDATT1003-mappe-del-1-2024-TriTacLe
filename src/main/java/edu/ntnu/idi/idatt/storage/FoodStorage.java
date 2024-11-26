@@ -93,6 +93,10 @@ public class FoodStorage {
         .orElse(null);
   }
   
+  public boolean itemExis(String name) {
+    return items.containsKey(name);
+  }
+  
   /**
    * Updated!!
    * If the item exists in the map and if the item's quantity is greater than the amount to remove
@@ -102,19 +106,28 @@ public class FoodStorage {
    * @param name     name of the item
    * @param quantity quantity of the item
    */
-  public void removeItemFromFoodStorage(String name, double quantity) {
-    if (!items.containsKey(name)) {
-      System.out.println(name + " does not exist in the food storage");
-    }
-    
+  public double removeItemFromFoodStorage(String name, double quantity) {
     ArrayList<Item> itemArrayList = items.get(name);
     List<Item> sortedList = getSorteItemsByExpirationsDate(itemArrayList);
     
-    if (sortedList.isEmpty()) {
-      System.out.println("No non-expired items of " + name);
-    }
+    double initialQuantity = quantity;
+    Iterator<Item> iterator = sortedList.iterator();
     
-    processItemRemoval(name, quantity, itemArrayList, sortedList);
+    while (iterator.hasNext() && quantity > 0) {
+      Item item = iterator.next();
+      
+      if (item.getQuantity() > quantity) {
+        item.setQuantity(item.getQuantity() - quantity);
+        quantity = 0;
+      } else {
+        quantity -= item.getQuantity();
+        itemArrayList.remove(item);
+      }
+    }
+    if (itemArrayList.isEmpty()) {
+      items.remove(name);
+    }
+    return initialQuantity - quantity; //Quantity removed
   }
   
   private List<Item> getSorteItemsByExpirationsDate(ArrayList<Item> itemArrayList) {
@@ -122,7 +135,7 @@ public class FoodStorage {
         .sorted(Comparator.comparing(Item::getExpirationDate))
         .collect(Collectors.toList());
   }
-  
+  /*
   private void processItemRemoval(String name, double quantity, ArrayList<Item> itemArrayList, List<Item> sortedItems) {
     Iterator<Item> iterator = sortedItems.iterator();
     
@@ -145,6 +158,7 @@ public class FoodStorage {
       System.out.println("Not enough " + name + " to remove");
     }
   }
+   */
   
   /**
    * prints out all expired items plus how much it costs
