@@ -1,6 +1,6 @@
-package edu.ntnu.idi.idatt.Utils;
+package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.Utils.InputValidation;
 
 import java.util.Arrays;
 

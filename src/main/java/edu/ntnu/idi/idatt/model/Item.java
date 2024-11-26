@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
 import edu.ntnu.idi.idatt.Utils.InputValidation;
-import edu.ntnu.idi.idatt.Utils.Unit;
 
 import java.time.LocalDate;
 

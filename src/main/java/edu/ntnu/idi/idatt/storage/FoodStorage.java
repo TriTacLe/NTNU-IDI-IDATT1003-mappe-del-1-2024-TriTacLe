@@ -68,17 +68,6 @@ public class FoodStorage {
     } else {
       itemArrayList.add(item);
     }
-    /*
-    items.entrySet().stream()
-            .filter(itemEntry -> itemEntry.getKey().equals(item.getName()))
-            .findFirst()
-            .ifPresentOrElse(
-                    // If found, increase the quantity with increaseQUantity method of the existing item
-                    entry -> entry.getValue().increaseQuantity(item.getQuantity()),
-                    // If not found, add the item to the map with put method
-                    () -> items.put(item.getName(), item)
-            );
-     */
   }
   
   /**

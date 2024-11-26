@@ -1,8 +1,13 @@
 package edu.ntnu.idi.idatt.Utils;
 
+import edu.ntnu.idi.idatt.model.Unit;
+
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class InputValidation {
+  
+  private static Scanner scanner = new Scanner(System.in);
   
   /**
    * Validates that a string input is not null or empty.
@@ -11,9 +16,10 @@ public class InputValidation {
    * @param fieldName the name of the field being validated.
    * @throws IllegalArgumentException if the field is null or empty.
    */
+  
   public static void validateString(String input, String fieldName) {
-    if (input == null || input.trim().isBlank()) {
-      throw new IllegalArgumentException(fieldName + " cannot be empty");
+    if (input.isEmpty() || input == null) {
+      throw new IllegalArgumentException(fieldName + " cannot be empty/null");
     }
   }
   
@@ -53,10 +59,8 @@ public class InputValidation {
    * @throws IllegalArgumentException if the date is in the past.
    */
   public static void validateDateNotInPast(LocalDate date, boolean allowNull, String fieldName) {
-    if (date == null) {
-      if (!allowNull) {
-        throw new IllegalArgumentException(fieldName + " cannot be null");
-      }
+    if (date == null && !allowNull) {
+      throw new IllegalArgumentException(fieldName + " cannot be null");
     } else if (date.isBefore(LocalDate.now())) {
       throw new IllegalArgumentException(fieldName + " cannot be in the past");
     }
