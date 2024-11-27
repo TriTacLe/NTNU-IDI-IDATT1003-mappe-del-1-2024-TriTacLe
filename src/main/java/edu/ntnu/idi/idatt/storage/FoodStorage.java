@@ -3,9 +3,19 @@ package edu.ntnu.idi.idatt.storage;
 import edu.ntnu.idi.idatt.model.Item;
 
 import java.time.LocalDate;
-import java.util.*;
+//import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Comparator;
+import java.util.Map;
 
 /**
  * The FoodStorage class manages a collection of items,
@@ -157,32 +167,26 @@ public class FoodStorage {
    * @return Total value of the items.
    */
   public double calculateTotalValue(Stream<Item> itemsStream) {
-    try {
-      if (itemsStream == null) {
-        throw new IllegalArgumentException("Items stream cannot be null");
-      }
-      return itemsStream
-          //.mapToDouble(item -> item.getQuantity() * item.getPerUnitPrice()) // Uncomment if quantity is relevant
-          .mapToDouble(Item::getPerUnitPrice)
-          .sum();
-    } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
-      return 0.0;
+    if (itemsStream == null) {
+      throw new IllegalArgumentException("Items stream cannot be null");
     }
+    return itemsStream
+        //.mapToDouble(item -> item.getQuantity() * item.getPerUnitPrice()) // Uncomment if quantity is relevant
+        .mapToDouble(Item::getPerUnitPrice)
+        .sum();
   }
   
-  
   /**
-   * helper
+   * Method that checks if items hashmap is empty.
    *
-   * @return
+   * @return items.isEmpty a bolean (true/false) value after checking if items is empty
    */
   public boolean isEmpty() {
     return items.isEmpty();
   }
   
   /**
-   * Using streams to find every item with a expirationdate before input date
+   * Using streams to find every item with a expirationdate before input date-
    *
    * @param date items date
    */
@@ -203,7 +207,6 @@ public class FoodStorage {
           Double quantity = items.get(key).stream()
               .mapToDouble(Item::getQuantity)
               .sum();
-          
           if (items.get(key).size() > 1) {
             System.out.println(items.get(key).getFirst().getName() + " (Quantity: " + quantity + "):");
             items.get(key).forEach(item -> System.out.println("- " + item));

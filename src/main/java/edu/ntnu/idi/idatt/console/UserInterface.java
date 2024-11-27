@@ -214,7 +214,7 @@ public class UserInterface {
       expiredItems.forEach(item -> System.out.println("- " + item));
       System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
     } catch (IllegalArgumentException e) {
-      System.out.println("Error!: " + e.getMessage());
+      System.out.println("Error while trying to display expired items: " + e.getMessage());
     }
   }
   
@@ -229,33 +229,38 @@ public class UserInterface {
       
       System.out.println("The total value of the food storage is: " + totalValue + " kr");
     } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
+      System.out.println("Error while getting the total value of food storage: " + e.getMessage());
     }
   }
   
   public void viewItemsBeforeDate() {
-    System.out.print("Enter a date (yyyy-mm-dd) to view items expiring before it: ");
-    String inputDate = scanner.next();
-    LocalDate date;
+    LocalDate date = inputHandler.getValidatedDate("Enter a date (yyyy-mm-dd) to view items expiring before it: ", "Please enter a date in the format yyyy-mm-dd");
     try {
-      date = LocalDate.parse(inputDate);
-    } catch (DateTimeParseException e) {
-      System.out.println("Invalid date format. Please enter the date in yyyy-mm-dd format.");
-      return;
-    }
-    
-    List<Item> itemsBeforeDate = foodStorage.getItemsExpiringBefore(date);
-    
-    if (itemsBeforeDate.isEmpty()) {
-      System.out.println("No items expire before: " + date);
-    } else {
-      itemsBeforeDate.forEach(System.out::println);
+      List<Item> itemsBeforeDate = foodStorage.getItemsExpiringBefore(date);
+      if (itemsBeforeDate == null || itemsBeforeDate.isEmpty()) {
+        System.out.println("No items expire before: " + date);
+      } else {
+        System.out.println("Items expiring before date: " + date + ": ");
+        //itemsBeforeDate.forEach(System.out::println);
+        itemsBeforeDate.forEach(item -> System.out.println("- " + item));
+        
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error while retrieving items: " + e.getMessage());
     }
   }
   
   public void displayFoodStorageAlphabetically() {
     System.out.println("Food storage sorted out alphabetically by name:");
-    foodStorage.getFoodStorageAlphabetically();
+    if (foodStorage == null || foodStorage.isEmpty()) {
+      System.out.println("Food storage is empty. These is not items in food storage.");
+      return;
+    }
+    try {
+      foodStorage.getFoodStorageAlphabetically();
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error while displaying the food storage from a-z: " + e.getMessage());
+    }
   }
   
   //Cookbook
@@ -268,7 +273,7 @@ public class UserInterface {
   }
   
   public void hasEnoughItemsForRecipe() {
-    
+  
   }
   
   public void suggestedRecipe() {
