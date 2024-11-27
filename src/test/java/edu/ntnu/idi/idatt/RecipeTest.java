@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt;
 
 import edu.ntnu.idi.idatt.model.Item;
 import edu.ntnu.idi.idatt.model.Recipe;
+import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,10 +29,10 @@ class RecipeTest {
   @BeforeEach
   void setUp() {
     //items
-    item1 = new Item("Apple", 20, "Pieces", LocalDate.of(2000, 12, 15), ITEM1_INITIAL_QUANTITY);
-    item2 = new Item("Milk", 100, "Milliliters", LocalDate.of(2024, 12, 15), ITEM2_INITIAL_QUANTITY);
-    item3 = new Item("Sugar", 3000, "Grams", LocalDate.of(2025, 12, 24), ITEM3_INITIAL_QUANTITY);
-    item4 = new Item("Orange", 5, "Pieces", LocalDate.of(1900, 12, 15), ITEM4_INITIAL_QUANTITY);
+    item1 = new Item("Apple", 20, Unit.PIECES, LocalDate.of(2000, 12, 15), ITEM1_INITIAL_QUANTITY);
+    item2 = new Item("Milk", 100, Unit.DESILITRE, LocalDate.of(2024, 12, 15), ITEM2_INITIAL_QUANTITY);
+    item3 = new Item("Sugar", 3000, Unit.GRAM, LocalDate.of(2025, 12, 24), ITEM3_INITIAL_QUANTITY);
+    item4 = new Item("Orange", 5, Unit.PIECES, LocalDate.of(1900, 12, 15), ITEM4_INITIAL_QUANTITY);
     //recipe
     recipe = new Recipe("Cake", "Delicious chocolate cake", "Mix all ingredients and bake", 4);
     //foodstorage
@@ -64,7 +65,7 @@ class RecipeTest {
     assertTrue(recipe.getItemsList().contains(item4), "Item4 (Orange) should be added to the recipe.");
     
     // Add item1 again (should increase the quantity)
-    Item item1Duplicate = new Item("Apple", 20, "Pieces", LocalDate.of(2000, 12, 15), ITEM1_ADDITIONAL_QUANTITY);
+    Item item1Duplicate = new Item("Apple", 20, Unit.PIECES, LocalDate.of(2000, 12, 15), ITEM1_ADDITIONAL_QUANTITY);
     recipe.addItemToRecipe(item1Duplicate);
     assertEquals(ITEM1_INITIAL_QUANTITY + ITEM1_ADDITIONAL_QUANTITY, item1.getQuantity(),
         "Quantity of Apple should be updated to the new total.");
@@ -84,7 +85,7 @@ class RecipeTest {
   void testHasNotEnoughItemsForRecipe() {
     // Simulate the case where eggs are missing
     foodStorage.getItems().clear();
-    foodStorage.addItemToFoodStorage(new Item("Eggs", 10, "Pieces", LocalDate.of(2025, 12, 24), 3));
+    foodStorage.addItemToFoodStorage(new Item("Eggs", 10, Unit.PIECES, LocalDate.of(2025, 12, 24), 3));
     
     recipe.addItemToRecipe(item1);  // Apple
     recipe.addItemToRecipe(item2);  // Milk
