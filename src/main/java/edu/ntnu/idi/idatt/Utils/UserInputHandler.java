@@ -11,17 +11,18 @@ public class UserInputHandler {
   
   public UserInputHandler(Scanner scanner) {
     this.scanner = scanner;
-    
   }
   
   public String getValidatedString(String request, String errorMessage) {
     while (true) {
       System.out.println(request);
-      String input = scanner.nextLine();
-      if (!input.isBlank()) {
+      try {
+        String input = scanner.next();
+        InputValidation.validateString(input, "name");
         return input;
+      } catch (IllegalArgumentException e) {
+        System.out.println(errorMessage + ": " + e.getMessage());
       }
-      System.out.println(errorMessage);
     }
   }
   

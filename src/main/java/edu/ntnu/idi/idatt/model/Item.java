@@ -132,6 +132,6 @@ public class Item {
     // TODO Auto-generated method stub
     //if else forenklet
     String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
-    return name + "(" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput + " Price: " + pricePerUnit + " kr"; // + ". Todays date: " + LocalDate.now();
+    return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput + " Price: " + pricePerUnit + " kr"; // + ". Todays date: " + LocalDate.now();
   }
 }

@@ -33,10 +33,10 @@ public class UserInterface {
    * Initalizes cookingbook and foodStorage.
    */
   public void init() {
+    scanner = new Scanner(System.in);
     inputHandler = new UserInputHandler(scanner);
     foodStorage = new FoodStorage();
     cookbook = new Cookbook();
-    scanner = new Scanner(System.in);
     dummyData.loadDummyData(foodStorage, cookbook);
   }
   
@@ -131,13 +131,12 @@ public class UserInterface {
   
   //Foodstorage
   private void addItem() {
-    UserInputHandler inputHandler = new UserInputHandler(new Scanner(System.in));
     try {
-      String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
+      final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
       double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity");
-      Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-      LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format yyyy-mm-dd", "Please enter a date in the format yyyy-mm-dd");
-      double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price");
+      final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
+      final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format yyyy-mm-dd", "Please enter a date in the format yyyy-mm-dd");
+      final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price");
       
       Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
       foodStorage.addItemToFoodStorage(item);
@@ -150,37 +149,52 @@ public class UserInterface {
   }
   
   public void searchItem() {
-    System.out.println("Name of the item: ");
-    String name = scanner.next();
-    
-    Item searchStatus = foodStorage.searchForItemInFoodStorage(name.toLowerCase());
-    if (searchStatus != null) {
-      System.out.println("Item found: ");
-      System.out.println(searchStatus);
-    } else {
-      System.out.println("Item do not exist");
+    try {
+      UserInputHandler inputHandler = new UserInputHandler(new Scanner(System.in));
+      String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
+      
+      if (foodStorage == null) {
+        System.out.println("Food storage is not initialized.");
+        return;
+      }
+      
+      Item searchStatus = foodStorage.searchForItemInFoodStorage(name.toLowerCase());
+      if (searchStatus != null) {
+        System.out.println("Item found: ");
+        System.out.println(searchStatus);
+      } else {
+        System.out.println("Item does not exist.");
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Invalid input: " + e.getMessage());
     }
   }
   
   public void removeItem() {
-    System.out.print("Enter the name of the item to be removed from the food storage: ");
-    String name = scanner.next();
-    
-    if (!foodStorage.itemExis(name)) {
-      System.out.println("Item does not exist");
-    }
-    
-    System.out.print("Enter how much (quantity) of the item that should be removed: ");
-    double quantity = scanner.nextDouble();
-    
-    double removedQuantity = foodStorage.removeItemFromFoodStorage(name, quantity);
-    
-    ArrayList<Item> itemArrayList = foodStorage.getItems().get(name);
-    if (removedQuantity > 0 || itemArrayList != null && !itemArrayList.isEmpty()) {
-      String unit = itemArrayList.get(0).getUnit().getSymbol(); // Assuming unit has a symbol
-      System.out.println("Removed " + removedQuantity + " " + unit + " of " + name);
-    } else {
-      System.out.println("Not enough " + name + " to remove");
+    try {
+      String name = inputHandler.getValidatedString("Enter the name of the item to be removed from the food storage: ", "Item name cannot be empty/blank");
+      
+      if (!foodStorage.itemExist(name)) {
+        throw new IllegalArgumentException("Item " + name + " does not exist");
+      }
+      
+      double quantity = inputHandler.getValidatedDouble("Enter how much quantity of the item that should be removed: ", "Invalid quantity");
+      double removedQuantity = foodStorage.removeItemFromFoodStorage(name, quantity);
+      ArrayList<Item> itemArrayList = foodStorage.getItems().get(name);
+      
+      if (itemArrayList == null || itemArrayList.isEmpty()) {
+        throw new IllegalArgumentException("Item " + name + " does not exist in the storage.");
+      }
+      System.out.println(removedQuantity); //
+      String unit = (itemArrayList.getFirst().getUnit() != null) ? itemArrayList.getFirst().getUnit().getSymbol() : "units";
+      if (removedQuantity > 0 && !itemArrayList.isEmpty()) {
+        System.out.println("Removed " + removedQuantity + " " + unit + " of " + name);
+      } else {
+        throw new IllegalArgumentException("Not enough " + name + " to remove. " + name
+            + " quantity: " + itemArrayList.getFirst().getQuantity() + unit);
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
     }
   }
   

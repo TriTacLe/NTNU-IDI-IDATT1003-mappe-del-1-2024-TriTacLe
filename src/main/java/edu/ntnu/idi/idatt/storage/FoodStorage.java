@@ -70,6 +70,10 @@ public class FoodStorage {
     }
   }
   
+  public boolean itemExist(String name) {
+    return items.containsKey(name);
+  }
+  
   /**
    * @param nameItem that represent the name attribute of the item. Can be called with getName
    *                 It also represents the key for the map
@@ -82,21 +86,21 @@ public class FoodStorage {
         .orElse(null);
   }
   
-  public boolean itemExis(String name) {
-    return items.containsKey(name);
-  }
   
   /**
-   * Updated!!
    * If the item exists in the map and if the item's quantity is greater than the amount to remove
    * Reduce the item's quantity
-   * If the quantity is less than or equal to the amount to remove, remove the item from the map
+   * If the quantity is less than or equal to the amount to remove, remove the item from the map.
    *
    * @param name     name of the item
    * @param quantity quantity of the item
    */
   public double removeItemFromFoodStorage(String name, double quantity) {
     ArrayList<Item> itemArrayList = items.get(name);
+    if (itemArrayList == null || itemArrayList.isEmpty()) {
+      return 0.0;
+    }
+    
     List<Item> sortedList = getSorteItemsByExpirationsDate(itemArrayList);
     
     double initialQuantity = quantity;
@@ -110,7 +114,8 @@ public class FoodStorage {
         quantity = 0;
       } else {
         quantity -= item.getQuantity();
-        itemArrayList.remove(item);
+        iterator.remove();
+        //itemArrayList.remove(item);
       }
     }
     if (itemArrayList.isEmpty()) {
@@ -121,6 +126,7 @@ public class FoodStorage {
   
   private List<Item> getSorteItemsByExpirationsDate(ArrayList<Item> itemArrayList) {
     return itemArrayList.stream()
+        .filter(item -> item.getExpirationDate() != null) //Avoid nullpoointer when using comparator
         .sorted(Comparator.comparing(Item::getExpirationDate))
         .collect(Collectors.toList());
   }
