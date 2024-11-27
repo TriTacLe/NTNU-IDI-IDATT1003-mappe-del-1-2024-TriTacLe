@@ -18,7 +18,7 @@ public class InputValidation {
    */
   
   public static void validateString(String input, String fieldName) {
-    if (input.isEmpty() || input == null) {
+    if (input == null || input.isBlank()) {
       throw new IllegalArgumentException(fieldName + " cannot be empty/null");
     }
   }
@@ -28,24 +28,11 @@ public class InputValidation {
    *
    * @param number    The number to validate.
    * @param fieldName The name of the field being validated.
-   * @throws IllegalArgumentException if the number is negative.
+   * @throws IllegalArgumentException if the number is negative or null.
    */
-  public static void validateNonNegative(double number, String fieldName) {
-    if (number < 0) {
+  public static void validateDouble(Double number, String fieldName) {
+    if (number == null || number < 0) {
       throw new IllegalArgumentException(fieldName + " cannot be negative");
-    }
-  }
-  
-  /**
-   * Validates that an object is not null.
-   *
-   * @param obj       The object to validate.
-   * @param fieldName The name of the field being validated.
-   * @throws IllegalArgumentException if the object is null.
-   */
-  public static void validateNotNull(Object obj, String fieldName) {
-    if (obj == null) {
-      throw new IllegalArgumentException(fieldName + " cannot be null");
     }
   }
   
@@ -55,14 +42,18 @@ public class InputValidation {
    *
    * @param date      The date to validate.
    * @param allowNull Whether null is allowed.
-   * @param fieldName The name of the field being validated.
    * @throws IllegalArgumentException if the date is in the past.
    */
-  public static void validateDateNotInPast(LocalDate date, boolean allowNull, String fieldName) {
+  public static void validateDateNotInPast(LocalDate date, boolean allowNull) {
     if (date == null && !allowNull) {
-      throw new IllegalArgumentException(fieldName + " cannot be null");
+      throw new IllegalArgumentException("Expiration date cannot be null");
     } else if (date.isBefore(LocalDate.now())) {
-      throw new IllegalArgumentException(fieldName + " cannot be in the past");
+      System.out.println("This date is in the past. Are you sure you want to continue? Yes to continue, anything else to not continue");
+      Scanner scanner = new Scanner(System.in);
+      String userInput = scanner.nextLine().toUpperCase();
+      if (!"YES".equalsIgnoreCase(userInput)) {
+        throw new IllegalArgumentException("Expiration date cannot be in the past");
+      }
     }
   }
   

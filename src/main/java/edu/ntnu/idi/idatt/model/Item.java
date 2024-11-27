@@ -31,10 +31,10 @@ public class Item {
   public Item(String name, double quantity, Unit unit, LocalDate expirationDate, double pricePerUnit) {
     //Input validering
     inputValidation.validateString(name, "Name");
-    inputValidation.validateNonNegative(quantity, "Quantity");
+    inputValidation.validateDouble(quantity, "Quantity");
     inputValidation.validationEnum(unit);
     //inputValidation.validateDateNotInPast(expirationDate, true, "Expiration date");
-    inputValidation.validateNonNegative(pricePerUnit, "Price");
+    inputValidation.validateDouble(pricePerUnit, "Price");
     
     this.name = name;
     this.nameLowercase = name.toLowerCase();
@@ -46,9 +46,9 @@ public class Item {
   
   public Item(String name, double quantity, Unit unit, double pricePerUnit) {
     inputValidation.validateString(name, "Name");
-    inputValidation.validateNonNegative(quantity, "Quantity");
+    inputValidation.validateDouble(quantity, "Quantity");
     inputValidation.validationEnum(unit);
-    inputValidation.validateNonNegative(pricePerUnit, "Price");
+    inputValidation.validateDouble(pricePerUnit, "Price");
     
     this.name = name;
     this.nameLowercase = name.toLowerCase();
@@ -117,7 +117,7 @@ public class Item {
   }
   
   public void increaseQuantity(double quantity) {
-    inputValidation.validateNonNegative(quantity, "Quantity");
+    inputValidation.validateDouble(quantity, "Quantity");
     this.quantity += quantity;
   }
   

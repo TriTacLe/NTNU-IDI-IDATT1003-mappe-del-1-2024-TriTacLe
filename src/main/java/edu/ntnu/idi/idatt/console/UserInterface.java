@@ -1,6 +1,8 @@
 package edu.ntnu.idi.idatt.console;
 
 import edu.ntnu.idi.idatt.Utils.DummyData;
+import edu.ntnu.idi.idatt.Utils.InputValidation;
+import edu.ntnu.idi.idatt.Utils.UserInputHandler;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
@@ -24,12 +26,14 @@ public class UserInterface {
   private Cookbook cookbook;
   private Scanner scanner;
   private DummyData dummyData;
+  private UserInputHandler inputHandler;
   
   
   /**
    * Initalizes cookingbook and foodStorage.
    */
   public void init() {
+    inputHandler = new UserInputHandler(scanner);
     foodStorage = new FoodStorage();
     cookbook = new Cookbook();
     scanner = new Scanner(System.in);
@@ -127,65 +131,23 @@ public class UserInterface {
   
   //Foodstorage
   private void addItem() {
+    UserInputHandler inputHandler = new UserInputHandler(new Scanner(System.in));
     try {
-      System.out.print("Enter item name: ");
-      String name = scanner.next();
-      
-      double quantity = 0;
-      while (true) {
-        try {
-          System.out.print("Enter quantity: ");
-          quantity = scanner.nextDouble();
-          break;
-        } catch (IllegalArgumentException e) {
-          System.out.println("Invalid input for quantity. Please enter a numeric value.");
-          scanner.next(); // Clear invalid input
-        }
-      }
-      
-      Unit unit = null;
-      while (true) {
-        try {
-          System.out.print("Enter unit (kg, g, L, mL, pcs): ");
-          unit = Unit.fromSymbol(scanner.next());
-          break;
-        } catch (IllegalArgumentException e) {
-          System.out.println("Invalid unit. Please enter one of the valid units: kg, g, L, mL, pcs.");
-        }
-      }
-      
-      LocalDate expirationDate = null;
-      while (true) {
-        try {
-          System.out.print("Enter expiration date (yyyy-mm-dd): ");
-          expirationDate = LocalDate.parse(scanner.next());
-          break;
-        } catch (DateTimeParseException e) {
-          System.out.println("Invalid date format. Please enter the date in the format yyyy-mm-dd.");
-        }
-      }
-      
-      double pricePerUnit = 0;
-      while (true) {
-        try {
-          System.out.print("Enter price per unit: ");
-          pricePerUnit = scanner.nextDouble();
-          break;
-        } catch (IllegalArgumentException e) {
-          System.out.println("Invalid input for price. Please enter a numeric value.");
-          scanner.next();
-        }
-      }
+      String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
+      double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity");
+      Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
+      LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format yyyy-mm-dd", "Please enter a date in the format yyyy-mm-dd");
+      double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price");
       
       Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
       foodStorage.addItemToFoodStorage(item);
+      
       System.out.println("Item added: " + item);
       
-    } catch (Exception e) {
-      System.out.println("An unexpected error occurred: " + e.getMessage());
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
     }
   }
-  
   
   public void searchItem() {
     System.out.println("Name of the item: ");
@@ -283,7 +245,7 @@ public class UserInterface {
   }
   
   public void hasEnoughItemsForRecipe() {
-    
+  
   }
   
   public void suggestedRecipe() {
