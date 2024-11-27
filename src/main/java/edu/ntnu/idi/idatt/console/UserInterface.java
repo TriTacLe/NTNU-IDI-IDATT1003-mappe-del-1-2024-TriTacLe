@@ -208,7 +208,7 @@ public class UserInterface {
         return;
       }
       
-      double totalValue = foodStorage.calculateTotalValue(expiredItems);
+      double totalValue = foodStorage.calculateTotalValue(expiredItems.stream());
       
       System.out.println("Expired items");
       expiredItems.forEach(item -> System.out.println("- " + item));
@@ -219,13 +219,18 @@ public class UserInterface {
   }
   
   public void totalValue() {
-    if (foodStorage.isEmpty()) {
-      System.out.println("Food storage is empty");
+    try {
+      if (foodStorage == null || foodStorage.isEmpty()) {
+        System.out.println("Food storage is empty");
+        return;
+      }
+      double totalValue = foodStorage.calculateTotalValue(foodStorage.getItems().values().stream()
+          .flatMap(List::stream));
+      
+      System.out.println("The total value of the food storage is: " + totalValue + " kr");
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
     }
-    double totalValue = foodStorage.totalValueOfFoodStorage();
-    System.out.println("The total value of the food storage is: " + totalValue + " kr");
-    
-    foodStorage.totalValueOfFoodStorage();
   }
   
   public void viewItemsBeforeDate() {
@@ -263,7 +268,7 @@ public class UserInterface {
   }
   
   public void hasEnoughItemsForRecipe() {
-  
+    
   }
   
   public void suggestedRecipe() {

@@ -5,6 +5,7 @@ import edu.ntnu.idi.idatt.model.Item;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The FoodStorage class manages a collection of items,
@@ -135,31 +136,6 @@ public class FoodStorage {
         .collect(Collectors.toList());
   }
   
-  /*
-  private void processItemRemoval(String name, double quantity, ArrayList<Item> itemArrayList, List<Item> sortedItems) {
-    Iterator<Item> iterator = sortedItems.iterator();
-    
-    while (iterator.hasNext() && quantity > 0) {
-      Item item = iterator.next();
-      
-      if (item.getQuantity() > quantity) {
-        item.setQuantity(item.getQuantity() - quantity);
-        System.out.println(quantity + " " + item.getUnit().getSymbol() + " removed from " + name);
-      } else {
-        quantity -= item.getQuantity();
-        itemArrayList.remove(item);
-        System.out.println("Removed " + item.getQuantity() + " " + item.getUnit().getSymbol() + " from " + name);
-      }
-    }
-    if (itemArrayList.isEmpty()) {
-      items.remove(name);
-    }
-    if (quantity > 0) {
-      System.out.println("Not enough " + name + " to remove");
-    }
-  }
-   */
-  
   /**
    * prints out all expired items plus how much it costs
    *
@@ -174,23 +150,27 @@ public class FoodStorage {
         .collect(Collectors.toList());
   }
   
-  public double calculateTotalValue(List<Item> expiredItems) {
-    return expiredItems.stream()
-        //.filter(item -> item.getExpirationDate().isBefore(LocalDate.now()))
-        .mapToDouble(Item::getPerUnitPrice)
-        .sum();
+  /**
+   * Calculates the total value of items provided in the stream.
+   *
+   * @param itemsStream Stream of items to calculate the total value for.
+   * @return Total value of the items.
+   */
+  public double calculateTotalValue(Stream<Item> itemsStream) {
+    try {
+      if (itemsStream == null) {
+        throw new IllegalArgumentException("Items stream cannot be null");
+      }
+      return itemsStream
+          //.mapToDouble(item -> item.getQuantity() * item.getPerUnitPrice()) // Uncomment if quantity is relevant
+          .mapToDouble(Item::getPerUnitPrice)
+          .sum();
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+      return 0.0;
+    }
   }
   
-  /**
-   * Prints out total value. Checks if storage is empty
-   */
-  public double totalValueOfFoodStorage() {
-    return items.values().stream()
-        .flatMap(List::stream)
-        //.mapToDouble(item->item.getQuantity()*item.getPerUnitPrice())
-        .mapToDouble(Item::getPerUnitPrice)
-        .sum();
-  }
   
   /**
    * helper
