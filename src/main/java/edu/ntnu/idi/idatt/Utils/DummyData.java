@@ -16,7 +16,6 @@ public class DummyData {
   public static void loadDummyData(FoodStorage foodStorage, Cookbook cookbook) {
     // Add dummy items to FoodStorage
     foodStorage.addItemToFoodStorage(new Item("Honey", 2000, Unit.GRAM, LocalDate.of(2028, 2, 19), 30));
-    foodStorage.addItemToFoodStorage(new Item("Honey", 2000, Unit.GRAM, LocalDate.of(1934, 2, 19), 30));
     foodStorage.addItemToFoodStorage(new Item("Apple", 5, Unit.PIECES, LocalDate.of(2026, 6, 7), 10));
     foodStorage.addItemToFoodStorage(new Item("Apple", 2, Unit.PIECES, LocalDate.of(2029, 6, 7), 15));
     foodStorage.addItemToFoodStorage(new Item("Milk", 1, Unit.LITRE, LocalDate.of(2024, 12, 15), 20));
@@ -28,8 +27,10 @@ public class DummyData {
     foodStorage.addItemToFoodStorage(new Item("Chocolate", 200, Unit.GRAM, LocalDate.of(2026, 3, 15), 40));
     foodStorage.addItemToFoodStorage(new Item("Banana", 6, Unit.PIECES, LocalDate.of(2024, 11, 30), 5));
     foodStorage.addItemToFoodStorage(new Item("Vanilla Extract", 50, Unit.MILLILITRE, LocalDate.of(2025, 10, 15), 10));
+    //expired items
+    foodStorage.addItemToFoodStorage(new Item("Honey", 2000, Unit.GRAM, LocalDate.of(1934, 2, 19), 30));
     foodStorage.addItemToFoodStorage(new Item("Vanilla Extract", 50, Unit.MILLILITRE, LocalDate.of(1925, 10, 15), 10));
-    // Add dummy recipes to Cookbook
+    //Recipes
     Recipe pancakeRecipe = new Recipe(
         "Pancakes",
         "A simple pancake recipe.",
@@ -76,6 +77,7 @@ public class DummyData {
     chocolateCakeRecipe.addItemToRecipe(new Item("Sugar", 200, Unit.GRAM, 15));
     chocolateCakeRecipe.addItemToRecipe(new Item("Butter", 150, Unit.GRAM, 25));
     
+    //recipes that cant be made
     Recipe chickenAndRice = new Recipe(
         "Chikcen and Rice",
         "Manly diet for gym",

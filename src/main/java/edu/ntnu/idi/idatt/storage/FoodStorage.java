@@ -3,13 +3,7 @@ package edu.ntnu.idi.idatt.storage;
 import edu.ntnu.idi.idatt.model.Item;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -173,7 +167,9 @@ public class FoodStorage {
    */
   public List<Item> getExpiredItems() {
     return items.values().stream()
+        .filter(Objects::nonNull)
         .flatMap(List::stream) //Flatten nested ArrayList into stream
+        .filter(item -> item != null && item.getExpirationDate() != null)
         .filter(item -> item.getExpirationDate().isBefore(LocalDate.now()))
         .collect(Collectors.toList());
   }

@@ -200,17 +200,22 @@ public class UserInterface {
   public void displayExpiredItems() {
     /*getExpiredItems method are being called from the foodStorage class
     And the result is being assigned to the expiredItems variable*/
-    List<Item> expiredItems = foodStorage.getExpiredItems();
-    
-    if (expiredItems.isEmpty()) {
-      System.out.println("No items is expired! Nice!");
+    try {
+      List<Item> expiredItems = foodStorage.getExpiredItems();
+      
+      if (expiredItems == null || expiredItems.isEmpty()) {
+        System.out.println("No items is expired! Nice!");
+        return;
+      }
+      
+      double totalValue = foodStorage.calculateTotalValue(expiredItems);
+      
+      System.out.println("Expired items");
+      expiredItems.forEach(item -> System.out.println("- " + item));
+      System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error!: " + e.getMessage());
     }
-    
-    double totalValue = foodStorage.calculateTotalValue(expiredItems);
-    
-    System.out.println("Expired items");
-    expiredItems.forEach(item -> System.out.println("- " + item));
-    System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
   }
   
   public void totalValue() {
