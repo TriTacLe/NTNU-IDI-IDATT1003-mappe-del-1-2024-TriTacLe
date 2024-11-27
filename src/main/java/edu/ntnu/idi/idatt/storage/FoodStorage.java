@@ -51,8 +51,8 @@ public class FoodStorage {
    */
   public void addItemToFoodStorage(Item item) {
     // Update or make a new arrayList for item arguments name
-    items.putIfAbsent(item.getName(), new ArrayList<>());
-    ArrayList<Item> itemArrayList = items.get(item.getName());
+    items.putIfAbsent(item.getName().toLowerCase(), new ArrayList<>());
+    ArrayList<Item> itemArrayList = items.get(item.getName().toLowerCase());
   
     /*check if item and its attributes already exist
     Checks the attributes pricePerUnit, expirationDate and unit
@@ -80,7 +80,8 @@ public class FoodStorage {
    */
   public Item searchForItemInFoodStorage(String nameItem) {
     return items.entrySet().stream()
-        .filter(entry -> entry.getKey().toLowerCase().equals(nameItem))
+        //.filter(entry -> entry.getKey().toLowerCase().equals(nameItem.toLowerCase()))
+        .filter(entry -> entry.getKey().equalsIgnoreCase(nameItem))
         .flatMap(entry -> entry.getValue().stream())
         .findAny()
         .orElse(null);
@@ -96,19 +97,27 @@ public class FoodStorage {
    * @param quantity quantity of the item
    */
   public double removeItemFromFoodStorage(String name, double quantity) {
-    ArrayList<Item> itemArrayList = items.get(name);
+    ArrayList<Item> itemArrayList = items.get(name.toLowerCase());
+    
     if (itemArrayList == null || itemArrayList.isEmpty()) {
-      return 0.0;
+      throw new IllegalArgumentException("Item does not exist in storage.");
     }
     
-    List<Item> sortedList = getSorteItemsByExpirationsDate(itemArrayList);
+    double totalQuantity = itemArrayList.stream()
+        .mapToDouble(Item::getQuantity)
+        .sum();
+    
+    if (quantity > totalQuantity) {
+      throw new IllegalArgumentException("Invalid quantity to remove: " + quantity + ". Available: " + totalQuantity);
+    }
+    
+    List<Item> sortedList = getSorteItemsByExpirationsDate(itemArrayList); //removes the oldest item
     
     double initialQuantity = quantity;
     Iterator<Item> iterator = sortedList.iterator();
     
     while (iterator.hasNext() && quantity > 0) {
       Item item = iterator.next();
-      
       if (item.getQuantity() > quantity) {
         item.setQuantity(item.getQuantity() - quantity);
         quantity = 0;
@@ -121,8 +130,9 @@ public class FoodStorage {
     if (itemArrayList.isEmpty()) {
       items.remove(name);
     }
-    return initialQuantity - quantity; //Quantity removed
+    return initialQuantity - quantity;
   }
+  
   
   private List<Item> getSorteItemsByExpirationsDate(ArrayList<Item> itemArrayList) {
     return itemArrayList.stream()
@@ -130,6 +140,7 @@ public class FoodStorage {
         .sorted(Comparator.comparing(Item::getExpirationDate))
         .collect(Collectors.toList());
   }
+  
   /*
   private void processItemRemoval(String name, double quantity, ArrayList<Item> itemArrayList, List<Item> sortedItems) {
     Iterator<Item> iterator = sortedItems.iterator();
@@ -218,7 +229,7 @@ public class FoodStorage {
               .sum();
           
           if (items.get(key).size() > 1) {
-            System.out.println(key + " (Quantity: " + quantity + "):");
+            System.out.println(items.get(key).getFirst().getName() + " (Quantity: " + quantity + "):");
             items.get(key).forEach(item -> System.out.println("- " + item));
           } else {
             System.out.println(items.get(key).getFirst());

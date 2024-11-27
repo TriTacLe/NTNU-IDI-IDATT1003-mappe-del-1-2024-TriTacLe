@@ -57,7 +57,7 @@ public class UserInputHandler {
       System.out.println(request);
       try {
         LocalDate localDate = LocalDate.parse(scanner.next());
-        InputValidation.validateDateNotInPast(localDate, true);
+        InputValidation.validateDateNotInPast(localDate, false);
         return localDate;
       } catch (DateTimeParseException e) {
         System.out.println(errorMessage + ": Invalid date format. Please enter in yyyy-mm-dd format.");

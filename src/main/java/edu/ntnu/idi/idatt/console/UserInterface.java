@@ -172,27 +172,26 @@ public class UserInterface {
   
   public void removeItem() {
     try {
-      String name = inputHandler.getValidatedString("Enter the name of the item to be removed from the food storage: ", "Item name cannot be empty/blank");
+      String name = inputHandler.getValidatedString(
+          "Enter the name of the item to be removed from the food storage: ",
+          "Item name cannot be empty/blank"
+      );
       
-      if (!foodStorage.itemExist(name)) {
-        throw new IllegalArgumentException("Item " + name + " does not exist");
+      Item nameOriginal = foodStorage.searchForItemInFoodStorage(name.toLowerCase());
+      if (nameOriginal == null) {
+        throw new IllegalArgumentException("Item " + name + " does not exist.");
       }
       
-      double quantity = inputHandler.getValidatedDouble("Enter how much quantity of the item that should be removed: ", "Invalid quantity");
-      double removedQuantity = foodStorage.removeItemFromFoodStorage(name, quantity);
-      ArrayList<Item> itemArrayList = foodStorage.getItems().get(name);
+      double quantity = inputHandler.getValidatedDouble(
+          "Enter how much quantity of the item: " + nameOriginal.getName()
+              + "(" + nameOriginal.getQuantity() + nameOriginal.getUnit().getSymbol()
+              + ") to be removed: ", "Invalid quantity"
+      );
       
-      if (itemArrayList == null || itemArrayList.isEmpty()) {
-        throw new IllegalArgumentException("Item " + name + " does not exist in the storage.");
-      }
-      System.out.println(removedQuantity); //
-      String unit = (itemArrayList.getFirst().getUnit() != null) ? itemArrayList.getFirst().getUnit().getSymbol() : "units";
-      if (removedQuantity > 0 && !itemArrayList.isEmpty()) {
-        System.out.println("Removed " + removedQuantity + " " + unit + " of " + name);
-      } else {
-        throw new IllegalArgumentException("Not enough " + name + " to remove. " + name
-            + " quantity: " + itemArrayList.getFirst().getQuantity() + unit);
-      }
+      double removedQuantity = foodStorage.removeItemFromFoodStorage(nameOriginal.getName(), quantity);
+      
+      System.out.println("Removed " + removedQuantity + " " + nameOriginal.getUnit().getSymbol() + " of " + nameOriginal.getName());
+      
     } catch (IllegalArgumentException e) {
       System.out.println("Error: " + e.getMessage());
     }
