@@ -83,13 +83,17 @@ public class FoodStorage {
    * @param nameItem that represent the name attribute of the item. Can be called with getName
    *                 It also represents the key for the map
    */
-  public Item searchForItemInFoodStorage(String nameItem) {
+  public List<Item> searchForItemsInFoodStorage(String nameItem) {
+    if (nameItem == null) {
+      throw new NullPointerException("Item name cannot be null");
+    }
     return items.entrySet().stream()
         //.filter(entry -> entry.getKey().toLowerCase().equals(nameItem.toLowerCase()))
         .filter(entry -> entry.getKey().equalsIgnoreCase(nameItem))
         .flatMap(entry -> entry.getValue().stream())
-        .findAny()
-        .orElse(null);
+        .collect(Collectors.toList());
+//        .findAny()
+//        .orElse(null);
   }
   
   
@@ -102,13 +106,16 @@ public class FoodStorage {
    * @param quantity quantity of the item
    */
   public double removeItemFromFoodStorage(String name, double quantity) {
-    ArrayList<Item> itemArrayList = items.get(name.toLowerCase());
+    name = name.toLowerCase();
+    ArrayList<Item> itemArrayList = items.get(name);
     
     if (itemArrayList == null || itemArrayList.isEmpty()) {
       throw new IllegalArgumentException("Item does not exist in storage.");
     }
     
-    double totalQuantity = itemArrayList.stream()
+    List<Item> sortedList = getSorteItemsByExpirationsDate(itemArrayList);
+    
+    double totalQuantity = sortedList.stream()
         .mapToDouble(Item::getQuantity)
         .sum();
     
@@ -116,7 +123,6 @@ public class FoodStorage {
       throw new IllegalArgumentException("Invalid quantity to remove: " + quantity + ". Available: " + totalQuantity);
     }
     
-    List<Item> sortedList = getSorteItemsByExpirationsDate(itemArrayList); //removes the oldest item
     
     double initialQuantity = quantity;
     Iterator<Item> iterator = sortedList.iterator();
@@ -132,6 +138,9 @@ public class FoodStorage {
         //itemArrayList.remove(item);
       }
     }
+    itemArrayList.clear();
+    itemArrayList.addAll(sortedList);
+    
     if (itemArrayList.isEmpty()) {
       items.remove(name);
     }
@@ -139,7 +148,7 @@ public class FoodStorage {
   }
   
   
-  private List<Item> getSorteItemsByExpirationsDate(ArrayList<Item> itemArrayList) {
+  public List<Item> getSorteItemsByExpirationsDate(List<Item> itemArrayList) {
     return itemArrayList.stream()
         .filter(item -> item.getExpirationDate() != null) //Avoid nullpoointer when using comparator
         .sorted(Comparator.comparing(Item::getExpirationDate))
@@ -202,9 +211,9 @@ public class FoodStorage {
    */
   public void getFoodStorageAlphabetically() {
     items.keySet().stream()
-        .sorted() //sort key alphabetically
+        .sorted(String.CASE_INSENSITIVE_ORDER) //sort key alphabetically case in-sensitive
         .forEach(key -> {
-          Double quantity = items.get(key).stream()
+          double quantity = items.get(key).stream()
               .mapToDouble(Item::getQuantity)
               .sum();
           if (items.get(key).size() > 1) {
