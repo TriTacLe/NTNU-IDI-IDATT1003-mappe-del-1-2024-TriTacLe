@@ -203,6 +203,15 @@ public class FoodStorage {
     return items.values().stream()
         .flatMap(List::stream)
         .filter(item -> item.getExpirationDate().isBefore(date))
+        .sorted(Comparator.comparing(Item::getExpirationDate))
+        .collect(Collectors.toList());
+  }
+  
+  public List<Item> getItemsExpiringAfter(LocalDate date) {
+    return items.values().stream()
+        .flatMap(List::stream)
+        .filter(item -> item.getExpirationDate().isAfter(date))
+        .sorted(Comparator.comparing(Item::getExpirationDate))
         .collect(Collectors.toList());
   }
   

@@ -11,11 +11,8 @@ import edu.ntnu.idi.idatt.model.Recipe;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -37,6 +34,7 @@ public class UserInterface {
     inputHandler = new UserInputHandler(scanner);
     foodStorage = new FoodStorage();
     cookbook = new Cookbook();
+    dummyData = new DummyData();
     dummyData.loadDummyData(foodStorage, cookbook);
   }
   
@@ -67,12 +65,11 @@ public class UserInterface {
     TOTAL_VALUE("5. Get total value of all groceries"),
     VIEW_GROCERIES_BEFORE_DATE("6. View all groceries expiring before a date"),
     VIEW_ALL_GROCERIES("7. View all groceries (alphabetically)"),
-    CREATE_RECIPE("8. Create a recipe"),
+    ADD_RECIPE_TO_COOKBOOK("8. Add a recipe to the cookbook"),
     CHECK_INGREDIENTS("9. Check if the fridge has enough ingredients for a recipe"),
-    ADD_RECIPE_TO_COOKBOOK("10. Add a recipe to the cookbook"),
-    SUGGEST_RECIPES("11. View suggested recipes from the cookbook"),
-    VIEW_COOKBOOK("12. View all recipes in the cookbook"),
-    EXIT("13. Exit");
+    SUGGEST_RECIPES("10. View suggested recipes from the cookbook"),
+    VIEW_COOKBOOK("11. View all recipes in the cookbook"),
+    EXIT("12. Exit");
     
     private final String description;
     
@@ -118,7 +115,6 @@ public class UserInterface {
       case TOTAL_VALUE -> totalValue();
       case VIEW_GROCERIES_BEFORE_DATE -> viewItemsBeforeDate();
       case VIEW_ALL_GROCERIES -> displayFoodStorageAlphabetically();
-      //case CREATE_RECIPE -> ; //notfinished
       case ADD_RECIPE_TO_COOKBOOK -> addRecipeToCookbook(); //not finished
       case CHECK_INGREDIENTS -> hasEnoughItemsForRecipe(); //not finished
       case SUGGEST_RECIPES -> suggestedRecipe(); //not finished
@@ -271,11 +267,60 @@ public class UserInterface {
    *
    */
   public void addRecipeToCookbook() {
-    //cookbook.addRecipeToCookbook();
+    final String nameRecipe = inputHandler.getValidatedString("Enter recipe name: ", "Recipe name cannot be empty/blank");
+    final String description = inputHandler.getValidatedString("Enter a description: ", "Description cannot be empty/blank");
+    final String procedure = inputHandler.getValidatedString("Enter the procedure: ", "Procedure cannot be empty/blank");
+    final double portions = inputHandler.getValidatedDouble("Enter how many people this recipe is for", "Portions cannot be negative");
+    Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
+    double choiceDouble = inputHandler.getValidatedDouble("Would you add recipe manually: 1. Chose from existing ingrediens: 2.", "Error");
+    int choice = (int) choiceDouble;
+    
+    switch (choice) {
+      case 1:
+        int totalItemsCaseOne = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative");
+        for (int i = 0; i < totalItemsCaseOne; i++) {
+          System.out.println("Item: " + i);
+          final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
+          double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity");
+          final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
+          final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price");
+          Item item = new Item(name, quantity, unit, pricePerUnit);
+          recipe.addItemToRecipe(item);
+          cookbook.addRecipeToCookbook(recipe);
+        }
+        break;
+      case 2:
+        int totalItemsCaseTwo = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative");
+        
+        System.out.println("Every item that has not been expired and can be used in a recipe");
+        List<Item> foodStorageBeforeDate = foodStorage.getItemsExpiringAfter(LocalDate.now());
+        foodStorageBeforeDate.forEach(item -> System.out.println("- " + item));
+        
+        for (int i = 0; i < totalItemsCaseTwo; i++) {
+          String itemStringKey = inputHandler.getValidatedString("Enter the item you want", "Error getting the item");
+          
+          if (foodStorage.getItems() != null || foodStorage.getItems().containsKey(itemStringKey.toLowerCase())) {
+            List<Item> itemsRetrieved = foodStorage.getItems().get(itemStringKey.toLowerCase());
+            
+            if (itemsRetrieved != null && !itemsRetrieved.isEmpty()) {
+              itemsRetrieved.sort(Comparator.comparing(Item::getExpirationDate));
+              Item itemGotten = itemsRetrieved.get(0);
+              recipe.addItemToRecipe(itemGotten);
+              System.out.println("Added item: " + itemGotten.getName() + " to the recipe.");
+            } else {
+              System.out.println("No items found with this name");
+            }
+          } else {
+            System.out.println("Item is not found in the storage");
+          }
+          cookbook.addRecipeToCookbook(recipe);
+        }
+    }
   }
   
-  public void hasEnoughItemsForRecipe() {
   
+  public void hasEnoughItemsForRecipe() {
+    
   }
   
   public void suggestedRecipe() {
@@ -304,5 +349,4 @@ public class UserInterface {
   private void displayRecipe(Recipe recipe) {
     System.out.println(recipe.toString());
   }
-  
 }

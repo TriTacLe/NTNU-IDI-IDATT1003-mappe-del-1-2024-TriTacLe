@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
+import edu.ntnu.idi.idatt.Utils.InputValidation;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
 
 import java.util.ArrayList;
@@ -10,20 +11,23 @@ public class Recipe {
   private final String name;
   private final String description;
   private final String procedure;
-  private final int recipeServes;
+  private final double portions;
   private final ArrayList<Item> itemsList;
+  private InputValidation inputValidation;
   
-  public Recipe(String name, String description, String procedure, int recipeServes) {
-    validateStringParameter(name, "name");
-    validateStringParameter(description, "description");
-    validateStringParameter(procedure, "procedure");
-    validateIntParameter(recipeServes, "recipe serves");
+  public Recipe(String name, String description, String procedure, double portions) {
+    inputValidation.validateString(name, "Name of the recipe cannot be blank/empty");
+    inputValidation.validateString(description, "Description cannot be blank/empty");
+    inputValidation.validateString(procedure, "Procedure cannot be blank/empty");
+    inputValidation.validateDouble(portions, "Portions cannot negative");
+    
     this.name = name;
     this.description = description;
     this.procedure = procedure;
-    this.recipeServes = recipeServes;
+    this.portions = portions;
     this.itemsList = new ArrayList<>();
   }
+  
   
   public String getName() {
     return name;
@@ -37,26 +41,12 @@ public class Recipe {
     return procedure;
   }
   
-  public int getRecipeServes() {
-    return recipeServes;
+  public double getPortions() {
+    return portions;
   }
   
   public List<Item> getItemsList() {
     return itemsList;
-  }
-  
-  private void validateStringParameter(String value, String parameterName)
-      throws IllegalArgumentException {
-    if (value == null || value.isBlank()) {
-      throw new IllegalArgumentException("Argument: " + parameterName + " cannot be blank/empty");
-    }
-  }
-  
-  private void validateIntParameter(int value, String parameterName)
-      throws IllegalArgumentException {
-    if (value <= 0) {
-      throw new IllegalArgumentException("Argument: " + parameterName + " cannot be zero or negative");
-    }
   }
   
   /**

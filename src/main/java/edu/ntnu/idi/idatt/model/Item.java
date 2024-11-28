@@ -11,7 +11,6 @@ import java.time.LocalDate;
 public class Item {
   // Attributter
   private final String name;
-  private final String nameLowercase;
   private double quantity;
   private final Unit unit;
   private LocalDate expirationDate;
@@ -37,7 +36,6 @@ public class Item {
     inputValidation.validateDouble(pricePerUnit, "Price");
     
     this.name = name;
-    this.nameLowercase = name.toLowerCase();
     this.quantity = quantity;
     this.unit = unit;
     this.expirationDate = expirationDate;
@@ -51,7 +49,6 @@ public class Item {
     inputValidation.validateDouble(pricePerUnit, "Price");
     
     this.name = name;
-    this.nameLowercase = name.toLowerCase();
     this.quantity = quantity;
     this.unit = unit;
     this.pricePerUnit = pricePerUnit;

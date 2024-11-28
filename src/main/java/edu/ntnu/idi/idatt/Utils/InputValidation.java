@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 public class InputValidation {
   
-  private static Scanner scanner = new Scanner(System.in);
-  
   /**
    * Validates that a string input is not null or empty.
    *

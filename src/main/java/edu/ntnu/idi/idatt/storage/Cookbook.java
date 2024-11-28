@@ -19,7 +19,6 @@ public class Cookbook {
     
     if (!recipeArrayList.contains(recipe)) {
       recipeArrayList.add(recipe);
-      System.out.println("Recipe added: " + recipe);
     } else {
       System.out.println("Recipe for " + recipe.getName() + " already exist");
     }
