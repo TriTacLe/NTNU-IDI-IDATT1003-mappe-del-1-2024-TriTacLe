@@ -13,12 +13,12 @@ public class UserInputHandler {
     this.scanner = scanner;
   }
   
-  public String getValidatedString(String request, String errorMessage) {
+  public String getValidatedString(String request, String errorMessage, String fieldName) {
     while (true) {
       System.out.println(request);
       try {
         String input = scanner.next();
-        InputValidation.validateString(input, "name");
+        InputValidation.validateString(input, fieldName);
         return input;
       } catch (IllegalArgumentException e) {
         System.out.println(errorMessage + ": " + e.getMessage());
@@ -26,12 +26,25 @@ public class UserInputHandler {
     }
   }
   
-  public double getValidatedDouble(String request, String errorMessage) {
+  public double getValidatedDouble(String request, String errorMessage, String fieldName) {
     while (true) {
       System.out.println(request);
       try {
         double number = Double.parseDouble(scanner.next());
-        InputValidation.validateDouble(number, "quantity");
+        InputValidation.validateDouble(number, fieldName);
+        return number;
+      } catch (IllegalArgumentException e) {
+        System.out.println(errorMessage + ": " + e.getMessage());
+      }
+    }
+  }
+  
+  public int getValidatedInt(String request, String errorMessage, String fieldName) {
+    while (true) {
+      System.out.println(request);
+      try {
+        int number = Integer.parseInt(scanner.next());
+        InputValidation.validateInt(number, fieldName);
         return number;
       } catch (IllegalArgumentException e) {
         System.out.println(errorMessage + ": " + e.getMessage());

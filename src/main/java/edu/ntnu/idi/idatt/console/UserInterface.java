@@ -128,11 +128,11 @@ public class UserInterface {
   //Foodstorage
   private void addItem() {
     try {
-      final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
-      double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity");
+      final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank", "name");
+      double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
       final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
       final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format yyyy-mm-dd", "Please enter a date in the format yyyy-mm-dd");
-      final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price");
+      final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price", "price");
       
       Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
       foodStorage.addItemToFoodStorage(item);
@@ -147,7 +147,7 @@ public class UserInterface {
   public void searchItem() {
     try {
       UserInputHandler inputHandler = new UserInputHandler(new Scanner(System.in));
-      String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
+      String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank", "name");
       
       if (foodStorage == null) {
         throw new IllegalArgumentException("Food storage is not initialized.");
@@ -169,7 +169,7 @@ public class UserInterface {
     try {
       String name = inputHandler.getValidatedString(
           "Enter the name of the item to be removed from the food storage: ",
-          "Item name cannot be empty/blank"
+          "Item name cannot be empty/blank", "name"
       ).toLowerCase();
       
       List<Item> matchingItems = foodStorage.searchForItemsInFoodStorage(name);
@@ -183,7 +183,7 @@ public class UserInterface {
       double quantity = inputHandler.getValidatedDouble(
           "Enter how much quantity of the item: " + matchingItems.getFirst().getName()
               + "(" + totalQuantity + matchingItems.getFirst().getUnit().getSymbol()
-              + ") to be removed: ", "Invalid quantity"
+              + ") to be removed: ", "Invalid quantity", "quantity"
       );
       
       double removedQuantity = foodStorage.removeItemFromFoodStorage(name, quantity);
@@ -267,54 +267,161 @@ public class UserInterface {
    *
    */
   public void addRecipeToCookbook() {
-    final String nameRecipe = inputHandler.getValidatedString("Enter recipe name: ", "Recipe name cannot be empty/blank");
-    final String description = inputHandler.getValidatedString("Enter a description: ", "Description cannot be empty/blank");
-    final String procedure = inputHandler.getValidatedString("Enter the procedure: ", "Procedure cannot be empty/blank");
-    final double portions = inputHandler.getValidatedDouble("Enter how many people this recipe is for", "Portions cannot be negative");
-    Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
-    double choiceDouble = inputHandler.getValidatedDouble("Would you add recipe manually: 1. Chose from existing ingrediens: 2.", "Error");
-    int choice = (int) choiceDouble;
-    
-    switch (choice) {
-      case 1:
-        int totalItemsCaseOne = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative");
-        for (int i = 0; i < totalItemsCaseOne; i++) {
-          System.out.println("Item: " + i);
-          final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank");
-          double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity");
-          final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-          final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price");
-          Item item = new Item(name, quantity, unit, pricePerUnit);
-          recipe.addItemToRecipe(item);
-          cookbook.addRecipeToCookbook(recipe);
-        }
-        break;
-      case 2:
-        int totalItemsCaseTwo = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative");
+    try {
+      final String nameRecipe = inputHandler.getValidatedString("Enter recipe name: ", "Recipe name cannot be empty/blank", "recipe name");
+      final String description = inputHandler.getValidatedString("Enter a description: ", "Description cannot be empty/blank", "description");
+      final String procedure = inputHandler.getValidatedString("Enter the procedure: ", "Procedure cannot be empty/blank", "procedure");
+      final double portions = inputHandler.getValidatedDouble("Enter how many people this recipe is for", "Portions cannot be negative", "portions");
+      
+      Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
+      
+      try {
+        double choiceDouble = inputHandler.getValidatedDouble("Add items to the recipe manually: 1. Choose from the items in the food storage: 2.", "Error", "choice");
+        int choice = (int) choiceDouble;
         
-        System.out.println("Every item that has not been expired and can be used in a recipe");
-        List<Item> foodStorageBeforeDate = foodStorage.getItemsExpiringAfter(LocalDate.now());
-        foodStorageBeforeDate.forEach(item -> System.out.println("- " + item));
-        
-        for (int i = 0; i < totalItemsCaseTwo; i++) {
-          String itemStringKey = inputHandler.getValidatedString("Enter the item you want", "Error getting the item");
-          
-          if (foodStorage.getItems() != null || foodStorage.getItems().containsKey(itemStringKey.toLowerCase())) {
-            List<Item> itemsRetrieved = foodStorage.getItems().get(itemStringKey.toLowerCase());
-            
-            if (itemsRetrieved != null && !itemsRetrieved.isEmpty()) {
-              itemsRetrieved.sort(Comparator.comparing(Item::getExpirationDate));
-              Item itemGotten = itemsRetrieved.get(0);
-              recipe.addItemToRecipe(itemGotten);
-              System.out.println("Added item: " + itemGotten.getName() + " to the recipe.");
-            } else {
-              System.out.println("No items found with this name");
-            }
-          } else {
-            System.out.println("Item is not found in the storage");
-          }
-          cookbook.addRecipeToCookbook(recipe);
+        switch (choice) {
+          case 1:
+            addItemsManually(recipe);
+            break;
+          case 2:
+            addItemsFromStorage(recipe);
+            break;
+          default:
+            System.out.println("Invalid choice.");
+            return;
         }
+      } catch (IllegalArgumentException e) {
+        System.out.println("Invalid choice input. Please enter a valid option (1 or 2)");
+        return;
+      }
+      
+      boolean success = cookbook.addRecipeToCookbook(recipe);
+      if (success) {
+        System.out.println("Recipe added to the cookbook successfully:");
+        System.out.println(recipe);
+      } else {
+        System.out.println("Recipe for " + recipe.getName() + " already exists in the cookbook.");
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error while creating recipe: " + e.getMessage());
+    }
+  }
+  
+  private void addItemsManually(Recipe recipe) {
+    try {
+      int totalItems = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative", "Total items");
+      for (int i = 0; i < totalItems; i++) {
+        System.out.println("Item: " + (i + 1));
+        final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank", "name");
+        double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
+        final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
+        final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price", "price");
+        
+        Item item = new Item(name, quantity, unit, pricePerUnit);
+        recipe.addItemToRecipe(item);
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error adding items manually: " + e.getMessage());
+    }
+  }
+  
+  
+  private void addItemsFromStorage(Recipe recipe) {
+    try {
+      int totalItems = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative/other type than int or double", "total items");
+      
+      System.out.println("Every item that has not expired and can be used in a recipe:");
+      List<Item> availableItems = foodStorage.getItemsExpiringAfter(LocalDate.now());
+      availableItems.forEach(item -> System.out.println("- " + item));
+      
+      for (int i = 0; i < totalItems; i++) {
+        System.out.println("Item: " + (i + 1) + " of " + totalItems);
+        handleItemAddition(recipe);
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("An error occurred while adding items from storage: " + e.getMessage());
+    }
+  }
+  
+  private void handleItemAddition(Recipe recipe) {
+    try {
+      String itemKey;
+      List<Item> items;
+      
+      do {
+        itemKey = inputHandler.getValidatedString("Enter the item you want", "Error: Could not retrieve the item name.", "name").toLowerCase();
+        
+        items = getItemsFromStorage(itemKey);
+        if (items == null || items.isEmpty()) {
+          System.out.println("Item not found in storage. Please enter a valid item.");
+        }
+      } while (items == null || items.isEmpty());
+      
+      double totalAvailableQuantity = items.stream()
+          .mapToDouble(Item::getQuantity)
+          .sum();
+      
+      System.out.println("Total available quantity for " + itemKey + ": " + totalAvailableQuantity + ". Please read: Remember this is total quantity of " + itemKey + " in the food storage. How much you want to add to the recipe is an unrealized amount so it will not be deducted from the real amount.");
+      
+      int requestedQuantity = inputHandler.getValidatedInt("Enter quantity to add:", "Invalid input for quantity.", "requested quantity");
+      
+      if (requestedQuantity > totalAvailableQuantity && !confirmAdditionExceedingQuantity()) {
+        System.out.println("Item not added to the recipe.");
+        return;
+      }
+      
+      allocateItemsToRecipe(recipe, items, requestedQuantity);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Invalid input: " + e.getMessage());
+    }
+  }
+  
+  private List<Item> getItemsFromStorage(String itemKey) {
+    try {
+      if (foodStorage.getItems() == null || !foodStorage.getItems().containsKey(itemKey)) {
+        return null;
+      }
+      
+      List<Item> items = new ArrayList<>(foodStorage.getItems().get(itemKey));
+      items.sort(Comparator.comparing(Item::getExpirationDate));
+      return items;
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error while retrieving items from storage: " + e.getMessage());
+      return null;
+    }
+  }
+  
+  private boolean confirmAdditionExceedingQuantity() {
+    try {
+      String proceed = inputHandler.getValidatedString("Requested quantity exceeds available items. Do you still want to add this item? (yes/no)", "Invalid input. Please answer yes or no.", "yes/no input");
+      return proceed.equalsIgnoreCase("yes");
+    } catch (IllegalArgumentException e) {
+      System.out.println("Invalid input: " + e.getMessage());
+      return false;
+    }
+  }
+  
+  private void allocateItemsToRecipe(Recipe recipe, List<Item> items, int requestedQuantity) {
+    try {
+      double remainingToUse = requestedQuantity;
+      
+      for (Item item : items) {
+        if (remainingToUse <= 0) break;
+        
+        double availableQuantity = item.getQuantity();
+        double toAllocate = Math.min(availableQuantity, remainingToUse);
+        remainingToUse -= toAllocate;
+        
+        Item itemToAdd = new Item(item.getName(), toAllocate, item.getUnit(), item.getPerUnitPrice());
+        recipe.addItemToRecipe(itemToAdd);
+        System.out.println("Added item: " + itemToAdd.getName() + " (" + toAllocate + " " + itemToAdd.getUnit().getSymbol() + ") to the recipe.");
+      }
+      
+      if (remainingToUse > 0) {
+        System.out.println("Could not use the full quantity. Short by " + remainingToUse);
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error while try to allocate items to the recipe: " + e.getMessage());
     }
   }
   

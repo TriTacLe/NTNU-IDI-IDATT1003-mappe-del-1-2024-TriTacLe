@@ -113,11 +113,10 @@ public class Item {
     this.expirationDate = expirationDate;
   }
   
-  public void increaseQuantity(double quantity) {
+  public void updateQuantity(double quantity) {
     inputValidation.validateDouble(quantity, "Quantity");
     this.quantity += quantity;
   }
-  
   
   /**
    * Skriver ut detaljene fra en vare (fra hint)

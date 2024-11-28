@@ -30,7 +30,13 @@ public class InputValidation {
    */
   public static void validateDouble(Double number, String fieldName) {
     if (number == null || number < 0) {
-      throw new IllegalArgumentException(fieldName + " cannot be negative");
+      throw new IllegalArgumentException(fieldName + " cannot be negative/or another type than double");
+    }
+  }
+  
+  public static void validateInt(Integer number, String fieldName) {
+    if (number == null || number < 0) {
+      throw new IllegalArgumentException(fieldName + " cannot be negative or another type than int");
     }
   }
   

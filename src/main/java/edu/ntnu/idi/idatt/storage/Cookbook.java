@@ -13,14 +13,15 @@ public class Cookbook {
     this.recipes = new HashMap<>();
   }
   
-  public void addRecipeToCookbook(Recipe recipe) {
+  public boolean addRecipeToCookbook(Recipe recipe) {
     recipes.putIfAbsent(recipe.getName(), new ArrayList<>());
     ArrayList<Recipe> recipeArrayList = recipes.get(recipe.getName());
     
     if (!recipeArrayList.contains(recipe)) {
       recipeArrayList.add(recipe);
+      return true;
     } else {
-      System.out.println("Recipe for " + recipe.getName() + " already exist");
+      return false;
     }
   }
   

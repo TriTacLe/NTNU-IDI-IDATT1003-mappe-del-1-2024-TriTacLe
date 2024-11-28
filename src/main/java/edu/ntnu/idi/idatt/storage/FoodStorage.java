@@ -69,7 +69,7 @@ public class FoodStorage {
         .findFirst();
     
     if (matchingItem.isPresent()) {
-      matchingItem.get().increaseQuantity(item.getQuantity());
+      matchingItem.get().updateQuantity(item.getQuantity());
     } else {
       itemArrayList.add(item);
     }

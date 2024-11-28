@@ -54,19 +54,17 @@ public class Recipe {
    *
    * @param item
    */
-  public void addItemToRecipe(Item item) {
+  public boolean addItemToRecipe(Item item) {
     Optional<Item> existingItem = itemsList.stream()
         .filter(itemInRegister -> itemInRegister.getName().equals(item.getName()))
         .findAny();
     
     if (existingItem.isPresent()) {
-      existingItem.get().increaseQuantity(item.getQuantity());
-      System.out.println(item + "already exist in recipe: " + getName());
-      System.out.println("Updated quantity of item " + item + " is:" + existingItem.get().getQuantity());
+      existingItem.get().updateQuantity(item.getQuantity());
+      return false;
     } else {
       itemsList.add(item);
-      System.out.println(item + " added to the recipe.");
-      
+      return true;
     }
   }
   
