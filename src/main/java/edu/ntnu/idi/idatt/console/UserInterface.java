@@ -115,15 +115,13 @@ public class UserInterface {
       case TOTAL_VALUE -> totalValue();
       case VIEW_GROCERIES_BEFORE_DATE -> viewItemsBeforeDate();
       case VIEW_ALL_GROCERIES -> displayFoodStorageAlphabetically();
-      case ADD_RECIPE_TO_COOKBOOK -> addRecipeToCookbook(); //not finished
+      case ADD_RECIPE_TO_COOKBOOK -> addRecipeToCookbook();
       case CHECK_INGREDIENTS -> hasEnoughItemsForRecipe(); //not finished
       case SUGGEST_RECIPES -> suggestedRecipe(); //not finished
-      case VIEW_COOKBOOK -> displayCookbook();
+      case VIEW_COOKBOOK -> displayCookbook(); //not finished
       case EXIT -> System.out.println("Thank you for taking the effort to save food!");
     }
   }
-  
-  //Methods
   
   //Foodstorage
   private void addItem() {
