@@ -20,11 +20,11 @@ public class FoodStorageService {
   
   public void handleAddIngredient() {
     try {
-      final String name = inputHandler.getValidatedString("Enter Ingredient name:", "Ingredient name cannot be empty/blank", "name");
+      final String name = inputHandler.getValidatedString("Enter ingredient name:", "Ingredient name cannot be empty/blank", "name");
       double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
       final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
       final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format (yyyy-mm-dd):", "Please enter a date in the format yyyy-mm-dd");
-      final double pricePerUnit = inputHandler.getValidatedDouble("Enter the price of the amount of Ingredients added:", "Invalid input for price", "price");
+      final double pricePerUnit = inputHandler.getValidatedDouble("Enter the price of the amount of the ingredient added:", "Invalid input for price", "price");
       
       Ingredient ingredient = new Ingredient(name, quantity, unit, expirationDate, pricePerUnit);
       foodStorage.addIngredientToFoodStorage(ingredient);

@@ -15,9 +15,13 @@ public class InputValidation {
    * @throws IllegalArgumentException if the field is null or empty.
    */
   
-  public static void validateString(String input, String fieldName) {
-    if (input == null || input.isBlank()) {
-      throw new IllegalArgumentException(fieldName + " cannot be empty/null");
+  public static void validateString(Object input, String fieldName) {
+    if (!(input instanceof String)) {
+      throw new IllegalArgumentException(fieldName + " must be a valid string");
+    }
+    String strInput = (String) input;
+    if (strInput.isBlank()) {
+      throw new IllegalArgumentException(fieldName + " cannot be empty or blank");
     }
   }
   

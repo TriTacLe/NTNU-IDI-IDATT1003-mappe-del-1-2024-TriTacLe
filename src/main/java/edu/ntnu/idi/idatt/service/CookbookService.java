@@ -30,10 +30,17 @@ public class CookbookService {
    */
   public void handleAddRecipeToCookbook() {
     try {
-      final String nameRecipe = inputHandler.getValidatedString("Enter recipe name: ", "Recipe name cannot be empty/blank", "recipe name");
+      String nameRecipe;
+      do {
+        nameRecipe = inputHandler.getValidatedString("Enter recipe name: ", "Recipe name cannot be empty/blank", "recipe name");
+        if (cookbook.getRecipes().containsKey(nameRecipe)) {
+          System.out.println("Recipe: " + nameRecipe + " already exist");
+        }
+      } while (cookbook.getRecipes().containsKey(nameRecipe));
+      
       final String description = inputHandler.getValidatedString("Enter a description: ", "Description cannot be empty/blank", "description");
       final String procedure = inputHandler.getValidatedString("Enter the procedure: ", "Procedure cannot be empty/blank", "procedure");
-      final double portions = inputHandler.getValidatedDouble("Enter how many people this recipe is for", "Portions cannot be negative", "portions");
+      final double portions = inputHandler.getValidatedDouble("Enter how many people this recipe is for", "Portions have to be a number and it has to be positive", "portions");
       
       Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
       try {
@@ -42,8 +49,11 @@ public class CookbookService {
           choice = inputHandler.getValidatedInt(
               "How would you like to add ingredients? Enter 1: Add manually. Enter 2: Choose from available food storage ingredients.\nEnter your choice: ",
               "Invalid input. Enter 1 or 2", "choice");
-          if (choice == 1 || choice == 2) {
+          if (choice == 1) {
             addIngredientsManually(recipe);
+            break;
+          } else if (choice == 2) {
+            addIngredientsFromStorage(recipe);
             break;
           } else {
             System.out.println("Invalid choice. Please enter 1 or 2.");
@@ -86,7 +96,9 @@ public class CookbookService {
   
   private void addIngredientsFromStorage(Recipe recipe) {
     try {
-      int totalIngredients = (int) inputHandler.getValidatedDouble("Enter how many ingredients you want this recipe to have", "Total ingredients cannot be negative/other type than int or double", "total ingredients");
+      int totalIngredients = (int) inputHandler.getValidatedDouble("Enter how many ingredients you want this recipe to have",
+          "Total ingredients cannot be negative/other type than int or double",
+          "total ingredients");
       
       System.out.println("Every ingredient that has not expired and can be used in a recipe:");
       List<Ingredient> availableIngredients = foodStorage.getIngredientsExpiringAfter(LocalDate.now());
@@ -197,12 +209,18 @@ public class CookbookService {
         System.out.println((i + 1) + ". " + allRecipes.get(i).getName());
       }
       
-      int recipeChoice = inputHandler.getValidatedInt("Enter the number of the recipe: ", "Invalid! Please enter a valid number.", "recipe choice");
-      
-      if (recipeChoice < 1 || recipeChoice > allRecipes.size()) {
-        System.out.println("Invalid choice. Returning to the menu.");
-        return;
-      }
+      int recipeChoice;
+      do {
+        recipeChoice = inputHandler.getValidatedInt(
+            "Enter the number of the recipe: ",
+            "Invalid! Please enter a valid number.",
+            "recipe choice"
+        );
+        
+        if (recipeChoice < 1 || recipeChoice > allRecipes.size()) {
+          System.out.println("Please choose a number between 1 and " + allRecipes.size() + ".");
+        }
+      } while (recipeChoice < 1 || recipeChoice > allRecipes.size());
       
       Recipe selectedRecipe = allRecipes.get(recipeChoice - 1);
       
