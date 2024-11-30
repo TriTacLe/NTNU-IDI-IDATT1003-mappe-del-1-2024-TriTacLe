@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt;
 
-import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 import org.junit.jupiter.api.Test;
 
@@ -8,22 +8,22 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ItemTest {
+class IngredientTest {
   
   @Test
-  void shouldCreateItemWithValidAttributes() {
-    Item item = new Item("Apple", 2.5, Unit.PIECES, LocalDate.now().plusDays(10), 3.5);
-    assertEquals("Apple", item.getName());
-    assertEquals(2.5, item.getQuantity());
-    assertEquals("Kg", item.getUnit());
-    assertEquals(LocalDate.now().plusDays(10), item.getExpirationDate());
-    assertEquals(3.5, item.getPerUnitPrice());
+  void shouldCreateIngredientWithValidAttributes() {
+    Ingredient ingredient = new Ingredient("Apple", 2.5, Unit.PIECES, LocalDate.now().plusDays(10), 3.5);
+    assertEquals("Apple", ingredient.getName());
+    assertEquals(2.5, ingredient.getQuantity());
+    assertEquals("Kg", ingredient.getUnit());
+    assertEquals(LocalDate.now().plusDays(10), ingredient.getExpirationDate());
+    assertEquals(3.5, ingredient.getPrice());
   }
   
   @Test
   void shouldThrowExceptionForEmptyName() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      new Item("", 2.5, Unit.GRAM, LocalDate.now().plusDays(10), 3.5);
+      new Ingredient("", 2.5, Unit.GRAM, LocalDate.now().plusDays(10), 3.5);
     });
     assertEquals("Name cannot be empty", exception.getMessage());
   }
@@ -31,7 +31,7 @@ class ItemTest {
   @Test
   void shouldThrowExceptionForNegativeQuantity() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      new Item("Apple", -1.0, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
+      new Ingredient("Apple", -1.0, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
     });
     assertEquals("Quantity cannot be negative", exception.getMessage());
   }
@@ -39,7 +39,7 @@ class ItemTest {
   @Test
   void shouldThrowExceptionForEmptyUnit() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      new Item("Apple", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
+      new Ingredient("Apple", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
     });
     assertEquals("Unit cannot be empty", exception.getMessage());
   }
@@ -47,42 +47,42 @@ class ItemTest {
   @Test
   void shouldThrowExceptionForNegativePricePerUnit() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      new Item("Apple", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), -3.5);
+      new Ingredient("Apple", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), -3.5);
     });
     assertEquals("Price per unit cannot be negative", exception.getMessage());
   }
   
   @Test
   void shouldReturnCorrectQuantityAfterSetQuantity() {
-    Item item = new Item("Apple", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
-    item.setQuantity(5.0);
-    assertEquals(5.0, item.getQuantity());
+    Ingredient ingredient = new Ingredient("Apple", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
+    ingredient.setQuantity(5.0);
+    assertEquals(5.0, ingredient.getQuantity());
   }
   
   @Test
   void getExpirationDateShouldReturnCorrectDate() {
     LocalDate expirationDate = LocalDate.now().plusDays(15);
-    Item item = new Item("Water", 1.0, Unit.LITRE, expirationDate, 1.5);
-    assertEquals(expirationDate, item.getExpirationDate());
+    Ingredient ingredient = new Ingredient("Water", 1.0, Unit.LITRE, expirationDate, 1.5);
+    assertEquals(expirationDate, ingredient.getExpirationDate());
   }
   
   @Test
   void getUnitShouldReturnCorrectUnit() {
-    Item item = new Item("Flour", 1.0, Unit.KILOGRAM, LocalDate.now().plusDays(20), 0.8);
-    assertEquals("kg", item.getUnit());
+    Ingredient ingredient = new Ingredient("Flour", 1.0, Unit.KILOGRAM, LocalDate.now().plusDays(20), 0.8);
+    assertEquals("kg", ingredient.getUnit());
   }
   
   @Test
   void getPerUnitPriceShouldReturnCorrectPrice() {
-    Item item = new Item("Sugar", 3.0, Unit.KILOGRAM, LocalDate.now().plusDays(20), 2.2);
-    assertEquals(2.2, item.getPerUnitPrice());
+    Ingredient ingredient = new Ingredient("Sugar", 3.0, Unit.KILOGRAM, LocalDate.now().plusDays(20), 2.2);
+    assertEquals(2.2, ingredient.getPrice());
   }
   
   @Test
   void testToStringShouldReturnFormattedString() {
     LocalDate expirationDate = LocalDate.of(2023, 12, 25);
-    Item item = new Item("Butter", 0.5, Unit.KILOGRAM, expirationDate, 4.0);
+    Ingredient ingredient = new Ingredient("Butter", 0.5, Unit.KILOGRAM, expirationDate, 4.0);
     String expectedString = "Butter 0.5 Kg 2023-12-25 4.0";
-    assertEquals(expectedString, item.toString());
+    assertEquals(expectedString, ingredient.toString());
   }
 }

@@ -1,7 +1,7 @@
 package edu.ntnu.idi.idatt;//import static org.junit.Assert.assertEquals;
 //import org.junit.Test;
 
-import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;

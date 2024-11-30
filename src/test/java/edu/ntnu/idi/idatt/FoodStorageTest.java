@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt;
 
-import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,128 +28,128 @@ class FoodStorageTest {
   }
   
   /**
-   * Tests adding items to foodStorage, including when an item already exist
+   * Tests adding ingredients to foodStorage, including when an ingredient already exist
    */
   @Test
-  void testAddItemToFoodStorage() {
+  void testAddIngredientToFoodStorage() {
     //Arrange
-    Item item1 = new Item("Apple", 5, Unit.KILOGRAM, LocalDate.now().plusDays(10), 20);
+    Ingredient ingredient1 = new Ingredient("Apple", 5, Unit.KILOGRAM, LocalDate.now().plusDays(10), 20);
     //Act
-    foodStorage.addItemToFoodStorage(item1);
+    foodStorage.addIngredientToFoodStorage(ingredient1);
     //Assert
-    assertTrue(foodStorage.itemExist("apple"), "Apple should exist in the storage");//the apple item exist in storage
-    assertEquals(1, foodStorage.getItems().get("apple").size(), "There should only be one entry for Apple");//there is only one ArrayList for apple in the hashmap
+    assertTrue(foodStorage.ingredientExist("apple"), "Apple should exist in the storage");//the apple ingredient exist in storage
+    assertEquals(1, foodStorage.getIngredients().get("apple").size(), "There should only be one entry for Apple");//there is only one ArrayList for apple in the hashmap
     
     //Add another Apple with the same expiration date, unit and price.
-    Item item2 = new Item("Apple", 3, Unit.KILOGRAM, LocalDate.now().plusDays(10), 20);
-    foodStorage.addItemToFoodStorage(item2);
+    Ingredient ingredient2 = new Ingredient("Apple", 3, Unit.KILOGRAM, LocalDate.now().plusDays(10), 20);
+    foodStorage.addIngredientToFoodStorage(ingredient2);
     //Verifies that the quantity is updated and the there is only one arrayList for Apple.
-    assertEquals(1, foodStorage.getItems().get("apple").size(), "There should still be only one entry for Apple with matching attributes");
-    assertEquals(8, foodStorage.getItems().get("apple").get(0).getQuantity(), "Quantity should be updated to 8");
+    assertEquals(1, foodStorage.getIngredients().get("apple").size(), "There should still be only one entry for Apple with matching attributes");
+    assertEquals(8, foodStorage.getIngredients().get("apple").get(0).getQuantity(), "Quantity should be updated to 8");
     
     //Add a Apple with different attributes
-    Item item3 = new Item("Apple", 2, Unit.KILOGRAM, LocalDate.now().plusDays(15), 22);
-    foodStorage.addItemToFoodStorage(item3);
-    assertEquals(2, foodStorage.getItems().get("apple").size(), "A second entry should exist for Apple with different attributes");
+    Ingredient ingredient3 = new Ingredient("Apple", 2, Unit.KILOGRAM, LocalDate.now().plusDays(15), 22);
+    foodStorage.addIngredientToFoodStorage(ingredient3);
+    assertEquals(2, foodStorage.getIngredients().get("apple").size(), "A second entry should exist for Apple with different attributes");
     
     //negative test
     assertNotNull(foodStorage);
-    assertThrows(NullPointerException.class, () -> foodStorage.addItemToFoodStorage(null));
+    assertThrows(NullPointerException.class, () -> foodStorage.addIngredientToFoodStorage(null));
   }
   
   /**
-   * Tests searching for an item instance in foodStorage class
+   * Tests searching for an ingredient instance in foodStorage class
    */
   @Test
-  void testSearchForItemInFoodStorage() {
-    Item item1 = new Item("Milk", 1, Unit.LITRE, LocalDate.now().plusDays(5), 15);
-    Item item2 = new Item("Milk", 2, Unit.LITRE, LocalDate.now().plusDays(10), 30); // Add a second item with the same name
-    foodStorage.addItemToFoodStorage(item1);
-    foodStorage.addItemToFoodStorage(item2);
+  void testSearchForIngredientInFoodStorage() {
+    Ingredient ingredient1 = new Ingredient("Milk", 1, Unit.LITRE, LocalDate.now().plusDays(5), 15);
+    Ingredient ingredient2 = new Ingredient("Milk", 2, Unit.LITRE, LocalDate.now().plusDays(10), 30); // Add a second ingredient with the same name
+    foodStorage.addIngredientToFoodStorage(ingredient1);
+    foodStorage.addIngredientToFoodStorage(ingredient2);
     
-    List<Item> result1 = foodStorage.searchForItemsInFoodStorage("Milk");
-    List<Item> result2 = foodStorage.searchForItemsInFoodStorage("mIlK"); // Test case-insensitive
+    List<Ingredient> result1 = foodStorage.searchForIngredientsInFoodStorage("Milk");
+    List<Ingredient> result2 = foodStorage.searchForIngredientsInFoodStorage("mIlK"); // Test case-insensitive
     
     assertNotNull(result1, "Milk should be found");
     assertFalse(result1.isEmpty(), "Result should not be empty");
-    assertEquals(2, result1.size(), "Should find two items named 'Milk'");
-    assertTrue(result1.stream().allMatch(item -> "Milk".equalsIgnoreCase(item.getName())), "All found items should have name 'Milk'");
+    assertEquals(2, result1.size(), "Should find two ingredients named 'Milk'");
+    assertTrue(result1.stream().allMatch(ingredient -> "Milk".equalsIgnoreCase(ingredient.getName())), "All found ingredients should have name 'Milk'");
     
     assertNotNull(result2, "Case-insensitive search should find Milk");
     assertFalse(result2.isEmpty(), "Result for case-insensitive search should not be empty");
-    assertEquals(2, result2.size(), "Case-insensitive search should find two items");
-    assertTrue(result2.stream().allMatch(item -> "Milk".equalsIgnoreCase(item.getName())), "All found items should have name 'Milk'");
+    assertEquals(2, result2.size(), "Case-insensitive search should find two ingredients");
+    assertTrue(result2.stream().allMatch(ingredient -> "Milk".equalsIgnoreCase(ingredient.getName())), "All found ingredients should have name 'Milk'");
     
     //Negative
-    List<Item> result3 = foodStorage.searchForItemsInFoodStorage("Boxing");
-    assertNotNull(result3, "Result for non-existent item should not be null");
-    assertTrue(result3.isEmpty(), "Non-existent item should return an empty list");
+    List<Ingredient> result3 = foodStorage.searchForIngredientsInFoodStorage("Boxing");
+    assertNotNull(result3, "Result for non-existent ingredient should not be null");
+    assertTrue(result3.isEmpty(), "Non-existent ingredient should return an empty list");
     
-    assertThrows(NullPointerException.class, () -> foodStorage.searchForItemsInFoodStorage(null), "Searching for null should throw NullPointerException");
+    assertThrows(NullPointerException.class, () -> foodStorage.searchForIngredientsInFoodStorage(null), "Searching for null should throw NullPointerException");
   }
   
   /**
-   * Tests removing items from foodStorage
+   * Tests removing ingredients from foodStorage
    */
   @Test
-  void testRemoveItemFromFoodStorage() {
-    Item item1 = new Item("Orange", 3, Unit.KILOGRAM, LocalDate.now().plusDays(5), 25);
-    Item item2 = new Item("Orange", 2, Unit.KILOGRAM, LocalDate.now().plusDays(10), 25);
-    foodStorage.addItemToFoodStorage(item1);
-    foodStorage.addItemToFoodStorage(item2);
-    double removedQuantity = foodStorage.removeItemFromFoodStorage("Orange", 4);
+  void testRemoveIngredientFromFoodStorage() {
+    Ingredient ingredient1 = new Ingredient("Orange", 3, Unit.KILOGRAM, LocalDate.now().plusDays(5), 25);
+    Ingredient ingredient2 = new Ingredient("Orange", 2, Unit.KILOGRAM, LocalDate.now().plusDays(10), 25);
+    foodStorage.addIngredientToFoodStorage(ingredient1);
+    foodStorage.addIngredientToFoodStorage(ingredient2);
+    double removedQuantity = foodStorage.removeIngredientFromFoodStorage("Orange", 4);
     assertEquals(4, removedQuantity, "Total removed quantity should be 4");
     
-    assertNotNull(foodStorage.getItems().get("orange"), "Orange list should still exist in storage");
-    assertEquals(1, foodStorage.getItems().get("orange").get(0).getQuantity(), "Remaining quantity of the first item should be 1");
+    assertNotNull(foodStorage.getIngredients().get("orange"), "Orange list should still exist in storage");
+    assertEquals(1, foodStorage.getIngredients().get("orange").get(0).getQuantity(), "Remaining quantity of the first ingredient should be 1");
     
-    foodStorage.removeItemFromFoodStorage("Orange", 1);
-    assertFalse(foodStorage.itemExist("orange"), "Orange should no longer exist in storage after removing all quantities");
+    foodStorage.removeIngredientFromFoodStorage("Orange", 1);
+    assertFalse(foodStorage.ingredientExist("orange"), "Orange should no longer exist in storage after removing all quantities");
     
     //negative tests
-    assertThrows(IllegalArgumentException.class, () -> foodStorage.removeItemFromFoodStorage("Orange", 1), "Removing non-existent item should throw IllegalArgumentException");
-    assertThrows(IllegalArgumentException.class, () -> foodStorage.removeItemFromFoodStorage("Apple", 2), "Removing an item not in storage should throw IllegalArgumentException");
+    assertThrows(IllegalArgumentException.class, () -> foodStorage.removeIngredientFromFoodStorage("Orange", 1), "Removing non-existent ingredient should throw IllegalArgumentException");
+    assertThrows(IllegalArgumentException.class, () -> foodStorage.removeIngredientFromFoodStorage("Apple", 2), "Removing an ingredient not in storage should throw IllegalArgumentException");
   }
   
   /**
-   * Tests retrieving expired items from foodStorage.
+   * Tests retrieving expired ingredients from foodStorage.
    */
   @Test
-  void testGetExpiredItems() {
-    Item item1 = new Item("Tomahawk", 1, Unit.PIECES, LocalDate.now().minusDays(1), 1);
-    Item item2 = new Item("Chicken", 1, Unit.KILOGRAM, LocalDate.now().plusDays(5), 90);
-    foodStorage.addItemToFoodStorage(item1);
-    foodStorage.addItemToFoodStorage(item2);
+  void testGetExpiredIngredients() {
+    Ingredient ingredient1 = new Ingredient("Tomahawk", 1, Unit.PIECES, LocalDate.now().minusDays(1), 1);
+    Ingredient ingredient2 = new Ingredient("Chicken", 1, Unit.KILOGRAM, LocalDate.now().plusDays(5), 90);
+    foodStorage.addIngredientToFoodStorage(ingredient1);
+    foodStorage.addIngredientToFoodStorage(ingredient2);
     
-    List<Item> expiredItems = foodStorage.getExpiredItems();
-    assertEquals(1, expiredItems.size(), "Only one item should be expired");
-    assertEquals("Tomahawk", expiredItems.get(0).getName(), "Expired item name should be Tomahawk");
+    List<Ingredient> expiredIngredients = foodStorage.getExpiredIngredients();
+    assertEquals(1, expiredIngredients.size(), "Only one ingredient should be expired");
+    assertEquals("Tomahawk", expiredIngredients.get(0).getName(), "Expired ingredient name should be Tomahawk");
     
     //Negative tests
-    assertTrue(foodStorage.getExpiredItems().stream()
-        .noneMatch(item -> item.getName().equals("Chicken")), "Non-expired items should not appear in the expired list");
+    assertTrue(foodStorage.getExpiredIngredients().stream()
+        .noneMatch(ingredient -> ingredient.getName().equals("Chicken")), "Non-expired ingredients should not appear in the expired list");
     foodStorage = new FoodStorage();
-    assertTrue(foodStorage.getExpiredItems().isEmpty(), "Empty storage should return no expired items");
+    assertTrue(foodStorage.getExpiredIngredients().isEmpty(), "Empty storage should return no expired ingredients");
   }
   
   /**
-   * Tests getting items with expiration date before a date
+   * Tests getting ingredients with expiration date before a date
    */
   @Test
-  void testGetItemsExpirationDateBefore() {
-    Item item1 = new Item("Salt", 1, Unit.GRAM, LocalDate.of(3000, 10, 10), 60);
-    Item item2 = new Item("Steak", 1, Unit.KILOGRAM, LocalDate.now().plusDays(10), 40);
-    foodStorage.addItemToFoodStorage(item1);
-    foodStorage.addItemToFoodStorage(item2);
+  void testGetIngredientsExpirationDateBefore() {
+    Ingredient ingredient1 = new Ingredient("Salt", 1, Unit.GRAM, LocalDate.of(3000, 10, 10), 60);
+    Ingredient ingredient2 = new Ingredient("Steak", 1, Unit.KILOGRAM, LocalDate.now().plusDays(10), 40);
+    foodStorage.addIngredientToFoodStorage(ingredient1);
+    foodStorage.addIngredientToFoodStorage(ingredient2);
     
-    List<Item> itemsExpiringBeforeDate = foodStorage.getItemsExpiringBefore(LocalDate.now().plusDays(12));
+    List<Ingredient> ingredientsExpiringBeforeDate = foodStorage.getIngredientsExpiringBefore(LocalDate.now().plusDays(12));
     
-    assertEquals(1, itemsExpiringBeforeDate.size(), "Only one item should expire before the given date");
-    assertEquals("Steak", itemsExpiringBeforeDate.getFirst().getName(), "Item name should be Steak");
+    assertEquals(1, ingredientsExpiringBeforeDate.size(), "Only one ingredient should expire before the given date");
+    assertEquals("Steak", ingredientsExpiringBeforeDate.getFirst().getName(), "Ingredient name should be Steak");
     
     //negative
-    assertTrue(foodStorage.getItemsExpiringBefore(LocalDate.now().plusDays(1)).isEmpty(), "No items should expire before today");
-    assertThrows(NullPointerException.class, () -> foodStorage.getItemsExpiringBefore(null), "Null date should throw NullPointerException");
+    assertTrue(foodStorage.getIngredientsExpiringBefore(LocalDate.now().plusDays(1)).isEmpty(), "No ingredients should expire before today");
+    assertThrows(NullPointerException.class, () -> foodStorage.getIngredientsExpiringBefore(null), "Null date should throw NullPointerException");
   }
   
   /**
@@ -157,15 +157,15 @@ class FoodStorageTest {
    */
   @Test
   void testSortAlphabetically() {
-    Item item1 = new Item("Banan", 5.0, Unit.PIECES, LocalDate.now().plusDays(10), 30.0);
-    Item item2 = new Item("Apple", 5.0, Unit.PIECES, LocalDate.now().plusDays(7), 20.0);
+    Ingredient ingredient1 = new Ingredient("Banan", 5.0, Unit.PIECES, LocalDate.now().plusDays(10), 30.0);
+    Ingredient ingredient2 = new Ingredient("Apple", 5.0, Unit.PIECES, LocalDate.now().plusDays(7), 20.0);
     
-    foodStorage.addItemToFoodStorage(item1);
-    foodStorage.addItemToFoodStorage(item2);
+    foodStorage.addIngredientToFoodStorage(ingredient1);
+    foodStorage.addIngredientToFoodStorage(ingredient2);
     
     foodStorage.getFoodStorageAlphabetically();
     
-    List<String> sortedKeys = new ArrayList<>(foodStorage.getItems().keySet()).stream()
+    List<String> sortedKeys = new ArrayList<>(foodStorage.getIngredients().keySet()).stream()
         .sorted(String.CASE_INSENSITIVE_ORDER)
         .toList();
     
@@ -178,14 +178,14 @@ class FoodStorageTest {
    */
   @Test
   void testTotalValue() {
-    Item item1 = new Item("Eggs", 12, Unit.PIECES, LocalDate.now().plusDays(5), 2);
-    Item item2 = new Item("Creatine", 1000, Unit.GRAM, LocalDate.of(2028, 2, 10), 15);
-    foodStorage.addItemToFoodStorage(item1);
-    foodStorage.addItemToFoodStorage(item2);
+    Ingredient ingredient1 = new Ingredient("Eggs", 12, Unit.PIECES, LocalDate.now().plusDays(5), 2);
+    Ingredient ingredient2 = new Ingredient("Creatine", 1000, Unit.GRAM, LocalDate.of(2028, 2, 10), 15);
+    foodStorage.addIngredientToFoodStorage(ingredient1);
+    foodStorage.addIngredientToFoodStorage(ingredient2);
     
-    double totalValue = foodStorage.calculateTotalValue(foodStorage.getItems().values().stream()
+    double totalValue = foodStorage.calculateTotalValue(foodStorage.getIngredients().values().stream()
         .flatMap(List::stream));
-    double expectedTotalValue = item1.getPerUnitPrice() + item2.getPerUnitPrice();
+    double expectedTotalValue = ingredient1.getPerUnitPrice() + ingredient2.getPerUnitPrice();
     
     //assertEquals(17, totalValue);
     assertEquals(expectedTotalValue, totalValue, 0.01);
@@ -193,11 +193,11 @@ class FoodStorageTest {
     //negative
     assertThrows(IllegalArgumentException.class, () -> foodStorage.calculateTotalValue(null), "Null stream should throw Ill.Arg.Exc.");
     foodStorage = new FoodStorage();
-    assertEquals(0, foodStorage.calculateTotalValue(foodStorage.getItems().values().stream().flatMap(List::stream)));
+    assertEquals(0, foodStorage.calculateTotalValue(foodStorage.getIngredients().values().stream().flatMap(List::stream)));
     
     foodStorage = new FoodStorage();
     assertEquals(0, foodStorage.calculateTotalValue(
-        foodStorage.getItems().values().stream().flatMap(List::stream)
+        foodStorage.getIngredients().values().stream().flatMap(List::stream)
     ), "Total value of empty storage should be 0");
   }
   
@@ -207,10 +207,10 @@ class FoodStorageTest {
   @Test
   void testIsEmpty() {
     assertTrue(foodStorage.isEmpty());
-    Item item = new Item("Banana", 10, Unit.KILOGRAM, LocalDate.now().plusDays(7), 15);
-    foodStorage.addItemToFoodStorage(item);
+    Ingredient ingredient = new Ingredient("Banana", 10, Unit.KILOGRAM, LocalDate.now().plusDays(7), 15);
+    foodStorage.addIngredientToFoodStorage(ingredient);
     assertFalse(foodStorage.isEmpty());
-    foodStorage.removeItemFromFoodStorage("Banana", 10);
+    foodStorage.removeIngredientFromFoodStorage("Banana", 10);
     assertTrue(foodStorage.isEmpty());
     foodStorage = new FoodStorage();
     assertTrue(foodStorage.isEmpty());

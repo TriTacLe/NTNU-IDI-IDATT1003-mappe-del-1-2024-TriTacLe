@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.storage;
 
-import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 
 import java.util.ArrayList;
@@ -55,37 +55,37 @@ public class Cookbook {
   public List<Recipe> getSuggestedRecipes(FoodStorage foodStorage) {
     List<Recipe> suggestedRecipes = new ArrayList<>();
     
-    if (foodStorage == null || foodStorage.getItems() == null || recipes == null || recipes.isEmpty()) {
+    if (foodStorage == null || foodStorage.getIngredients() == null || recipes == null || recipes.isEmpty()) {
       return suggestedRecipes;
     }
     
-    Map<String, List<Item>> normalizedStorage = new HashMap<>();
-    foodStorage.getItems().forEach((key, value) -> {
+    Map<String, List<Ingredient>> normalizedStorage = new HashMap<>();
+    foodStorage.getIngredients().forEach((key, value) -> {
       normalizedStorage.put(key.toLowerCase().trim(), value);
     });
     
     recipes.forEach((recipeName, recipe) -> {
-      boolean canMakeRecipe = recipe.getItemsList().stream()
-          .allMatch(recipeItem -> {
-            String itemName = recipeItem.getName().toLowerCase().trim();
-            double neededQuantity = recipeItem.getQuantity();
+      boolean canMakeRecipe = recipe.getIngredientsList().stream()
+          .allMatch(recipeIngredient -> {
+            String ingredientName = recipeIngredient.getName().toLowerCase().trim();
+            double neededQuantity = recipeIngredient.getQuantity();
             
-            List<Item> storageItems = normalizedStorage.get(itemName);
+            List<Ingredient> storageIngredients = normalizedStorage.get(ingredientName);
             
-            if (storageItems == null || storageItems.isEmpty()) {
+            if (storageIngredients == null || storageIngredients.isEmpty()) {
               return false;
             }
             
-            double availableQuantity = storageItems.stream()
-                .mapToDouble(storageItem -> {
-                  if (!storageItem.getUnit().equals(recipeItem.getUnit())) {
+            double availableQuantity = storageIngredients.stream()
+                .mapToDouble(storageIngredient -> {
+                  if (!storageIngredient.getUnit().equals(recipeIngredient.getUnit())) {
                     try {
-                      return storageItem.getUnit().convertValue(storageItem.getQuantity(), recipeItem.getUnit());
+                      return storageIngredient.getUnit().convertValue(storageIngredient.getQuantity(), recipeIngredient.getUnit());
                     } catch (IllegalArgumentException e) {
                       return 0.0;
                     }
                   }
-                  return storageItem.getQuantity();
+                  return storageIngredient.getQuantity();
                 })
                 .sum();
             

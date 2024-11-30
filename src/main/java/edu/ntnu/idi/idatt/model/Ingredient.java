@@ -5,7 +5,7 @@ import edu.ntnu.idi.idatt.Utils.InputValidation;
 import java.time.LocalDate;
 
 /**
- * Class represent an item/grocery/ingredient
+ * Class represent an ingredient/grocery
  * Consist of attributes name, quantity, unit for the quantity, expiration date and the price per unit
  */
 public class Ingredient {
@@ -18,14 +18,14 @@ public class Ingredient {
   private InputValidation inputValidation;
   
   /**
-   * konstruktør to make an item (object) with (attributes) name, quantity, unit, expirations date price per unit
+   * konstruktør to make an Ingredient (object) with (attributes) name, quantity, unit, expirations date price per unit
    * I also implemented input control
    *
-   * @param name           items name
-   * @param quantity       quanity of item
+   * @param name           Ingredients name
+   * @param quantity       quanity of Ingredient
    * @param unit           unit for the quantity (SI-unit) ex: Kg
-   * @param expirationDate expiration date for the item
-   * @param price          price per unit of item
+   * @param expirationDate expiration date for the Ingredient
+   * @param price          price per unit of Ingredient
    */
   public Ingredient(String name, double quantity, Unit unit, LocalDate expirationDate, double price) {
     //Input validering
@@ -57,23 +57,23 @@ public class Ingredient {
   }
   
   /***
-   * Gets the name of the item
-   * @return name of the item
+   * Gets the name of the Ingredient
+   * @return name of the Ingredient
    */
   public String getName() {
     return name;
   }
   
   /***
-   * Gets the quantity of the item
-   * @return quantity of the item
+   * Gets the quantity of the Ingredient
+   * @return quantity of the Ingredient
    */
   public double getQuantity() {
     return quantity;
   }
   
   /**
-   * Gets the expiration date of the item
+   * Gets the expiration date of the Ingredient
    *
    * @return new expiration date
    */
@@ -90,7 +90,7 @@ public class Ingredient {
   }
   
   /***
-   * gets the price of the item
+   * gets the price of the Ingredient
    * @return
    */
   public double getPrice() {
@@ -98,8 +98,8 @@ public class Ingredient {
   }
   
   /***
-   * Sets the quantity of the item
-   * @param quantity new quantity of the item
+   * Sets the quantity of the Ingredient
+   * @param quantity new quantity of the Ingredient
    */
   public void setQuantity(double quantity) {
     InputValidation.validateDouble(quantity, "quantity");
@@ -108,7 +108,7 @@ public class Ingredient {
   
   
   /**
-   * Sets the expirations date of the item
+   * Sets the expirations date of the Ingredient
    *
    * @param expirationDate
    */

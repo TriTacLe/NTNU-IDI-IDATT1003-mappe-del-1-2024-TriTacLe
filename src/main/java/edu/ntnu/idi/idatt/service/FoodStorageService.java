@@ -24,7 +24,7 @@ public class FoodStorageService {
       double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
       final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
       final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format (yyyy-mm-dd):", "Please enter a date in the format yyyy-mm-dd");
-      final double pricePerUnit = inputHandler.getValidatedDouble("Enter the price of all the Ingredients:", "Invalid input for price", "price");
+      final double pricePerUnit = inputHandler.getValidatedDouble("Enter the price of the amount of Ingredients added:", "Invalid input for price", "price");
       
       Ingredient ingredient = new Ingredient(name, quantity, unit, expirationDate, pricePerUnit);
       foodStorage.addIngredientToFoodStorage(ingredient);
@@ -38,18 +38,18 @@ public class FoodStorageService {
   
   public void handleSearchIngredient() {
     try {
-      String name = inputHandler.getValidatedString("Enter Ingredient name:", "Ingredient name cannot be empty/blank", "name");
+      String name = inputHandler.getValidatedString("Enter name of the ingredient:", "Ingredient name cannot be empty/blank", "name");
       
       if (foodStorage == null) {
         throw new IllegalArgumentException("Food storage is not initialized.");
       }
       
       List<Ingredient> searchStatus = foodStorage.searchForIngredientsInFoodStorage(name.toLowerCase());
-      if (searchStatus != null) {
+      if (searchStatus != null && !searchStatus.isEmpty()) {
         System.out.println("Ingredient found: ");
-        searchStatus.forEach(Ingredient -> System.out.println(" - " + Ingredient));
+        searchStatus.forEach(ingredient -> System.out.println(" - " + ingredient));
       } else {
-        System.out.println("Ingredient does not exist.");
+        System.out.println("Ingredient: " + name + " does not exist.");
       }
     } catch (IllegalArgumentException e) {
       System.out.println("Invalid input: " + e.getMessage());

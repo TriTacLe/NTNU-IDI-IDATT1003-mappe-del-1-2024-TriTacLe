@@ -207,7 +207,7 @@ public class CookbookService {
       Map<String, Double> availability = foodStorage.getIngredientAvailabilityForRecipe(foodStorage, selectedRecipe);
       
       if (enoughIngredients) {
-        System.out.println("There are enough ingredients in the storage to make this recipe: " + selectedRecipe.getName());
+        System.out.println("Yes! There are enough ingredients in the storage to make this recipe: " + selectedRecipe.getName());
         selectedRecipe.getIngredientsList().forEach(recipeIngredient -> {
           double available = availability.getOrDefault(recipeIngredient.getName(), 0.0);
           System.out.println(" - " + recipeIngredient.getName()
