@@ -16,7 +16,6 @@ public enum Unit {
   private final UnitType type;
   private final Double conversionNumber;
   private InputValidation inputValidation;
-  private Item item;
   
   public enum UnitType {
     MASS,
@@ -60,10 +59,6 @@ public enum Unit {
     return (value * this.conversionNumber) / targetUnit.conversionNumber;
   }
   
-  public Double convertToBaseUnit(Item item) {
-    return item.getQuantity() * item.getUnit().getConversionNumber();
-  }
-  
   /**
    * Finds the Unit enum based on a user input string.
    *
@@ -73,7 +68,7 @@ public enum Unit {
    */
   public static Unit fromSymbol(String input) {
     return Arrays.stream(Unit.values())
-        .filter(unit -> unit.symbol.equalsIgnoreCase(input)) //ALlow case sensitive
+        .filter(unit -> unit.symbol.equalsIgnoreCase(input)) //ALlow case in-sensitive
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("Invalid unit: " + input));
   }

@@ -42,13 +42,13 @@ public class InputValidation {
   
   /**
    * Validates that a date is not in the past
-   * Optional null check, because items in the recipe does not need expiration date
+   * Optional null check, because ingredients in the recipe does not need expiration date
    *
    * @param date      The date to validate.
    * @param allowNull Whether null is allowed.
    * @throws IllegalArgumentException if the date is in the past.
    */
-  public static void validateDateNotInPast(LocalDate date, boolean allowNull) {
+  public static void validateDateInThePast(LocalDate date, boolean allowNull) {
     if (date == null && !allowNull) {
       throw new IllegalArgumentException("Expiration date cannot be null");
     } else if (date.isBefore(LocalDate.now())) {
@@ -58,6 +58,12 @@ public class InputValidation {
       if (!"YES".equalsIgnoreCase(userInput)) {
         throw new IllegalArgumentException("Expiration date cannot be in the past");
       }
+    }
+  }
+  
+  public static void validateDate(LocalDate date, boolean allowNull) {
+    if (date == null && !allowNull) {
+      throw new IllegalArgumentException("Expiration date cannot be null");
     }
   }
   

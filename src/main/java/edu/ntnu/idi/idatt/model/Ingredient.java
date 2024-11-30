@@ -8,13 +8,13 @@ import java.time.LocalDate;
  * Class represent an item/grocery/ingredient
  * Consist of attributes name, quantity, unit for the quantity, expiration date and the price per unit
  */
-public class Item {
+public class Ingredient {
   // Attributter
   private final String name;
   private double quantity;
   private final Unit unit;
   private LocalDate expirationDate;
-  private final double pricePerUnit;
+  private final double price;
   private InputValidation inputValidation;
   
   /**
@@ -25,33 +25,35 @@ public class Item {
    * @param quantity       quanity of item
    * @param unit           unit for the quantity (SI-unit) ex: Kg
    * @param expirationDate expiration date for the item
-   * @param pricePerUnit   price per unit of item
+   * @param price          price per unit of item
    */
-  public Item(String name, double quantity, Unit unit, LocalDate expirationDate, double pricePerUnit) {
+  public Ingredient(String name, double quantity, Unit unit, LocalDate expirationDate, double price) {
     //Input validering
     inputValidation.validateString(name, "Name");
-    inputValidation.validateDouble(quantity, "Quantity");
+    //inputValidation.validateDouble(quantity, "Quantity");
     inputValidation.validationEnum(unit);
-    //inputValidation.validateDateNotInPast(expirationDate, true, "Expiration date");
-    inputValidation.validateDouble(pricePerUnit, "Price");
+    inputValidation.validateDouble(price, "Price");
     
+    setExpirationDate(expirationDate);
+    setQuantity(quantity);
     this.name = name;
-    this.quantity = quantity;
+    //this.quantity = quantity;
     this.unit = unit;
-    this.expirationDate = expirationDate;
-    this.pricePerUnit = pricePerUnit;
+    //this.expirationDate = expirationDate;
+    this.price = price;
   }
   
-  public Item(String name, double quantity, Unit unit, double pricePerUnit) {
+  public Ingredient(String name, double quantity, Unit unit, double price) {
     inputValidation.validateString(name, "Name");
-    inputValidation.validateDouble(quantity, "Quantity");
+    //inputValidation.validateDouble(quantity, "Quantity");
     inputValidation.validationEnum(unit);
-    inputValidation.validateDouble(pricePerUnit, "Price");
+    inputValidation.validateDouble(price, "Price");
     
+    setQuantity(quantity);
     this.name = name;
-    this.quantity = quantity;
+    //this.quantity = quantity;
     this.unit = unit;
-    this.pricePerUnit = pricePerUnit;
+    this.price = price;
   }
   
   /***
@@ -91,8 +93,8 @@ public class Item {
    * gets the price of the item
    * @return
    */
-  public double getPerUnitPrice() {
-    return pricePerUnit;
+  public double getPrice() {
+    return price;
   }
   
   /***
@@ -100,6 +102,7 @@ public class Item {
    * @param quantity new quantity of the item
    */
   public void setQuantity(double quantity) {
+    InputValidation.validateDouble(quantity, "quantity");
     this.quantity = quantity;
   }
   
@@ -109,7 +112,8 @@ public class Item {
    *
    * @param expirationDate
    */
-  public void setExpirationDate(LocalDate expirationDate) {
+  private void setExpirationDate(LocalDate expirationDate) {
+    InputValidation.validateDate(expirationDate, false);
     this.expirationDate = expirationDate;
   }
   
@@ -128,6 +132,6 @@ public class Item {
     // TODO Auto-generated method stub
     //if else forenklet
     String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
-    return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput + " Price: " + pricePerUnit + " kr"; // + ". Todays date: " + LocalDate.now();
+    return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput + " Price: " + price + " kr"; // + ". Todays date: " + LocalDate.now();
   }
 }

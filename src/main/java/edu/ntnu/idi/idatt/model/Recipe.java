@@ -12,7 +12,7 @@ public class Recipe {
   private final String description;
   private final String procedure;
   private final double portions;
-  private final ArrayList<Item> itemsList;
+  private final ArrayList<Ingredient> ingredientsList;
   private InputValidation inputValidation;
   
   public Recipe(String name, String description, String procedure, double portions) {
@@ -25,7 +25,7 @@ public class Recipe {
     this.description = description;
     this.procedure = procedure;
     this.portions = portions;
-    this.itemsList = new ArrayList<>();
+    this.ingredientsList = new ArrayList<>();
   }
   
   
@@ -45,88 +45,88 @@ public class Recipe {
     return portions;
   }
   
-  public List<Item> getItemsList() {
-    return itemsList;
+  public List<Ingredient> getIngredientsList() {
+    return ingredientsList;
   }
   
   /**
-   * Adds item objects to the recipe (itemsList ArrayList)
+   * Adds ingredient objects to the recipe (ingredientsList ArrayList)
    *
-   * @param item
+   * @param ingredient
    */
-  public boolean addItemToRecipe(Item item) {
-    Optional<Item> existingItem = itemsList.stream()
-        .filter(itemInRegister -> itemInRegister.getName().equals(item.getName()))
+  public boolean addIngredientToRecipe(Ingredient ingredient) {
+    Optional<Ingredient> existingIngredient = ingredientsList.stream()
+        .filter(ingredientInRegister -> ingredientInRegister.getName().equals(ingredient.getName()))
         .findAny();
     
-    if (existingItem.isPresent()) {
-      existingItem.get().updateQuantity(item.getQuantity());
+    if (existingIngredient.isPresent()) {
+      existingIngredient.get().updateQuantity(ingredient.getQuantity());
       return false;
     } else {
-      itemsList.add(item);
+      ingredientsList.add(ingredient);
       return true;
     }
   }
   /*
   /**
-   * Checks if there are enough items in the food storage to prepare the recipe.
+   * Checks if there are enough ingredients in the food storage to prepare the recipe.
    * <p>
-   * This method iterates through the list of items required for the recipe and compares
+   * This method iterates through the list of ingredients required for the recipe and compares
    * the total quantity available in the food storage with the quantity needed for each
-   * item. It prints out whether there are enough items in the storage and displays the
-   * required and available quantities for each item.
+   * ingredient. It prints out whether there are enough ingredients in the storage and displays the
+   * required and available quantities for each ingredient.
    * </p>
    *
-   * @param foodStorage The food storage containing a collection of items in the kitchen.
-   *                    This is used to check the availability of each item required for
+   * @param foodStorage The food storage containing a collection of ingredients in the kitchen.
+   *                    This is used to check the availability of each ingredient required for
    *                    the recipe.
    */
   /*
-  public void hasEnoughItemsForRecipe(FoodStorage foodStorage) {
-    boolean enoughItems = itemsList.stream()
-        .allMatch(recipeItem -> {
-          double totalAvailable = foodStorage.getItems().values().stream()
+  public void hasEnoughIngredientsForRecipe(FoodStorage foodStorage) {
+    boolean enoughIngredients = ingredientsList.stream()
+        .allMatch(recipeIngredient -> {
+          double totalAvailable = foodStorage.getIngredients().values().stream()
               .flatMap(List::stream)
-              .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
-              .mapToDouble(storageItem -> {
-                if (!storageItem.getUnit().equals(recipeItem.getUnit())) {
-                  return storageItem.getUnit().converter(storageItem.getQuantity(), recipeItem.getUnit());
+              .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
+              .mapToDouble(storageIngredient -> {
+                if (!storageIngredient.getUnit().equals(recipeIngredient.getUnit())) {
+                  return storageIngredient.getUnit().converter(storageIngredient.getQuantity(), recipeIngredient.getUnit());
                 }
-                return storageItem.getQuantity();
+                return storageIngredient.getQuantity();
               })
               .sum();
-          return totalAvailable >= recipeItem.getQuantity();
+          return totalAvailable >= recipeIngredient.getQuantity();
         });
     
-    if (enoughItems) {
-      System.out.println("There is enough items in the storage to make this recipe: " + getName());
-      itemsList.forEach(recipeItem -> {
-        double totalQuantityAvailable = foodStorage.getItems().values().stream()
+    if (enoughIngredients) {
+      System.out.println("There is enough ingredients in the storage to make this recipe: " + getName());
+      ingredientsList.forEach(recipeIngredient -> {
+        double totalQuantityAvailable = foodStorage.getIngredients().values().stream()
             .flatMap(List::stream)
-            .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
-            .mapToDouble(Item::getQuantity)
+            .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
+            .mapToDouble(Ingredient::getQuantity)
             .sum();
         
-        System.out.println(" - " + recipeItem.getName()
-            + ": Required = " + recipeItem.getQuantity()
+        System.out.println(" - " + recipeIngredient.getName()
+            + ": Required = " + recipeIngredient.getQuantity()
             + ", Available: " + totalQuantityAvailable);
       });
     } else {
       System.out.println("There is not enough to make this recipe: " + getName());
-      itemsList.forEach(recipeItem -> {
-        double totalAvailable = foodStorage.getItems().values().stream()
+      ingredientsList.forEach(recipeIngredient -> {
+        double totalAvailable = foodStorage.getIngredients().values().stream()
             .flatMap(List::stream)
-            .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
-            .mapToDouble(Item::getQuantity)
+            .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
+            .mapToDouble(Ingredient::getQuantity)
             .sum();
         
         if (totalAvailable > 0) {
-          System.out.println(" - " + recipeItem.getName()
-              + ": Required = " + recipeItem.getQuantity()
+          System.out.println(" - " + recipeIngredient.getName()
+              + ": Required = " + recipeIngredient.getQuantity()
               + ", Available: " + totalAvailable);
         } else {
-          System.out.println(" - " + recipeItem.getName()
-              + ": Required = " + recipeItem.getQuantity()
+          System.out.println(" - " + recipeIngredient.getName()
+              + ": Required = " + recipeIngredient.getQuantity()
               + ", Available: 0 (Not in foodStorage)");
         }
       });
@@ -146,10 +146,10 @@ public class Recipe {
     if (procedure != null && !procedure.isEmpty()) {
       stringBuilder.append("Procedure: ").append(procedure).append("\n");
     }
-    if (itemsList != null && !itemsList.isEmpty()) {
-      stringBuilder.append("Items: \n");
-      for (Item item : itemsList) {
-        stringBuilder.append(" - ").append(item);
+    if (ingredientsList != null && !ingredientsList.isEmpty()) {
+      stringBuilder.append("Ingredients: \n");
+      for (Ingredient ingredient : ingredientsList) {
+        stringBuilder.append(" - ").append(ingredient);
       }
     }
     return stringBuilder.toString();

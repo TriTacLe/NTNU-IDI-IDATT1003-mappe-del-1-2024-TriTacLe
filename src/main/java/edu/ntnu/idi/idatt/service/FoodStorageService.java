@@ -1,7 +1,8 @@
 package edu.ntnu.idi.idatt.service;
 
 import edu.ntnu.idi.idatt.Utils.UserInputHandler;
-import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Ingredient;
+import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
 
@@ -17,92 +18,93 @@ public class FoodStorageService {
     this.inputHandler = inputHandler;
   }
   
-  public void handleAddItem() {
+  public void handleAddIngredient() {
     try {
-      final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank", "name");
+      final String name = inputHandler.getValidatedString("Enter Ingredient name:", "Ingredient name cannot be empty/blank", "name");
       double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
       final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-      final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format yyyy-mm-dd", "Please enter a date in the format yyyy-mm-dd");
-      final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price", "price");
+      final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format (yyyy-mm-dd):", "Please enter a date in the format yyyy-mm-dd");
+      final double pricePerUnit = inputHandler.getValidatedDouble("Enter the price of all the Ingredients:", "Invalid input for price", "price");
       
-      Item item = new Item(name, quantity, unit, expirationDate, pricePerUnit);
-      foodStorage.addItemToFoodStorage(item);
+      Ingredient ingredient = new Ingredient(name, quantity, unit, expirationDate, pricePerUnit);
+      foodStorage.addIngredientToFoodStorage(ingredient);
       
-      System.out.println("Item added: " + item);
+      System.out.println("Ingredient added: " + ingredient);
       
     } catch (IllegalArgumentException e) {
       System.out.println("Error: " + e.getMessage());
     }
   }
   
-  public void handleSearchItem() {
+  public void handleSearchIngredient() {
     try {
-      String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank", "name");
+      String name = inputHandler.getValidatedString("Enter Ingredient name:", "Ingredient name cannot be empty/blank", "name");
       
       if (foodStorage == null) {
         throw new IllegalArgumentException("Food storage is not initialized.");
       }
       
-      List<Item> searchStatus = foodStorage.searchForItemsInFoodStorage(name.toLowerCase());
+      List<Ingredient> searchStatus = foodStorage.searchForIngredientsInFoodStorage(name.toLowerCase());
       if (searchStatus != null) {
-        System.out.println("Item found: ");
-        searchStatus.forEach(item -> System.out.println(" - " + item));
+        System.out.println("Ingredient found: ");
+        searchStatus.forEach(Ingredient -> System.out.println(" - " + Ingredient));
       } else {
-        System.out.println("Item does not exist.");
+        System.out.println("Ingredient does not exist.");
       }
     } catch (IllegalArgumentException e) {
       System.out.println("Invalid input: " + e.getMessage());
     }
   }
   
-  public void handleRemoveItem() {
+  public void handleRemoveIngredient() {
     try {
       String name = inputHandler.getValidatedString(
-          "Enter the name of the item to be removed from the food storage: ",
-          "Item name cannot be empty/blank", "name"
+          "Enter the name of the Ingredient to be removed from the food storage: ",
+          "Ingredient name cannot be empty/blank", "name"
       ).toLowerCase();
       
-      List<Item> matchingItems = foodStorage.searchForItemsInFoodStorage(name);
-      if (matchingItems == null || matchingItems.isEmpty()) {
-        throw new IllegalArgumentException("Item " + name + " does not exist.");
+      List<Ingredient> matchingIngredients = foodStorage.searchForIngredientsInFoodStorage(name);
+      if (matchingIngredients == null || matchingIngredients.isEmpty()) {
+        throw new IllegalArgumentException("Ingredient " + name + " does not exist.");
       }
-      double totalQuantity = matchingItems.stream()
-          .mapToDouble(Item::getQuantity)
+      double totalQuantity = matchingIngredients.stream()
+          .mapToDouble(Ingredient::getQuantity)
           .sum();
       
       double quantity = inputHandler.getValidatedDouble(
-          "Enter how much quantity of the item: " + matchingItems.getFirst().getName()
-              + "(" + totalQuantity + matchingItems.getFirst().getUnit().getSymbol()
+          "Enter how much quantity of the Ingredient: " + matchingIngredients.getFirst().getName()
+              + "(" + totalQuantity + matchingIngredients.getFirst().getUnit().getSymbol()
               + ") to be removed: ", "Invalid quantity", "quantity"
       );
       
-      double removedQuantity = foodStorage.removeItemFromFoodStorage(name, quantity);
+      double removedQuantity = foodStorage.removeIngredientFromFoodStorage(name, quantity);
       
-      System.out.println("Removed " + removedQuantity + matchingItems.getFirst().getUnit().getSymbol() + " from " + matchingItems.getFirst().getName());
+      System.out.println("Removed " + removedQuantity + matchingIngredients.getFirst().getUnit().getSymbol() + " from " + matchingIngredients.getFirst().getName());
       
     } catch (IllegalArgumentException e) {
       System.out.println("Error: " + e.getMessage());
     }
   }
   
-  public void handleDisplayExpiredItems() {
-    /*getExpiredItems method are being called from the foodStorage class
-    And the result is being assigned to the expiredItems variable*/
+  public void handleDisplayExpiredIngredients() {
+    /*getExpiredIngredients method are being called from the foodStorage class
+    And the result is being assigned to the expiredIngredients variable*/
     try {
-      List<Item> expiredItems = foodStorage.getExpiredItems();
+      List<Ingredient> expiredIngredients = foodStorage.getExpiredIngredients();
       
-      if (expiredItems == null || expiredItems.isEmpty()) {
-        System.out.println("No items is expired! Nice!");
+      if (expiredIngredients == null || expiredIngredients.isEmpty()) {
+        System.out.println("No Ingredients is expired! Nice!");
         return;
       }
       
-      double totalValue = foodStorage.calculateTotalValue(expiredItems.stream());
+      double totalValue = foodStorage.calculateTotalValue(expiredIngredients.stream());
       
-      System.out.println("Expired items");
-      expiredItems.forEach(item -> System.out.println("- " + item));
-      System.out.printf("Total value of expired items: %.2f kr%n", totalValue); //2 desimaler
+      System.out.println("Expired Ingredients");
+      expiredIngredients.forEach(Ingredient -> System.out.println("- " + Ingredient));
+      System.out.printf("Total value of expired Ingredients: %.2f kr%n", totalValue); //2 desimaler
+      System.out.println("Try to conserve more food");
     } catch (IllegalArgumentException e) {
-      System.out.println("Error while trying to display expired items: " + e.getMessage());
+      System.out.println("Error while trying to display expired Ingredients: " + e.getMessage());
     }
   }
   
@@ -112,7 +114,7 @@ public class FoodStorageService {
         System.out.println("Food storage is empty");
         return;
       }
-      double totalValue = foodStorage.calculateTotalValue(foodStorage.getItems().values().stream()
+      double totalValue = foodStorage.calculateTotalValue(foodStorage.getIngredients().values().stream()
           .flatMap(List::stream));
       
       System.out.println("The total value of the food storage is: " + totalValue + " kr");
@@ -121,28 +123,27 @@ public class FoodStorageService {
     }
   }
   
-  public void handleViewItemsBeforeDate() {
-    LocalDate date = inputHandler.getValidatedDate("Enter a date (yyyy-mm-dd) to view items expiring before it: ", "Please enter a date in the format yyyy-mm-dd");
+  public void handleViewIngredientsBeforeDate() {
+    LocalDate date = inputHandler.getValidatedDate("Enter a date (yyyy-mm-dd) to view Ingredients expiring before it: ", "Please enter a date in the format yyyy-mm-dd");
     try {
-      List<Item> itemsBeforeDate = foodStorage.getItemsExpiringBefore(date);
-      if (itemsBeforeDate == null || itemsBeforeDate.isEmpty()) {
-        System.out.println("No items expire before: " + date);
+      List<Ingredient> IngredientsBeforeDate = foodStorage.getIngredientsExpiringBefore(date);
+      if (IngredientsBeforeDate == null || IngredientsBeforeDate.isEmpty()) {
+        System.out.println("No Ingredients expire before: " + date);
       } else {
-        System.out.println("----Items expiring before date: " + date + "----");
-        //itemsBeforeDate.forEach(System.out::println);
-        itemsBeforeDate.forEach(item -> System.out.println("- " + item));
+        System.out.println("----Ingredients expiring before date: " + date + "----");
+        //IngredientsBeforeDate.forEach(System.out::println);
+        IngredientsBeforeDate.forEach(Ingredient -> System.out.println("- " + Ingredient));
         
       }
     } catch (IllegalArgumentException e) {
-      System.out.println("Error while retrieving items: " + e.getMessage());
+      System.out.println("Error while retrieving Ingredients: " + e.getMessage());
     }
   }
   
   public void handleDisplayFoodStorageAlphabetically() {
     System.out.println("----Food storage sorted out alphabetically by name----");
     if (foodStorage == null || foodStorage.isEmpty()) {
-      System.out.println("Food storage is empty. These is not items in food storage.");
-      return;
+      System.out.println("Food storage is empty. These is not Ingredients in food storage.");
     }
     try {
       foodStorage.getFoodStorageAlphabetically();

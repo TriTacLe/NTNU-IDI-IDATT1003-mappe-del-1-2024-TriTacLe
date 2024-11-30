@@ -1,7 +1,7 @@
 package edu.ntnu.idi.idatt.service;
 
 import edu.ntnu.idi.idatt.Utils.UserInputHandler;
-import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
@@ -38,11 +38,11 @@ public class CookbookService {
       Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
       
       try {
-        int choice = inputHandler.getValidatedInt("How would you like to add ingredients? 1. Add manually 2. Choose from available food storage items. Enter your choice: ", "Invalid input. Enter 1 or 2.", "choice");
+        int choice = inputHandler.getValidatedInt("How would you like to add ingredients? 1. Add manually 2. Choose from available food storage ingredients. Enter your choice: ", "Invalid input. Enter 1 or 2.", "choice");
         
         switch (choice) {
-          case 1 -> addItemsManually(recipe);
-          case 2 -> addItemsFromStorage(recipe);
+          case 1 -> addIngredientsManually(recipe);
+          case 2 -> addIngredientsFromStorage(recipe);
           default -> System.out.println("Invalid choice.");
         }
       } catch (IllegalArgumentException e) {
@@ -62,93 +62,93 @@ public class CookbookService {
     }
   }
   
-  private void addItemsManually(Recipe recipe) {
+  private void addIngredientsManually(Recipe recipe) {
     try {
-      int totalItems = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative", "Total items");
-      for (int i = 0; i < totalItems; i++) {
-        System.out.println("Item: " + (i + 1));
-        final String name = inputHandler.getValidatedString("Enter item name:", "Item name cannot be empty/blank", "name");
+      int totalIngredients = (int) inputHandler.getValidatedDouble("Enter how many ingredients you want this recipe to have", "Total ingredients cannot be negative", "Total ingredients");
+      for (int i = 0; i < totalIngredients; i++) {
+        System.out.println("Ingredient: " + (i + 1));
+        final String name = inputHandler.getValidatedString("Enter ingredient name:", "Ingredient name cannot be empty/blank", "name");
         double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
         final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
         final double pricePerUnit = inputHandler.getValidatedDouble("Enter price per unit:", "Invalid input for price", "price");
         
-        Item item = new Item(name, quantity, unit, pricePerUnit);
-        recipe.addItemToRecipe(item);
+        Ingredient ingredient = new Ingredient(name, quantity, unit, pricePerUnit);
+        recipe.addIngredientToRecipe(ingredient);
       }
     } catch (IllegalArgumentException e) {
-      System.out.println("Error adding items manually: " + e.getMessage());
+      System.out.println("Error adding ingredients manually: " + e.getMessage());
     }
   }
   
   
-  private void addItemsFromStorage(Recipe recipe) {
+  private void addIngredientsFromStorage(Recipe recipe) {
     try {
-      int totalItems = (int) inputHandler.getValidatedDouble("Enter how many items you want this recipe to have", "Total items cannot be negative/other type than int or double", "total items");
+      int totalIngredients = (int) inputHandler.getValidatedDouble("Enter how many ingredients you want this recipe to have", "Total ingredients cannot be negative/other type than int or double", "total ingredients");
       
-      System.out.println("Every item that has not expired and can be used in a recipe:");
-      List<Item> availableItems = foodStorage.getItemsExpiringAfter(LocalDate.now());
-      availableItems.forEach(item -> System.out.println("- " + item));
+      System.out.println("Every ingredient that has not expired and can be used in a recipe:");
+      List<Ingredient> availableIngredients = foodStorage.getIngredientsExpiringAfter(LocalDate.now());
+      availableIngredients.forEach(ingredient -> System.out.println("- " + ingredient));
       
-      for (int i = 0; i < totalItems; i++) {
-        System.out.println("Item: " + (i + 1) + " of " + totalItems);
-        handleItemAddition(recipe);
+      for (int i = 0; i < totalIngredients; i++) {
+        System.out.println("Ingredient: " + (i + 1) + " of " + totalIngredients);
+        handleIngredientAddition(recipe);
       }
     } catch (IllegalArgumentException e) {
-      System.out.println("An error occurred while adding items from storage: " + e.getMessage());
+      System.out.println("An error occurred while adding ingredients from storage: " + e.getMessage());
     }
   }
   
-  private void handleItemAddition(Recipe recipe) {
+  private void handleIngredientAddition(Recipe recipe) {
     try {
-      String itemKey;
-      List<Item> items;
+      String ingredientKey;
+      List<Ingredient> ingredients;
       
       do {
-        itemKey = inputHandler.getValidatedString("Enter the item you want", "Error: Could not retrieve the item name.", "name").toLowerCase();
+        ingredientKey = inputHandler.getValidatedString("Enter the ingredient you want", "Error: Could not retrieve the ingredient name.", "name").toLowerCase();
         
-        items = getItemsFromStorage(itemKey);
-        if (items == null || items.isEmpty()) {
-          System.out.println("Item not found in storage. Please enter a valid item.");
+        ingredients = getIngredientsFromStorage(ingredientKey);
+        if (ingredients == null || ingredients.isEmpty()) {
+          System.out.println("Ingredient not found in storage. Please enter a valid ingredient.");
         }
-      } while (items == null || items.isEmpty());
+      } while (ingredients == null || ingredients.isEmpty());
       
-      double totalAvailableQuantity = items.stream()
-          .mapToDouble(Item::getQuantity)
+      double totalAvailableQuantity = ingredients.stream()
+          .mapToDouble(Ingredient::getQuantity)
           .sum();
       
-      System.out.println("Total available quantity for " + itemKey + ": " + totalAvailableQuantity + ". Please read: Remember this is total quantity of " + itemKey + " in the food storage. How much you want to add to the recipe is an unrealized amount so it will not be deducted from the real amount.");
+      System.out.println("Total available quantity for " + ingredientKey + ": " + totalAvailableQuantity + ". Please read: Remember this is total quantity of " + ingredientKey + " in the food storage. How much you want to add to the recipe is an unrealized amount so it will not be deducted from the real amount.");
       
       int requestedQuantity = inputHandler.getValidatedInt("Enter quantity to add:", "Invalid input for quantity.", "requested quantity");
       
       if (requestedQuantity > totalAvailableQuantity && !confirmAdditionExceedingQuantity()) {
-        System.out.println("Item not added to the recipe.");
+        System.out.println("Ingredient not added to the recipe.");
         return;
       }
       
-      allocateItemsToRecipe(recipe, items, requestedQuantity);
+      allocateIngredientsToRecipe(recipe, ingredients, requestedQuantity);
     } catch (IllegalArgumentException e) {
       System.out.println("Invalid input: " + e.getMessage());
     }
   }
   
-  private List<Item> getItemsFromStorage(String itemKey) {
+  private List<Ingredient> getIngredientsFromStorage(String ingredientKey) {
     try {
-      if (foodStorage.getItems() == null || !foodStorage.getItems().containsKey(itemKey)) {
+      if (foodStorage.getIngredients() == null || !foodStorage.getIngredients().containsKey(ingredientKey)) {
         return null;
       }
       
-      List<Item> items = new ArrayList<>(foodStorage.getItems().get(itemKey));
-      items.sort(Comparator.comparing(Item::getExpirationDate));
-      return items;
+      List<Ingredient> ingredients = new ArrayList<>(foodStorage.getIngredients().get(ingredientKey));
+      ingredients.sort(Comparator.comparing(Ingredient::getExpirationDate));
+      return ingredients;
     } catch (IllegalArgumentException e) {
-      System.out.println("Error while retrieving items from storage: " + e.getMessage());
+      System.out.println("Error while retrieving ingredients from storage: " + e.getMessage());
       return null;
     }
   }
   
   private boolean confirmAdditionExceedingQuantity() {
     try {
-      String proceed = inputHandler.getValidatedString("Requested quantity exceeds available items. Do you still want to add this item? (yes/no)", "Invalid input. Please answer yes or no.", "yes/no input");
+      String proceed = inputHandler.getValidatedString("Requested quantity exceeds available ingredients. Do you still want to add this ingredient? (yes/no)", "Invalid input. Please answer yes or no.", "yes/no input");
       return proceed.equalsIgnoreCase("yes");
     } catch (IllegalArgumentException e) {
       System.out.println("Invalid input: " + e.getMessage());
@@ -156,32 +156,32 @@ public class CookbookService {
     }
   }
   
-  private void allocateItemsToRecipe(Recipe recipe, List<Item> items, int requestedQuantity) {
+  private void allocateIngredientsToRecipe(Recipe recipe, List<Ingredient> ingredients, int requestedQuantity) {
     try {
       double remainingToUse = requestedQuantity;
       
-      for (Item item : items) {
+      for (Ingredient ingredient : ingredients) {
         if (remainingToUse <= 0) break;
         
-        double availableQuantity = item.getQuantity();
+        double availableQuantity = ingredient.getQuantity();
         double toAllocate = Math.min(availableQuantity, remainingToUse);
         remainingToUse -= toAllocate;
         
-        Item itemToAdd = new Item(item.getName(), toAllocate, item.getUnit(), item.getPerUnitPrice());
-        recipe.addItemToRecipe(itemToAdd);
-        System.out.println("Added item: " + itemToAdd.getName() + " (" + toAllocate + " " + itemToAdd.getUnit().getSymbol() + ") to the recipe.");
+        Ingredient ingredientToAdd = new Ingredient(ingredient.getName(), toAllocate, ingredient.getUnit(), ingredient.getPrice());
+        recipe.addIngredientToRecipe(ingredientToAdd);
+        System.out.println("Added ingredient: " + ingredientToAdd.getName() + " (" + toAllocate + " " + ingredientToAdd.getUnit().getSymbol() + ") to the recipe.");
       }
       
       if (remainingToUse > 0) {
         System.out.println("Could not use the full quantity. Short by " + remainingToUse);
       }
     } catch (IllegalArgumentException e) {
-      System.out.println("Error while try to allocate items to the recipe: " + e.getMessage());
+      System.out.println("Error while try to allocate ingredients to the recipe: " + e.getMessage());
     }
   }
   
   
-  public void handleViewHasEnoughItemsForRecipe() {
+  public void handleViewHasEnoughIngredientsForRecipe() {
     try {
       if (cookbook == null || cookbook.getRecipes().isEmpty()) {
         System.out.println("The cookbook is empty. Add some recipes first.");
@@ -203,28 +203,28 @@ public class CookbookService {
       
       Recipe selectedRecipe = allRecipes.get(recipeChoice - 1);
       
-      boolean enoughItems = foodStorage.hasEnoughItemsForRecipe(foodStorage, selectedRecipe);
-      Map<String, Double> availability = foodStorage.getItemAvailabilityForRecipe(foodStorage, selectedRecipe);
+      boolean enoughIngredients = foodStorage.hasEnoughIngredientsForRecipe(foodStorage, selectedRecipe);
+      Map<String, Double> availability = foodStorage.getIngredientAvailabilityForRecipe(foodStorage, selectedRecipe);
       
-      if (enoughItems) {
-        System.out.println("There are enough items in the storage to make this recipe: " + selectedRecipe.getName());
-        selectedRecipe.getItemsList().forEach(recipeItem -> {
-          double available = availability.getOrDefault(recipeItem.getName(), 0.0);
-          System.out.println(" - " + recipeItem.getName()
-              + ": Required = " + recipeItem.getQuantity()
+      if (enoughIngredients) {
+        System.out.println("There are enough ingredients in the storage to make this recipe: " + selectedRecipe.getName());
+        selectedRecipe.getIngredientsList().forEach(recipeIngredient -> {
+          double available = availability.getOrDefault(recipeIngredient.getName(), 0.0);
+          System.out.println(" - " + recipeIngredient.getName()
+              + ": Required = " + recipeIngredient.getQuantity()
               + ", Available: " + available);
         });
       } else {
         System.out.println("There is not enough to make this recipe: " + selectedRecipe.getName());
-        selectedRecipe.getItemsList().forEach(recipeItem -> {
-          double available = availability.getOrDefault(recipeItem.getName(), 0.0);
+        selectedRecipe.getIngredientsList().forEach(recipeIngredient -> {
+          double available = availability.getOrDefault(recipeIngredient.getName(), 0.0);
           if (available > 0) {
-            System.out.println(" - " + recipeItem.getName()
-                + ": Required = " + recipeItem.getQuantity()
+            System.out.println(" - " + recipeIngredient.getName()
+                + ": Required = " + recipeIngredient.getQuantity()
                 + ", Available: " + available);
           } else {
-            System.out.println(" - " + recipeItem.getName()
-                + ": Required = " + recipeItem.getQuantity()
+            System.out.println(" - " + recipeIngredient.getName()
+                + ": Required = " + recipeIngredient.getQuantity()
                 + ", Available: 0 (Not in foodStorage)");
           }
         });
@@ -266,7 +266,6 @@ public class CookbookService {
       System.out.println("Recipes in the cookbook: ");
       System.out.println();
       cookbookContents.forEach((recipeName, recipe) -> {
-        System.out.println("Recipe Name: " + recipeName);
         displayRecipe(recipe);
       });
     } catch (Exception e) {
@@ -283,10 +282,10 @@ public class CookbookService {
     System.out.println("Recipe Name: " + recipe.getName());
     System.out.println("Description: " + recipe.getDescription());
     System.out.println("Procedure: " + recipe.getProcedure());
-    System.out.println("Portions: " + recipe.getPortions());
+    System.out.println("Portions: " + recipe.getPortions() + " person");
     System.out.println("Ingredients:");
-    recipe.getItemsList().forEach(item -> {
-      System.out.println(" - " + item.getName() + ": " + item.getQuantity() + " " + item.getUnit().getSymbol());
+    recipe.getIngredientsList().forEach(ingredient -> {
+      System.out.println(" - " + ingredient.getName() + ": " + ingredient.getQuantity() + " " + ingredient.getUnit().getSymbol());
     });
     System.out.println();
   }
