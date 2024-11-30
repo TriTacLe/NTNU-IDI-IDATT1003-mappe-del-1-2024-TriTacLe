@@ -35,6 +35,7 @@ public class UserInterface {
   
   /**
    * <h2>Initialization</h2>
+   *
    * <p>Sets up necessary services and loads dummy data for testing purposes.</p>
    */
   public void init() {
@@ -57,10 +58,11 @@ public class UserInterface {
    * <p>Displays the main menu and handles user input to perform various actions.</p>
    */
   public void start() {
-    System.out.println("\u001B[32m========================================="
-        + "\n Welcome to the \u001B[34mFood Conservation App \u001B[32m"
-        + "\n========================================="
-        + "\u001B[0m");
+    System.out.println("\u001B[33m====================================================\u001B[0m");
+    System.out.println("\u001B[34m    \uD83C\uDF31✨Welcome to the \u001B[32mFood Conservation App!✨\uD83C\uDF31        \u001B[0m");
+    System.out.println("\u001B[33m====================================================\u001B[0m");
+    
+    displayAsciiBanner();
     boolean running = true;
     
     while (running) {
@@ -81,25 +83,24 @@ public class UserInterface {
         case 11 -> cookbookService.handleDisplayCookbook();
         case 12 -> displayHelp();
         case 13 -> {
-          System.out.println("\u001B[33mThank you for using the Food Conservation App! "
-              + "Remember, every action counts in reducing food waste.\u001B[0m");
+          displayGoodbyeMessage();
           running = false;
         }
         default -> System.out.println("\u001B[31mInvalid choice. Please try again or type '12' for guidance.\u001B[0m");
       }
     }
-    
     scanner.close();
   }
   
   /**
    * <h2>Display Menu</h2>
+   *
    * <p>Shows the main menu with color-coded and styled options for better readability.</p>
    */
   private void displayMenu() {
-    System.out.println("\n\u001B[36m-----------------------------------------" +
-        "\n               Main Menu                 " +
-        "\n-----------------------------------------\u001B[0m");
+    System.out.println("\n\u001B[36m-----------------------------------------"
+        + "\n               Main Menu                 "
+        + "\n-----------------------------------------\u001B[0m");
     Arrays.stream(MenuOption.values())
         .map(option -> "\u001B[34m" + option.getDescription() + "\u001B[0m")
         .forEach(System.out::println);
@@ -108,6 +109,7 @@ public class UserInterface {
   
   /**
    * <h2>User Input</h2>
+   *
    * <p>Prompts the user to enter their menu choice and validates the input.</p>
    *
    * @return The user's menu choice as an integer.
@@ -119,13 +121,14 @@ public class UserInterface {
         return scanner.nextInt();
       } catch (InputMismatchException e) {
         System.out.println("\u001B[31mInvalid input. Please enter a number between 1 and 13.\u001B[0m");
-        scanner.nextLine(); // Clear invalid input
+        scanner.nextLine();
       }
     }
   }
   
   /**
    * <h2>Help Menu</h2>
+   *
    * <p>Displays a detailed explanation of all menu options.</p>
    */
   private void displayHelp() {
@@ -145,8 +148,31 @@ public class UserInterface {
     System.out.println("13: Quit the application.");
   }
   
+  private void displayAsciiBanner() {
+    String blue = "\u001B[34m";
+    System.out.print("\u001B[32m   🌳     🌲    🌳    \u001B[31m 🍎\u001B[0m");
+    System.out.println("\u001B[33m       ☀️       \u001B[0m");
+    System.out.print("\u001B[32m   🌳    \u001B[31m🍎\u001B[0m");
+    System.out.print("\u001B[34m     🌍       🌏    \u001B[0m");
+    System.out.print("\u001B[32m  🌲🌱  🌿   🌳🌿   \u001B[0m");
+    System.out.println("\u001B[32m          \u001B[0m");
+    System.out.print("\u001B[33m      🌾       🌾   \u001B[0m");
+    System.out.print("\u001B[32m  🌳🌿   🌳    🌲🌿   🌳\u001B[0m");
+    System.out.println("\u001B[32m    🌿🌿   \u001B[0m");
+    System.out.println(blue + "    Please participate in saving the environment!   ");
+  }
+  
+  private void displayGoodbyeMessage() {
+    System.out.println("\u001B[35m-----------------------------------------\u001B[0m");
+    System.out.println("\u001B[33mThank you for using the Food Conservation App!"
+        + "\nTogether, we can reduce food waste and make a difference."
+        + "\u001B[0m");
+    System.out.println("\u001B[35m-----------------------------------------\u001B[0m");
+  }
+  
   /**
    * <h2>Menu Options</h2>
+   *
    * <p>Enum representing the menu options with descriptions.</p>
    */
   private enum MenuOption {

@@ -36,18 +36,21 @@ public class CookbookService {
       final double portions = inputHandler.getValidatedDouble("Enter how many people this recipe is for", "Portions cannot be negative", "portions");
       
       Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
-      
       try {
-        int choice = inputHandler.getValidatedInt("How would you like to add ingredients? 1. Add manually 2. Choose from available food storage ingredients. Enter your choice: ", "Invalid input. Enter 1 or 2.", "choice");
-        
-        switch (choice) {
-          case 1 -> addIngredientsManually(recipe);
-          case 2 -> addIngredientsFromStorage(recipe);
-          default -> System.out.println("Invalid choice.");
-        }
+        int choice;
+        do {
+          choice = inputHandler.getValidatedInt(
+              "How would you like to add ingredients? Enter 1: Add manually. Enter 2: Choose from available food storage ingredients.\nEnter your choice: ",
+              "Invalid input. Enter 1 or 2", "choice");
+          if (choice == 1 || choice == 2) {
+            addIngredientsManually(recipe);
+            break;
+          } else {
+            System.out.println("Invalid choice. Please enter 1 or 2.");
+          }
+        } while (true);
       } catch (IllegalArgumentException e) {
         System.out.println("Invalid choice input. Please enter a valid option (1 or 2)");
-        return;
       }
       
       boolean success = cookbook.addRecipeToCookbook(recipe);
@@ -66,7 +69,7 @@ public class CookbookService {
     try {
       int totalIngredients = (int) inputHandler.getValidatedDouble("Enter how many ingredients you want this recipe to have", "Total ingredients cannot be negative", "Total ingredients");
       for (int i = 0; i < totalIngredients; i++) {
-        System.out.println("Ingredient: " + (i + 1));
+        System.out.println("Ingredient: " + (i + 1) + " of " + totalIngredients);
         final String name = inputHandler.getValidatedString("Enter ingredient name:", "Ingredient name cannot be empty/blank", "name");
         double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
         final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");

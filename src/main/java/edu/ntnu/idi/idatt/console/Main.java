@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt.console;
 
+
 /**
  * The main class.
  */
