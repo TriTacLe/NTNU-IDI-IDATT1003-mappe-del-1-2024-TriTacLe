@@ -243,7 +243,7 @@ public class FoodStorage {
               .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
               .mapToDouble(storageItem -> {
                 if (!storageItem.getUnit().equals(recipeItem.getUnit())) {
-                  return storageItem.getUnit().converter(storageItem.getQuantity(), recipeItem.getUnit());
+                  return storageItem.getUnit().convertValue(storageItem.getQuantity(), recipeItem.getUnit());
                 }
                 return storageItem.getQuantity();
               })

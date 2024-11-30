@@ -38,7 +38,23 @@ public enum Unit {
     return conversionNumber;
   }
   
-  public Double converter(Double value, Unit targetUnit) {
+  /**
+   * Converts a given value from the current unit to a target unit.
+   *
+   * <p>This method validates the input to ensure that the target unit is a valid
+   * enumeration and belongs to the same unit type as the source unit. It then
+   * calculates the converted value using the conversion factors of both units.
+   * </p>
+   *
+   * @param value      the value to be converted. This represents the quantity in the
+   *                   current unit.
+   * @param targetUnit the unit to which the value should be converted. This must
+   *                   belong to the same unit type as the current unit.
+   * @return the converted value in the target unit.
+   * @throws IllegalArgumentException if the target unit is invalid or does not
+   *                                  belong to the same unit type as the source unit.
+   */
+  public Double convertValue(Double value, Unit targetUnit) {
     inputValidation.validationEnum(targetUnit);
     inputValidation.validationEnumUnitType(this.type, targetUnit.type);
     return (value * this.conversionNumber) / targetUnit.conversionNumber;
