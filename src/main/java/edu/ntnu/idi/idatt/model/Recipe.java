@@ -67,7 +67,7 @@ public class Recipe {
       return true;
     }
   }
-  
+  /*
   /**
    * Checks if there are enough items in the food storage to prepare the recipe.
    * <p>
@@ -81,6 +81,7 @@ public class Recipe {
    *                    This is used to check the availability of each item required for
    *                    the recipe.
    */
+  /*
   public void hasEnoughItemsForRecipe(FoodStorage foodStorage) {
     boolean enoughItems = itemsList.stream()
         .allMatch(recipeItem -> {
@@ -131,6 +132,7 @@ public class Recipe {
       });
     }
   }
+   */
   
   @Override
   public String toString() {

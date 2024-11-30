@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.storage;
 
 import edu.ntnu.idi.idatt.model.Item;
+import edu.ntnu.idi.idatt.model.Recipe;
 
 import java.time.LocalDate;
 //import java.util.*;
@@ -232,6 +233,36 @@ public class FoodStorage {
             System.out.println(items.get(key).getFirst());
           }
         });
+  }
+  
+  public boolean hasEnoughItemsForRecipe(FoodStorage foodStorage, Recipe recipe) {
+    return recipe.getItemsList().stream()
+        .allMatch(recipeItem -> {
+          double totalAvailable = foodStorage.getItems().values().stream()
+              .flatMap(List::stream)
+              .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
+              .mapToDouble(storageItem -> {
+                if (!storageItem.getUnit().equals(recipeItem.getUnit())) {
+                  return storageItem.getUnit().converter(storageItem.getQuantity(), recipeItem.getUnit());
+                }
+                return storageItem.getQuantity();
+              })
+              .sum();
+          return totalAvailable >= recipeItem.getQuantity();
+        });
+  }
+  
+  public Map<String, Double> getItemAvailabilityForRecipe(FoodStorage foodStorage, Recipe recipe) {
+    Map<String, Double> availability = new HashMap<>();
+    recipe.getItemsList().forEach(recipeItem -> {
+      double totalAvailable = foodStorage.getItems().values().stream()
+          .flatMap(List::stream)
+          .filter(storageItem -> storageItem.getName().equals(recipeItem.getName()))
+          .mapToDouble(Item::getQuantity)
+          .sum();
+      availability.put(recipeItem.getName(), totalAvailable);
+    });
+    return availability;
   }
   
   /**
