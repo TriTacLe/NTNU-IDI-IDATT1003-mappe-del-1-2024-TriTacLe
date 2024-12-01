@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 /**
  * <h1>UserInterface</h1>
+ *
  * <p>A console-based UI for the Food Conservation App. It handles user interactions
  * and integrates various services to manage food storage and recipes.</p>
  *

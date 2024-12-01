@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
 import edu.ntnu.idi.idatt.Utils.InputValidation;
-import edu.ntnu.idi.idatt.storage.FoodStorage;
 
 import java.util.ArrayList;
 import java.util.List;

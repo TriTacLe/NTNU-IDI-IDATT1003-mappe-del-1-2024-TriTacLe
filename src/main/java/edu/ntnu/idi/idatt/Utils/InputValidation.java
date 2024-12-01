@@ -16,9 +16,6 @@ public class InputValidation {
    */
   
   public static void validateString(Object input, String fieldName) {
-    if (!(input instanceof String)) {
-      throw new IllegalArgumentException(fieldName + " must be a valid string");
-    }
     String strInput = (String) input;
     if (strInput.isBlank()) {
       throw new IllegalArgumentException(fieldName + " cannot be empty or blank");

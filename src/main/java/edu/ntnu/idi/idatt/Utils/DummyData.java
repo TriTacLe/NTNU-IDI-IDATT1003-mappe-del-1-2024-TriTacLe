@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class DummyData {
   
   public static void loadDummyData(FoodStorage foodStorage, Cookbook cookbook) {
-    // Add dummy Ingredients to FoodStorage
+    //Ingredients to FoodStorage
     foodStorage.addIngredientToFoodStorage(new Ingredient("Honey", 2000, Unit.GRAM, LocalDate.of(2028, 2, 19), 30));
     foodStorage.addIngredientToFoodStorage(new Ingredient("Apple", 5, Unit.PIECES, LocalDate.of(2026, 6, 7), 10));
     foodStorage.addIngredientToFoodStorage(new Ingredient("Apple", 2, Unit.PIECES, LocalDate.of(2029, 6, 7), 15));

@@ -23,6 +23,13 @@ public enum Unit {
     NUMBER
   }
   
+  /**
+   * Construtor.
+   *
+   * @param symbol
+   * @param type
+   * @param conversionNumber
+   */
   Unit(String symbol, UnitType type, Double conversionNumber) {
     this.symbol = symbol;
     this.type = type;
