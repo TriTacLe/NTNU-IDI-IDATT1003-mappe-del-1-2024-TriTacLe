@@ -185,7 +185,7 @@ class FoodStorageTest {
     
     double totalValue = foodStorage.calculateTotalValue(foodStorage.getIngredients().values().stream()
         .flatMap(List::stream));
-    double expectedTotalValue = ingredient1.getPerUnitPrice() + ingredient2.getPerUnitPrice();
+    double expectedTotalValue = ingredient1.getPrice() + ingredient2.getPrice();
     
     //assertEquals(17, totalValue);
     assertEquals(expectedTotalValue, totalValue, 0.01);
