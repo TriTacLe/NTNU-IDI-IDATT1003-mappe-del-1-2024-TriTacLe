@@ -148,7 +148,7 @@ public class Recipe {
     if (ingredientsList != null && !ingredientsList.isEmpty()) {
       stringBuilder.append("Ingredients: \n");
       for (Ingredient ingredient : ingredientsList) {
-        stringBuilder.append(" - ").append(ingredient);
+        stringBuilder.append(" - ").append(ingredient).append("\n");
       }
     }
     return stringBuilder.toString();

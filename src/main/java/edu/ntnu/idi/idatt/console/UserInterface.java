@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.console;
 
-import edu.ntnu.idi.idatt.Utils.DummyData;
+import edu.ntnu.idi.idatt.data.DummyData;
 import edu.ntnu.idi.idatt.Utils.UserInputHandler;
 import edu.ntnu.idi.idatt.service.CookbookService;
 import edu.ntnu.idi.idatt.service.FoodStorageService;
@@ -79,11 +79,12 @@ public class UserInterface {
         case 6 -> foodStorageService.handleViewIngredientsBeforeDate();
         case 7 -> foodStorageService.handleDisplayFoodStorageAlphabetically();
         case 8 -> cookbookService.handleAddRecipeToCookbook();
-        case 9 -> cookbookService.handleViewHasEnoughIngredientsForRecipe();
-        case 10 -> cookbookService.handleSuggestedRecipe();
-        case 11 -> cookbookService.handleDisplayCookbook();
-        case 12 -> displayHelp();
-        case 13 -> {
+        case 9 -> cookbookService.handleSearchRecipe();
+        case 10 -> cookbookService.handleViewHasEnoughIngredientsForRecipe();
+        case 11 -> cookbookService.handleSuggestedRecipe();
+        case 12 -> cookbookService.handleDisplayCookbook();
+        case 13 -> displayHelp();
+        case 14 -> {
           displayGoodbyeMessage();
           running = false;
         }
@@ -119,7 +120,9 @@ public class UserInterface {
     while (true) {
       System.out.print("\u001B[36mEnter your choice: \u001B[0m");
       try {
-        return scanner.nextInt();
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
       } catch (InputMismatchException e) {
         System.out.println("\u001B[31mInvalid input. Please enter a number between 1 and 13.\u001B[0m");
         scanner.nextLine();
@@ -142,6 +145,7 @@ public class UserInterface {
     System.out.println("6: View Groceries Before Date - List items expiring before a specific date.");
     System.out.println("7: View All Groceries - Display all groceries alphabetically.");
     System.out.println("8: Add Recipe - Add a recipe to the cookbook.");
+    System.out.println("9: Search Recipe - Find a recipe by its name.");
     System.out.println("9: Check Ingredients - Verify if you have enough ingredients for a recipe.");
     System.out.println("10: Suggest Recipes - Get recipe suggestions based on available ingredients.");
     System.out.println("11: View Cookbook - Display all recipes in the cookbook.");
@@ -185,11 +189,12 @@ public class UserInterface {
     VIEW_GROCERIES_BEFORE_DATE("6. View all groceries expiring before a date"),
     VIEW_ALL_GROCERIES("7. View all groceries"),
     ADD_RECIPE_TO_COOKBOOK("8. Add a recipe to the cookbook"),
-    CHECK_INGREDIENTS("9. Check if the fridge has enough ingredients for a recipe"),
-    SUGGEST_RECIPES("10. View suggested recipes from the cookbook"),
-    VIEW_COOKBOOK("11. View all recipes in the cookbook"),
-    HELP("12. Help"),
-    EXIT("13. Exit");
+    SEARCH_ITEM("9. Search for a recipe"),
+    CHECK_INGREDIENTS("10. Check if the fridge has enough ingredients for a recipe"),
+    SUGGEST_RECIPES("11. View suggested recipes from the cookbook"),
+    VIEW_COOKBOOK("12. View all recipes in the cookbook"),
+    HELP("13. Help"),
+    EXIT("14. Exit");
     
     private final String description;
     

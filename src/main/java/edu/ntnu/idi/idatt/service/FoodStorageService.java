@@ -38,7 +38,7 @@ public class FoodStorageService {
   
   public void handleSearchIngredient() {
     try {
-      String name = inputHandler.getValidatedString("Enter name of the ingredient:", "Ingredient name cannot be empty/blank", "name");
+      String name = inputHandler.getValidatedString("Enter name of the ingredient:", "Ingredient name cannot be empty/blank", "name").trim();
       
       if (foodStorage == null) {
         throw new IllegalArgumentException("Food storage is not initialized.");
@@ -94,15 +94,16 @@ public class FoodStorageService {
       
       if (expiredIngredients == null || expiredIngredients.isEmpty()) {
         System.out.println("No Ingredients is expired! Nice!");
+        System.out.println("Nice work saving the environment!");
         return;
       }
       
       double totalValue = foodStorage.calculateTotalValue(expiredIngredients.stream());
       
-      System.out.println("Expired Ingredients");
+      System.out.println("Expired ingredients:");
       expiredIngredients.forEach(Ingredient -> System.out.println("- " + Ingredient));
-      System.out.printf("Total value of expired Ingredients: %.2f kr%n", totalValue); //2 desimaler
-      System.out.println("Try to conserve more food");
+      System.out.printf("Total value of expired ingredients: %.2f kr%n", totalValue); //2 desimaler
+      System.out.println("Try to conserve more food please!");
     } catch (IllegalArgumentException e) {
       System.out.println("Error while trying to display expired Ingredients: " + e.getMessage());
     }

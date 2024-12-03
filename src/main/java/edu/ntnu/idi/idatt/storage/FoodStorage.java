@@ -82,9 +82,6 @@ public class FoodStorage {
    *                       It also represents the key for the map
    */
   public List<Ingredient> searchForIngredientsInFoodStorage(String nameIngredient) {
-    if (nameIngredient == null) {
-      throw new NullPointerException("Ingredient name cannot be null");
-    }
     return ingredients.entrySet().stream()
         //.filter(entry -> entry.getKey().toLowerCase().equals(nameIngredient.toLowerCase()))
         .filter(entry -> entry.getKey().equalsIgnoreCase(nameIngredient))

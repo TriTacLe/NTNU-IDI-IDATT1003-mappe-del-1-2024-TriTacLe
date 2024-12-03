@@ -17,7 +17,7 @@ public class UserInputHandler {
     while (true) {
       System.out.println(request);
       try {
-        String input = scanner.next();
+        String input = scanner.nextLine().trim();
         InputValidation.validateString(input, fieldName);
         return input;
       } catch (IllegalArgumentException e) {

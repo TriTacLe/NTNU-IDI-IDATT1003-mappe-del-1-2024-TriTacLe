@@ -3,10 +3,7 @@ package edu.ntnu.idi.idatt.storage;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Cookbook {
   private HashMap<String, Recipe> recipes;
@@ -27,7 +24,7 @@ public class Cookbook {
    */
   public boolean addRecipeToCookbook(Recipe recipe) {
     if (recipes.containsKey(recipe.getName())) {
-      return false; // Recipe already exists
+      return false;
     }
     recipes.put(recipe.getName(), recipe);
     return true;
@@ -45,6 +42,12 @@ public class Cookbook {
 //    });
 //    return recipes;
 //  }
+  
+  public Optional<Map.Entry<String, Recipe>> searchForRecipeInCookbook(String nameRecipe) {
+    return recipes.entrySet().stream()
+        .filter(entry -> entry.getKey().equalsIgnoreCase(nameRecipe))
+        .findFirst();
+  }
   
   /**
    * Suggests recipes that can be made based on the current food storage.

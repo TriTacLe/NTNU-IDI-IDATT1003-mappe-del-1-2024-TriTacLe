@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Utils;
+package edu.ntnu.idi.idatt.data;
 
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
@@ -26,10 +26,10 @@ public class DummyData {
     foodStorage.addIngredientToFoodStorage(new Ingredient("Butter", 200, Unit.GRAM, LocalDate.of(2029, 5, 10), 20));
     foodStorage.addIngredientToFoodStorage(new Ingredient("Chocolate", 200, Unit.GRAM, LocalDate.of(2026, 3, 15), 40));
     foodStorage.addIngredientToFoodStorage(new Ingredient("Banana", 6, Unit.PIECES, LocalDate.of(2024, 11, 30), 5));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Vanilla Extract", 50, Unit.MILLILITRE, LocalDate.of(2025, 10, 15), 10));
+    foodStorage.addIngredientToFoodStorage(new Ingredient("Vanilla", 50, Unit.MILLILITRE, LocalDate.of(2025, 10, 15), 10));
     //expired Ingredients
     foodStorage.addIngredientToFoodStorage(new Ingredient("Honey", 2000, Unit.GRAM, LocalDate.of(1934, 2, 19), 30));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Vanilla Extract", 50, Unit.MILLILITRE, LocalDate.of(1925, 10, 15), 10));
+    foodStorage.addIngredientToFoodStorage(new Ingredient("Vanilla", 50, Unit.MILLILITRE, LocalDate.of(1925, 10, 15), 10));
     //Recipes
     Recipe pancakeRecipe = new Recipe(
         "Pancakes",
@@ -79,7 +79,7 @@ public class DummyData {
     
     //recipes that cant be made
     Recipe chickenAndRice = new Recipe(
-        "Chikcen and Rice",
+        "Chicken and Rice",
         "Manly diet for gym",
         "1. Fry rice. \n2. Season and steak chicken \n3. Mix it up with veggies",
         1

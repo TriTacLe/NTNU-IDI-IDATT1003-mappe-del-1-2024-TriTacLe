@@ -13,6 +13,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CookbookService {
   private final Cookbook cookbook;
@@ -195,6 +197,32 @@ public class CookbookService {
     }
   }
   
+  public void handleSearchRecipe() {
+    try {
+      final String name = inputHandler.getValidatedString("Enter name of the recipe:",
+          "Recipe name cannot be empty/blank", "name").trim();
+      
+      if (cookbook == null) {
+        throw new IllegalArgumentException("Cookbook is not initialized.");
+      }
+      Optional<Map.Entry<String, Recipe>> recipeSearchResult = cookbook.searchForRecipeInCookbook(name);
+      /*
+      Optional<Map.Entry<String, Recipe>> recipeSearchResult = cookbook.getRecipes().entrySet().stream()
+          .filter(entry -> entry.getKey().equalsIgnoreCase(name))
+          .findFirst();
+       */
+      if (recipeSearchResult.isPresent()) {
+        System.out.println("Recipe found:");
+        Recipe foundRecipe = recipeSearchResult.get().getValue();
+        System.out.println(foundRecipe);
+      } else {
+        System.out.println("Recipe: " + name + " does not exist.");
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Invalid input: " + e.getMessage());
+    }
+  }
+  
   
   public void handleViewHasEnoughIngredientsForRecipe() {
     try {
@@ -311,5 +339,4 @@ public class CookbookService {
     System.out.println();
   }
   //System.out.println(recipe.toString());
-  
 }
