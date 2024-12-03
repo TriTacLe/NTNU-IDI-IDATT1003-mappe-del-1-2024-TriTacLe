@@ -223,6 +223,25 @@ public class CookbookService {
     }
   }
   
+  public void handleRemoveRecipe() {
+    try {
+      String name = inputHandler.getValidatedString(
+          "Enter the name of the Recipe to be removed from the cookbook: ",
+          "Recipe name cannot be empty/blank", "name"
+      ).toLowerCase();
+      
+      boolean removedStatus = cookbook.removeRecipeFromCookbook(name);
+      if (removedStatus) {
+        System.out.println("Recipe \"" + name + "\" removed successfully.");
+      } else {
+        System.out.println("Recipe \"" + name + "\" does not exist.");
+      }
+      
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+    }
+  }
+  
   
   public void handleViewHasEnoughIngredientsForRecipe() {
     try {

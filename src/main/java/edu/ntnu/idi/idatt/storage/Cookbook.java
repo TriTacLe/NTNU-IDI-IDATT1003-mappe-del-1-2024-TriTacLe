@@ -49,6 +49,20 @@ public class Cookbook {
         .findFirst();
   }
   
+  
+  public boolean removeRecipeFromCookbook(String name) {
+    String keyToRemove = recipes.keySet().stream()
+        .filter(key -> key.equalsIgnoreCase(name))
+        .findFirst()
+        .orElse(null);
+    
+    if (keyToRemove != null) {
+      recipes.remove(keyToRemove);
+      return true;
+    }
+    return false;
+  }
+  
   /**
    * Suggests recipes that can be made based on the current food storage.
    *

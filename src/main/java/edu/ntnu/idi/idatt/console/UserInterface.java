@@ -83,8 +83,9 @@ public class UserInterface {
         case 10 -> cookbookService.handleViewHasEnoughIngredientsForRecipe();
         case 11 -> cookbookService.handleSuggestedRecipe();
         case 12 -> cookbookService.handleDisplayCookbook();
-        case 13 -> displayHelp();
-        case 14 -> {
+        case 13 -> cookbookService.handleRemoveRecipe();
+        case 14 -> displayHelp();
+        case 15 -> {
           displayGoodbyeMessage();
           running = false;
         }
@@ -153,6 +154,9 @@ public class UserInterface {
     System.out.println("13: Quit the application.");
   }
   
+  /**
+   * Displays ASCII art for the welcome banner.
+   */
   private void displayAsciiBanner() {
     String blue = "\u001B[34m";
     System.out.print("\u001B[32m   🌳     🌲    🌳    \u001B[31m 🍎\u001B[0m");
@@ -167,6 +171,9 @@ public class UserInterface {
     System.out.println(blue + "    Please participate in saving the environment!   ");
   }
   
+  /**
+   * Displays the message when exiting the applicaiton.
+   */
   private void displayGoodbyeMessage() {
     System.out.println("\u001B[35m-----------------------------------------\u001B[0m");
     System.out.println("\u001B[33mThank you for using the Food Conservation App!"
@@ -189,12 +196,13 @@ public class UserInterface {
     VIEW_GROCERIES_BEFORE_DATE("6. View all groceries expiring before a date"),
     VIEW_ALL_GROCERIES("7. View all groceries"),
     ADD_RECIPE_TO_COOKBOOK("8. Add a recipe to the cookbook"),
-    SEARCH_ITEM("9. Search for a recipe"),
+    SEARCH_RECIPE("9. Search for a recipe"),
     CHECK_INGREDIENTS("10. Check if the fridge has enough ingredients for a recipe"),
     SUGGEST_RECIPES("11. View suggested recipes from the cookbook"),
     VIEW_COOKBOOK("12. View all recipes in the cookbook"),
-    HELP("13. Help"),
-    EXIT("14. Exit");
+    REMOVE_RECIPE_FROM_COOKBOOK("13. Remove a recipe from the cookbook"),
+    HELP("14. Help"),
+    EXIT("15. Exit");
     
     private final String description;
     
