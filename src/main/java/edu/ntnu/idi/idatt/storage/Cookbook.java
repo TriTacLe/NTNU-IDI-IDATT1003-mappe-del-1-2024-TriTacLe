@@ -115,5 +115,4 @@ public class Cookbook {
     });
     return suggestedRecipes;
   }
-  
 }

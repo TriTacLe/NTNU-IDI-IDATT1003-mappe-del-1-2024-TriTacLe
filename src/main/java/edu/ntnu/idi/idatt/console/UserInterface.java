@@ -147,11 +147,12 @@ public class UserInterface {
     System.out.println("7: View All Groceries - Display all groceries alphabetically.");
     System.out.println("8: Add Recipe - Add a recipe to the cookbook.");
     System.out.println("9: Search Recipe - Find a recipe by its name.");
-    System.out.println("9: Check Ingredients - Verify if you have enough ingredients for a recipe.");
-    System.out.println("10: Suggest Recipes - Get recipe suggestions based on available ingredients.");
-    System.out.println("11: View Cookbook - Display all recipes in the cookbook.");
-    System.out.println("12: View this help menu.");
-    System.out.println("13: Quit the application.");
+    System.out.println("10: Check Ingredients - Verify if you have enough ingredients for a recipe.");
+    System.out.println("11: Suggest Recipes - Get recipe suggestions based on available ingredients.");
+    System.out.println("12: View Cookbook - Display all recipes in the cookbook.");
+    System.out.println("13. Remove Recipe - Remove a recipe from the cookbook by name");
+    System.out.println("13: View this help menu.");
+    System.out.println("14: Quit the application.");
   }
   
   /**
