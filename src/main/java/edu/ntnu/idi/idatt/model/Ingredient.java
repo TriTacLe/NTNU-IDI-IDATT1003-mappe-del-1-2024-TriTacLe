@@ -5,8 +5,14 @@ import edu.ntnu.idi.idatt.Utils.InputValidation;
 import java.time.LocalDate;
 
 /**
- * Class represent an ingredient/grocery
- * Consist of attributes name, quantity, unit for the quantity, expiration date and the price per unit
+ * Class that represents an ingredient or a grocery item that consist of information such as name,
+ * quantity, unit for the quantity, expiration date and the price.
+ *
+ * <p>Provides a constructor to create a train departure and a functionality for validation.
+ * Also include mutator methods for expiration date and quantity</p>
+ *
+ * @author TriLe
+ * @version 1.2.1
  */
 public class Ingredient {
   // Attributter
@@ -15,19 +21,20 @@ public class Ingredient {
   private final Unit unit;
   private LocalDate expirationDate;
   private final double price;
-  private InputValidation inputValidation;
+  private final InputValidation inputValidation = new InputValidation();
   
   /**
-   * konstruktør to make an Ingredient (object) with (attributes) name, quantity, unit, expirations date price per unit
-   * I also implemented input control
+   * Initialize an Ingredient instance with the specified attributes and performs validation.
    *
-   * @param name           Ingredients name
-   * @param quantity       quanity of Ingredient
-   * @param unit           unit for the quantity (SI-unit) ex: Kg
+   * @param name           the name of the ingredient
+   * @param quantity       the quantity of the ingredient
+   * @param unit           the unit of measurements (SI-unit) for the ingredient.
    * @param expirationDate expiration date for the Ingredient
-   * @param price          price per unit of Ingredient
+   * @param price          the price of the ingredient(s)
+   * @throws IllegalArgumentException if any input validation fails
    */
-  public Ingredient(String name, double quantity, Unit unit, LocalDate expirationDate, double price) {
+  public Ingredient(String name, double quantity, Unit unit,
+                    LocalDate expirationDate, double price) {
     //Input validering
     inputValidation.validateString(name, "Name");
     //inputValidation.validateDouble(quantity, "Quantity");
@@ -43,6 +50,15 @@ public class Ingredient {
     this.price = price;
   }
   
+  /**
+   * Initialize an instance of Ingredient without an expiration date.
+   *
+   * @param name     the name of the ingredient
+   * @param quantity the quantity of the ingredient
+   * @param unit     the unit of measurement for the ingredient
+   * @param price    the price per unit of the ingredient
+   * @throws IllegalArgumentException if any input validation fails
+   */
   public Ingredient(String name, double quantity, Unit unit, double price) {
     inputValidation.validateString(name, "Name");
     //inputValidation.validateDouble(quantity, "Quantity");
@@ -56,82 +72,96 @@ public class Ingredient {
     this.price = price;
   }
   
-  /***
-   * Gets the name of the Ingredient
-   * @return name of the Ingredient
+  /**
+   * Retrieves the name of the Ingredient.
+   *
+   * @return the name of the Ingredient
    */
   public String getName() {
     return name;
   }
   
-  /***
-   * Gets the quantity of the Ingredient
-   * @return quantity of the Ingredient
+  /**
+   * Retrieves the quantity of the Ingredient.
+   *
+   * @return the quantity of the Ingredient
    */
   public double getQuantity() {
     return quantity;
   }
   
   /**
-   * Gets the expiration date of the Ingredient
+   * Retrieves the expiration date of the ingredient.
    *
-   * @return new expiration date
+   * @return the expiration date of the ingredient or{@code null} if not set
    */
   public LocalDate getExpirationDate() {
     return expirationDate;
   }
   
-  /***
-   * gets the unit of quantity
-   * @return unit of quantity
+  /**
+   * Retrieves the unit of measurement of the ingredient.
+   *
+   * @return the unit of measurement of the ingredient
    */
   public Unit getUnit() {
     return unit;
   }
   
-  /***
-   * gets the price of the Ingredient
-   * @return
+  /**
+   * Retrieves the price of the ingredient.
+   *
+   * @return the price of the ingredient.
    */
   public double getPrice() {
     return price;
   }
   
-  /***
-   * Sets the quantity of the Ingredient
-   * @param quantity new quantity of the Ingredient
-   */
-  public void setQuantity(double quantity) {
-    InputValidation.validateDouble(quantity, "quantity");
-    this.quantity = quantity;
-  }
-  
-  
   /**
-   * Sets the expirations date of the Ingredient
+   * Updates the quantity of the ingredient.
    *
-   * @param expirationDate
+   * @param quantity the total quantity to add to the current quantity
+   * @throws IllegalArgumentException if the quantity is invalid
    */
-  private void setExpirationDate(LocalDate expirationDate) {
-    InputValidation.validateDate(expirationDate, false);
-    this.expirationDate = expirationDate;
-  }
-  
   public void updateQuantity(double quantity) {
     inputValidation.validateDouble(quantity, "Quantity");
     this.quantity += quantity;
   }
   
   /**
-   * Skriver ut detaljene fra en vare (fra hint)
+   * Sets the quantity of the ingredient.
    *
-   * @return detaljene
+   * @param quantity the new quantity of the ingredient
+   * @throws IllegalArgumentException if the quantity is invalid
+   */
+  public void setQuantity(double quantity) {
+    InputValidation.validateDouble(quantity, "quantity");
+    this.quantity = quantity;
+  }
+  
+  /**
+   * Sets the expiration date of the ingredient.
+   *
+   * @param expirationDate the new expiration date
+   * @throws IllegalArgumentException if the expiration date is invalid
+   */
+  private void setExpirationDate(LocalDate expirationDate) {
+    InputValidation.validateDate(expirationDate, false);
+    this.expirationDate = expirationDate;
+  }
+  
+  /**
+   * Returns a string representation of the ingredient, including information such as
+   * name, quantity, unit, expiration date (if available), and price.
+   *
+   * @return a string representation of the ingredient
    */
   @Override
   public String toString() {
     // TODO Auto-generated method stub
     //if else forenklet
     String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
-    return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput + " Price: " + price + " kr"; // + ". Todays date: " + LocalDate.now();
+    return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput
+        + " Price: " + price + " kr"; // + ". Todays date: " + LocalDate.now();
   }
 }

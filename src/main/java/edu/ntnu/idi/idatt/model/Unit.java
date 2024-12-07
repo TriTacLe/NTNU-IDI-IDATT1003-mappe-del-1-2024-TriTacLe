@@ -4,6 +4,12 @@ import edu.ntnu.idi.idatt.Utils.InputValidation;
 
 import java.util.Arrays;
 
+/**
+ * Represents different units of measurement used in the system.
+ *
+ * <p>Each unit is associated with a symbol, a type (e.g., mass, volume, or number) for readability,
+ * and a conversion factor for unit conversion. </p>
+ */
 public enum Unit {
   GRAM("g", UnitType.MASS, 0.001),
   KILOGRAM("kg", UnitType.MASS, 1.0),
@@ -15,8 +21,11 @@ public enum Unit {
   private final String symbol;
   private final UnitType type;
   private final Double conversionNumber;
-  private InputValidation inputValidation;
+  private final InputValidation inputValidation = new InputValidation();
   
+  /**
+   * Defines types of units used for categorizing measurement units.
+   */
   public enum UnitType {
     MASS,
     VOLUME,
@@ -24,11 +33,11 @@ public enum Unit {
   }
   
   /**
-   * Construtor.
+   * Constructor to initialize a unit with its attributes.
    *
-   * @param symbol
-   * @param type
-   * @param conversionNumber
+   * @param symbol           the symbol representing the unit (e.g., "kg", "g").
+   * @param type             the type of the unit (e.g., mass, volume).
+   * @param conversionNumber the conversion factor for the unit relative to its base unit.
    */
   Unit(String symbol, UnitType type, Double conversionNumber) {
     this.symbol = symbol;
@@ -36,10 +45,20 @@ public enum Unit {
     this.conversionNumber = conversionNumber;
   }
   
+  /**
+   * Gets the symbol of the unit.
+   *
+   * @return the symbol representing the unit.
+   */
   public String getSymbol() {
     return symbol;
   }
   
+  /**
+   * Gets the conversion factor of the unit relative to its base type.
+   *
+   * @return the conversion factor of the unit.
+   */
   public Double getConversionNumber() {
     return conversionNumber;
   }
@@ -47,18 +66,13 @@ public enum Unit {
   /**
    * Converts a given value from the current unit to a target unit.
    *
-   * <p>This method validates the input to ensure that the target unit is a valid
-   * enumeration and belongs to the same unit type as the source unit. It then
-   * calculates the converted value using the conversion factors of both units.
+   * <p>This method validates the target unit to ensure compatibility with the current unit's type.
    * </p>
    *
-   * @param value      the value to be converted. This represents the quantity in the
-   *                   current unit.
-   * @param targetUnit the unit to which the value should be converted. This must
-   *                   belong to the same unit type as the current unit.
+   * @param value      the value to be converted (in the current unit).
+   * @param targetUnit the target unit for conversion.
    * @return the converted value in the target unit.
-   * @throws IllegalArgumentException if the target unit is invalid or does not
-   *                                  belong to the same unit type as the source unit.
+   * @throws IllegalArgumentException if the target unit is null, invalid, or incompatible.
    */
   public Double convertValue(Double value, Unit targetUnit) {
     inputValidation.validationEnum(targetUnit);
@@ -67,15 +81,15 @@ public enum Unit {
   }
   
   /**
-   * Finds the Unit enum based on a user input string.
+   * Finds the corresponding unit based on a symbol.
    *
-   * @param input The string input by the user.
-   * @return The corresponding Unit enum.
-   * @throws IllegalArgumentException if the input does not match any Unit.
+   * @param input the symbol representing the unit (case-insensitive).
+   * @return the matching {@code Unit} enumeration.
+   * @throws IllegalArgumentException if no matching unit is found.
    */
   public static Unit fromSymbol(String input) {
     return Arrays.stream(Unit.values())
-        .filter(unit -> unit.symbol.equalsIgnoreCase(input)) //ALlow case in-sensitive
+        .filter(unit -> unit.symbol.equalsIgnoreCase(input))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("Invalid unit: " + input));
   }
