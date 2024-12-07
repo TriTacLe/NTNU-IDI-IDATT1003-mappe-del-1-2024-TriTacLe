@@ -110,7 +110,7 @@ public class InputValidator {
    */
   public static void validationEnum(Unit unit) {
     if (unit == null) {
-      throw new IllegalArgumentException("Unit cannot be empty or null " + unit);
+      throw new IllegalArgumentException("Unit cannot be empty or null: " + unit);
     }
   }
   

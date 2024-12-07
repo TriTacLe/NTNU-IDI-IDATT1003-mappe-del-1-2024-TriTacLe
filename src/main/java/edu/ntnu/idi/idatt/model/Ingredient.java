@@ -97,7 +97,7 @@ public class Ingredient {
    * @throws IllegalArgumentException if the quantity is invalid
    */
   public void setQuantity(double quantity) {
-    InputValidator.validateDouble(quantity, "quantity");
+    InputValidator.validateDouble(quantity, "Quantity");
     this.quantity = quantity;
   }
   
@@ -159,9 +159,10 @@ public class Ingredient {
   @Override
   public String toString() {
     // TODO Auto-generated method stub
-    //if else forenklet
     String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
+    //String formattedPrice = String.format("%.2f", price);
+    
     return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput
-        + " Price: " + price + " kr"; // + ". Todays date: " + LocalDate.now();
+        + " Price: " + price  + " kr"; // + ". Todays date: " + LocalDate.now();
   }
 }

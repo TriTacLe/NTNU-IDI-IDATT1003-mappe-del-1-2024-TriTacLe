@@ -13,18 +13,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RecipeTest {
   
+  private static final double ITEM1_INITIAL_QUANTITY = 20;
+  private static final double ITEM2_INITIAL_QUANTITY = 30;
+  private static final double ITEM3_INITIAL_QUANTITY = 40;
+  private static final double ITEM4_INITIAL_QUANTITY = 20;
+  private static final double ITEM1_ADDITIONAL_QUANTITY = 20;
   private Recipe recipe;
   private Ingredient ingredient1;
   private Ingredient ingredient2;
   private Ingredient ingredient3;
   private Ingredient ingredient4;
   private FoodStorage foodStorage;
-  
-  private static final double ITEM1_INITIAL_QUANTITY = 20;
-  private static final double ITEM2_INITIAL_QUANTITY = 30;
-  private static final double ITEM3_INITIAL_QUANTITY = 40;
-  private static final double ITEM4_INITIAL_QUANTITY = 20;
-  private static final double ITEM1_ADDITIONAL_QUANTITY = 20;
   
   @BeforeEach
   void setUp() {
@@ -72,16 +71,6 @@ class RecipeTest {
   }
   
   @Test
-  void testHasEnoughIngredientsForRecipe() {
-    recipe.addIngredientToRecipe(ingredient1);  // Apple
-    recipe.addIngredientToRecipe(ingredient2);  // Milk
-    
-    // Check if the recipe has enough ingredients in the food storage
-    recipe.hasEnoughIngredientsForRecipe(foodStorage);
-    // Expected output should confirm that the storage has enough quantities of Apple and Milk
-  }
-  
-  @Test
   void testHasNotEnoughIngredientsForRecipe() {
     // Simulate the case where eggs are missing
     foodStorage.getIngredients().clear();
@@ -91,7 +80,7 @@ class RecipeTest {
     recipe.addIngredientToRecipe(ingredient2);  // Milk
     
     // The recipe should report that there are not enough ingredients
-    recipe.hasEnoughIngredientsForRecipe(foodStorage);
+    foodStorage.hasEnoughIngredientsForRecipe(foodStorage, recipe);
     // Expected output should indicate insufficient quantities for some ingredients
   }
   
