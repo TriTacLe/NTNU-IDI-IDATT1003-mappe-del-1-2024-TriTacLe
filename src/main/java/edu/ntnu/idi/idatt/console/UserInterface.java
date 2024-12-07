@@ -1,7 +1,7 @@
 package edu.ntnu.idi.idatt.console;
 
-import edu.ntnu.idi.idatt.data.DummyData;
 import edu.ntnu.idi.idatt.Utils.UserInputHandler;
+import edu.ntnu.idi.idatt.data.DummyData;
 import edu.ntnu.idi.idatt.service.CookbookService;
 import edu.ntnu.idi.idatt.service.FoodStorageService;
 import edu.ntnu.idi.idatt.storage.Cookbook;
@@ -12,36 +12,23 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * <h1>UserInterface</h1>
+ * <h1>UserInterface.</h1>
  *
- * <p>A console-based UI for the Food Conservation App. It handles user interactions
- * and integrates various services to manage food storage and recipes.</p>
- *
- * <h2>Features:</h2>
- * <ul>
- *     <li>Manage food storage: Add, search, and remove groceries</li>
- *     <li>View expired groceries and calculate their value</li>
- *     <li>Suggest recipes based on available ingredients</li>
- *     <li>Maintain and explore a cookbook</li>
- * </ul>
- *
- * <p>Designed with usability in mind and includes styled outputs for better readability.</p>
+ * <p>A text-based UI for the Food Conservation App. It handles user interactions
+ * and integrates services to manage the food storage and recipes.</p>
  */
 public class UserInterface {
   
   private FoodStorageService foodStorageService;
   private CookbookService cookbookService;
   private Scanner scanner;
-  private UserInputHandler inputHandler;
   
   /**
-   * <h2>Initialization</h2>
-   *
-   * <p>Sets up necessary services and loads dummy data for testing purposes.</p>
+   * Initializes the user interface by setting up services and loading dummy data.
    */
   public void init() {
     scanner = new Scanner(System.in);
-    inputHandler = new UserInputHandler(scanner);
+    UserInputHandler inputHandler = new UserInputHandler(scanner);
     
     FoodStorage foodStorage = new FoodStorage();
     Cookbook cookbook = new Cookbook();
@@ -54,13 +41,15 @@ public class UserInterface {
   }
   
   /**
-   * <h2>Main Application Loop</h2>
+   * <h2>Main Application Loop.</h2>
    *
    * <p>Displays the main menu and handles user input to perform various actions.</p>
    */
+  @SuppressWarnings("checkstyle:AvoidEscapedUnicodeCharacters")
   public void start() {
     System.out.println("\u001B[33m====================================================\u001B[0m");
-    System.out.println("\u001B[34m    \uD83C\uDF31✨Welcome to the \u001B[32mFood Conservation App!✨\uD83C\uDF31        \u001B[0m");
+    System.out.println("\u001B[34m    \uD83C\uDF31✨Welcome to the"
+        + " \u001B[32mFood Conservation App!✨\uD83C\uDF31        \u001B[0m");
     System.out.println("\u001B[33m====================================================\u001B[0m");
     
     displayAsciiBanner();
@@ -89,16 +78,15 @@ public class UserInterface {
           displayGoodbyeMessage();
           running = false;
         }
-        default -> System.out.println("\u001B[31mInvalid choice. Please try again or type '12' for guidance.\u001B[0m");
+        default -> System.out.println("\u001B[31mInvalid choice. "
+            + "Please try again or type '12' for guidance.\u001B[0m");
       }
     }
     scanner.close();
   }
   
   /**
-   * <h2>Display Menu</h2>
-   *
-   * <p>Shows the main menu with color-coded and styled options for better readability.</p>
+   * Displays the main menu to the user.
    */
   private void displayMenu() {
     System.out.println("\n\u001B[36m-----------------------------------------"
@@ -107,13 +95,12 @@ public class UserInterface {
     Arrays.stream(MenuOption.values())
         .map(option -> "\u001B[34m" + option.getDescription() + "\u001B[0m")
         .forEach(System.out::println);
-    System.out.println("Enter a number (\u001B[32m1-13\u001B[0m). Type '\u001B[33m12\u001B[0m' for help or '\u001B[31m13\u001B[0m' to quit.");
+    System.out.println("Enter a number (\u001B[32m1-13\u001B[0m). "
+        + "Type '\u001B[33m12\u001B[0m' for help or '\u001B[31m13\u001B[0m' to quit.");
   }
   
   /**
-   * <h2>User Input</h2>
-   *
-   * <p>Prompts the user to enter their menu choice and validates the input.</p>
+   * Prompts the user to enter their menu choice and validates the input.
    *
    * @return The user's menu choice as an integer.
    */
@@ -125,30 +112,33 @@ public class UserInterface {
         scanner.nextLine();
         return choice;
       } catch (InputMismatchException e) {
-        System.out.println("\u001B[31mInvalid input. Please enter a number between 1 and 13.\u001B[0m");
+        System.out.println("\u001B[31mInvalid input. "
+            + "Please enter a number between 1 and 13.\u001B[0m");
         scanner.nextLine();
       }
     }
   }
   
   /**
-   * <h2>Help Menu</h2>
-   *
-   * <p>Displays a detailed explanation of all menu options.</p>
+   * Displays the help menu with details about each option.
    */
   private void displayHelp() {
     System.out.println("\n\u001B[33mHELP MENU:\u001B[0m");
     System.out.println("1: Add Grocery - Add or update a grocery item in the food storage.");
     System.out.println("2: Search Grocery - Find a grocery item by name.");
     System.out.println("3: Remove Grocery - Remove or adjust the quantity of a grocery item.");
-    System.out.println("4: View Expired Groceries - Lists all expired items with their total cost.");
+    System.out.println("4: View Expired Groceries - "
+        + "Lists all expired items with their total cost.");
     System.out.println("5: Total Value - View the total value of groceries in storage.");
-    System.out.println("6: View Groceries Before Date - List items expiring before a specific date.");
+    System.out.println("6: View Groceries Before Date - "
+        + "List items expiring before a specific date.");
     System.out.println("7: View All Groceries - Display all groceries alphabetically.");
     System.out.println("8: Add Recipe - Add a recipe to the cookbook.");
     System.out.println("9: Search Recipe - Find a recipe by its name.");
-    System.out.println("10: Check Ingredients - Verify if you have enough ingredients for a recipe.");
-    System.out.println("11: Suggest Recipes - Get recipe suggestions based on available ingredients.");
+    System.out.println("10: Check Ingredients - "
+        + "Verify if you have enough ingredients for a recipe.");
+    System.out.println("11: Suggest Recipes - "
+        + "Get recipe suggestions based on available ingredients.");
     System.out.println("12: View Cookbook - Display all recipes in the cookbook.");
     System.out.println("13. Remove Recipe - Remove a recipe from the cookbook by name");
     System.out.println("13: View this help menu.");
@@ -173,7 +163,7 @@ public class UserInterface {
   }
   
   /**
-   * Displays the message when exiting the applicaiton.
+   * Displays the message when exiting the application.
    */
   private void displayGoodbyeMessage() {
     System.out.println("\u001B[35m-----------------------------------------\u001B[0m");
@@ -184,9 +174,7 @@ public class UserInterface {
   }
   
   /**
-   * <h2>Menu Options</h2>
-   *
-   * <p>Enum representing the menu options with descriptions.</p>
+   * Enum representing the menu options with descriptions.
    */
   private enum MenuOption {
     ADD_GROCERY_TO_FOODSTORAGE("1. Add a grocery"),
@@ -211,6 +199,11 @@ public class UserInterface {
       this.description = description;
     }
     
+    /**
+     * Gets the description of the menu option.
+     *
+     * @return the description of the menu option
+     */
     private String getDescription() {
       return description;
     }

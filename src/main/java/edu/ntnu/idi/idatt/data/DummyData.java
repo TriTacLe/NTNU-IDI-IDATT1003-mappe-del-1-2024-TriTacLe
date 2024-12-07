@@ -9,27 +9,53 @@ import edu.ntnu.idi.idatt.storage.FoodStorage;
 import java.time.LocalDate;
 
 /**
- * A class that holds dummy instances of recipes and Ingredients, and adds them to their respective registers.
+ * Provides dummy data for initializing the application with predefined
+ * {@link Ingredient} and{@link Recipe} instances. The class
+ * includes a variety of ingredients and recipe for testing purposes.
  */
 public class DummyData {
   
+  /**
+   * Loads dummy data into the provided {@link FoodStorage} and {@link Cookbook} instances.
+   *
+   * <p>This method adds a collection of ingredients to the food storage,
+   * including expired ingredients too. It also adds some recipes to the cookbook,
+   * including recipes that cannot be made with the ingredients added to the food storage</p>
+   *
+   * @param foodStorage the {@link FoodStorage} instance to add ingredients to
+   * @param cookbook    the {@link Cookbook} instance to add recipes to
+   */
   public static void loadDummyData(FoodStorage foodStorage, Cookbook cookbook) {
     //Ingredients to FoodStorage
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Honey", 2000, Unit.GRAM, LocalDate.of(2028, 2, 19), 30));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Apple", 5, Unit.PIECES, LocalDate.of(2026, 6, 7), 10));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Apple", 2, Unit.PIECES, LocalDate.of(2029, 6, 7), 15));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Milk", 1, Unit.LITRE, LocalDate.of(2024, 12, 15), 20));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Eggs", 12, Unit.PIECES, LocalDate.of(2025, 12, 24), 5));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Sugar", 1000, Unit.GRAM, LocalDate.of(2025, 12, 24), 15));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Flour", 2000, Unit.GRAM, LocalDate.of(2026, 1, 15), 12));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Butter", 500, Unit.GRAM, LocalDate.of(2025, 5, 10), 25));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Butter", 200, Unit.GRAM, LocalDate.of(2029, 5, 10), 20));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Chocolate", 200, Unit.GRAM, LocalDate.of(2026, 3, 15), 40));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Banana", 6, Unit.PIECES, LocalDate.of(2024, 11, 30), 5));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Vanilla", 50, Unit.MILLILITRE, LocalDate.of(2025, 10, 15), 10));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Honey", 2000, Unit.GRAM, LocalDate.of(2028, 2, 19), 30));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Apple", 5, Unit.PIECES, LocalDate.of(2026, 6, 7), 10));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Apple", 2, Unit.PIECES, LocalDate.of(2029, 6, 7), 15));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Milk", 1, Unit.LITRE, LocalDate.of(2024, 12, 15), 20));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Eggs", 12, Unit.PIECES, LocalDate.of(2025, 12, 24), 5));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Sugar", 1000, Unit.GRAM, LocalDate.of(2025, 12, 24), 15));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Flour", 2000, Unit.GRAM, LocalDate.of(2026, 1, 15), 12));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Butter", 500, Unit.GRAM, LocalDate.of(2025, 5, 10), 25));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Butter", 200, Unit.GRAM, LocalDate.of(2029, 5, 10), 20));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Chocolate", 200, Unit.GRAM, LocalDate.of(2026, 3, 15), 40));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Banana", 6, Unit.PIECES, LocalDate.of(2024, 11, 30), 5));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Vanilla", 50, Unit.MILLILITRE, LocalDate.of(2025, 10, 15), 10));
     //expired Ingredients
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Honey", 2000, Unit.GRAM, LocalDate.of(1934, 2, 19), 30));
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Vanilla", 50, Unit.MILLILITRE, LocalDate.of(1925, 10, 15), 10));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Honey", 2000, Unit.GRAM, LocalDate.of(1934, 2, 19), 30));
+    foodStorage.addIngredientToFoodStorage(
+        new Ingredient("Vanilla", 50, Unit.MILLILITRE, LocalDate.of(1925, 10, 15), 10));
     //Recipes
     Recipe pancakeRecipe = new Recipe(
         "Pancakes",

@@ -105,7 +105,7 @@ public class FoodStorage {
     ArrayList<Ingredient> ingredientArrayList = ingredients.get(name);
     
     if (ingredientArrayList == null || ingredientArrayList.isEmpty()) {
-      throw new IllegalArgumentException("Ingredient does not exist in storage.");
+      throw new IllegalArgumentException("Ingredient " + name + " does not exist in storage.");
     }
     
     List<Ingredient> sortedList = getSorteIngredientsByExpirationsDate(ingredientArrayList);

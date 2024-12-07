@@ -53,85 +53,25 @@ public class Recipe {
    *
    * @param ingredient
    */
-  public boolean addIngredientToRecipe(Ingredient ingredient) {
-    Optional<Ingredient> existingIngredient = ingredientsList.stream()
-        .filter(ingredientInRegister -> ingredientInRegister.getName().equals(ingredient.getName()))
-        .findAny();
-    
-    if (existingIngredient.isPresent()) {
-      existingIngredient.get().updateQuantity(ingredient.getQuantity());
-      return false;
-    } else {
-      ingredientsList.add(ingredient);
-      return true;
+  public void addIngredientToRecipe(Ingredient ingredient) {
+    try {
+      if (ingredient == null) {
+        throw new IllegalArgumentException("Ingredient cannot be null");
+      }
+      Optional<Ingredient> existingIngredient = ingredientsList.stream()
+          .filter(ingredientInRegister -> ingredientInRegister.getName().equals(ingredient.getName()))
+          .findAny();
+      
+      if (existingIngredient.isPresent()) {
+        existingIngredient.get().updateQuantity(ingredient.getQuantity());
+      } else {
+        ingredientsList.add(ingredient);
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error adding ingredient to recipe: " + e.getMessage());
     }
   }
-  /*
-  /**
-   * Checks if there are enough ingredients in the food storage to prepare the recipe.
-   * <p>
-   * This method iterates through the list of ingredients required for the recipe and compares
-   * the total quantity available in the food storage with the quantity needed for each
-   * ingredient. It prints out whether there are enough ingredients in the storage and displays the
-   * required and available quantities for each ingredient.
-   * </p>
-   *
-   * @param foodStorage The food storage containing a collection of ingredients in the kitchen.
-   *                    This is used to check the availability of each ingredient required for
-   *                    the recipe.
-   */
-  /*
-  public void hasEnoughIngredientsForRecipe(FoodStorage foodStorage) {
-    boolean enoughIngredients = ingredientsList.stream()
-        .allMatch(recipeIngredient -> {
-          double totalAvailable = foodStorage.getIngredients().values().stream()
-              .flatMap(List::stream)
-              .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
-              .mapToDouble(storageIngredient -> {
-                if (!storageIngredient.getUnit().equals(recipeIngredient.getUnit())) {
-                  return storageIngredient.getUnit().converter(storageIngredient.getQuantity(), recipeIngredient.getUnit());
-                }
-                return storageIngredient.getQuantity();
-              })
-              .sum();
-          return totalAvailable >= recipeIngredient.getQuantity();
-        });
-    
-    if (enoughIngredients) {
-      System.out.println("There is enough ingredients in the storage to make this recipe: " + getName());
-      ingredientsList.forEach(recipeIngredient -> {
-        double totalQuantityAvailable = foodStorage.getIngredients().values().stream()
-            .flatMap(List::stream)
-            .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
-            .mapToDouble(Ingredient::getQuantity)
-            .sum();
-        
-        System.out.println(" - " + recipeIngredient.getName()
-            + ": Required = " + recipeIngredient.getQuantity()
-            + ", Available: " + totalQuantityAvailable);
-      });
-    } else {
-      System.out.println("There is not enough to make this recipe: " + getName());
-      ingredientsList.forEach(recipeIngredient -> {
-        double totalAvailable = foodStorage.getIngredients().values().stream()
-            .flatMap(List::stream)
-            .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
-            .mapToDouble(Ingredient::getQuantity)
-            .sum();
-        
-        if (totalAvailable > 0) {
-          System.out.println(" - " + recipeIngredient.getName()
-              + ": Required = " + recipeIngredient.getQuantity()
-              + ", Available: " + totalAvailable);
-        } else {
-          System.out.println(" - " + recipeIngredient.getName()
-              + ": Required = " + recipeIngredient.getQuantity()
-              + ", Available: 0 (Not in foodStorage)");
-        }
-      });
-    }
-  }
-   */
+  
   
   @Override
   public String toString() {
@@ -153,5 +93,4 @@ public class Recipe {
     }
     return stringBuilder.toString();
   }
-  
 }
