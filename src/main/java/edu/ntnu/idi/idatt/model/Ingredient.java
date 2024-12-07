@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.utils.InputValidation;
+import edu.ntnu.idi.idatt.utils.InputValidator;
 
 import java.time.LocalDate;
 
@@ -19,7 +19,7 @@ public class Ingredient {
   private final String name;
   private final Unit unit;
   private final double price;
-  private final InputValidation inputValidation = new InputValidation();
+  private final InputValidator inputValidator = new InputValidator();
   private double quantity;
   private LocalDate expirationDate;
   
@@ -36,10 +36,10 @@ public class Ingredient {
   public Ingredient(String name, double quantity, Unit unit,
                     LocalDate expirationDate, double price) {
     //Input validering
-    inputValidation.validateString(name, "Name");
-    //inputValidation.validateDouble(quantity, "Quantity");
-    inputValidation.validationEnum(unit);
-    inputValidation.validateDouble(price, "Price");
+    inputValidator.validateString(name, "Name");
+    //inputValidator.validateDouble(quantity, "Quantity");
+    inputValidator.validationEnum(unit);
+    inputValidator.validateDouble(price, "Price");
     
     setExpirationDate(expirationDate);
     setQuantity(quantity);
@@ -60,10 +60,10 @@ public class Ingredient {
    * @throws IllegalArgumentException if any input validation fails
    */
   public Ingredient(String name, double quantity, Unit unit, double price) {
-    inputValidation.validateString(name, "Name");
-    //inputValidation.validateDouble(quantity, "Quantity");
-    inputValidation.validationEnum(unit);
-    inputValidation.validateDouble(price, "Price");
+    inputValidator.validateString(name, "Name");
+    //inputValidator.validateDouble(quantity, "Quantity");
+    inputValidator.validationEnum(unit);
+    inputValidator.validateDouble(price, "Price");
     
     setQuantity(quantity);
     this.name = name;
@@ -97,7 +97,7 @@ public class Ingredient {
    * @throws IllegalArgumentException if the quantity is invalid
    */
   public void setQuantity(double quantity) {
-    InputValidation.validateDouble(quantity, "quantity");
+    InputValidator.validateDouble(quantity, "quantity");
     this.quantity = quantity;
   }
   
@@ -117,7 +117,7 @@ public class Ingredient {
    * @throws IllegalArgumentException if the expiration date is invalid
    */
   private void setExpirationDate(LocalDate expirationDate) {
-    InputValidation.validateDate(expirationDate, false);
+    InputValidator.validateDate(expirationDate, false);
     this.expirationDate = expirationDate;
   }
   
@@ -146,7 +146,7 @@ public class Ingredient {
    * @throws IllegalArgumentException if the quantity is invalid
    */
   public void updateQuantity(double quantity) {
-    inputValidation.validateDouble(quantity, "Quantity");
+    inputValidator.validateDouble(quantity, "Quantity");
     this.quantity += quantity;
   }
   

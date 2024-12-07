@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.console;
 
-import edu.ntnu.idi.idatt.utils.UserInputHandler;
+import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import edu.ntnu.idi.idatt.data.DummyData;
 import edu.ntnu.idi.idatt.service.CookbookService;
 import edu.ntnu.idi.idatt.service.FoodStorageService;
@@ -16,6 +16,8 @@ import java.util.Scanner;
  *
  * <p>A text-based UI for the Food Conservation App. It handles user interactions
  * and integrates services to manage the food storage and recipes.</p>
+ *
+ * @author trile
  */
 public class UserInterface {
   
@@ -28,7 +30,7 @@ public class UserInterface {
    */
   public void init() {
     scanner = new Scanner(System.in);
-    UserInputHandler inputHandler = new UserInputHandler(scanner);
+    ConsoleInputManager inputManager = new ConsoleInputManager(scanner);
     
     FoodStorage foodStorage = new FoodStorage();
     Cookbook cookbook = new Cookbook();
@@ -36,8 +38,8 @@ public class UserInterface {
     DummyData dummyData = new DummyData();
     dummyData.loadDummyData(foodStorage, cookbook);
     
-    foodStorageService = new FoodStorageService(foodStorage, inputHandler);
-    cookbookService = new CookbookService(cookbook, foodStorage, inputHandler);
+    foodStorageService = new FoodStorageService(foodStorage, inputManager);
+    cookbookService = new CookbookService(cookbook, foodStorage, inputManager);
   }
   
   /**

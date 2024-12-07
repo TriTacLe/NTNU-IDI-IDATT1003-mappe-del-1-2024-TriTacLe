@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.service;
 
-import edu.ntnu.idi.idatt.utils.UserInputHandler;
+import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 import edu.ntnu.idi.idatt.model.Unit;
@@ -28,7 +28,7 @@ import java.util.Optional;
 public class CookbookService {
   private final Cookbook cookbook;
   private final FoodStorage foodStorage;
-  private final UserInputHandler inputHandler;
+  private final ConsoleInputManager inputManager;
   
   /**
    * Initializes a CookbookService instance with the given cookbook,
@@ -36,13 +36,13 @@ public class CookbookService {
    *
    * @param cookbook     the cookbook to manage recipes
    * @param foodStorage  the food storage containing available ingredients
-   * @param inputHandler the input handler for user input validation
+   * @param inputManager the input handler for user input validation
    */
-  public CookbookService(Cookbook cookbook, FoodStorage foodStorage, UserInputHandler
-      inputHandler) {
+  public CookbookService(Cookbook cookbook, FoodStorage foodStorage, ConsoleInputManager
+      inputManager) {
     this.cookbook = cookbook;
     this.foodStorage = foodStorage;
-    this.inputHandler = inputHandler;
+    this.inputManager = inputManager;
   }
   
   /**
@@ -57,7 +57,7 @@ public class CookbookService {
     try {
       String nameRecipe;
       do {
-        nameRecipe = inputHandler.getValidatedString(
+        nameRecipe = inputManager.getValidatedString(
             "Enter recipe name: ",
             "Recipe name cannot be empty/blank",
             "recipe name");
@@ -66,15 +66,15 @@ public class CookbookService {
         }
       } while (cookbook.getRecipes().containsKey(nameRecipe));
       
-      final String description = inputHandler.getValidatedString(
+      final String description = inputManager.getValidatedString(
           "Enter a description: ",
           "Description cannot be empty/blank",
           "description");
-      final String procedure = inputHandler.getValidatedString(
+      final String procedure = inputManager.getValidatedString(
           "Enter the procedure: ",
           "Procedure cannot be empty/blank",
           "procedure");
-      final double portions = inputHandler.getValidatedDouble(
+      final double portions = inputManager.getValidatedDouble(
           "Enter how many people this recipe is for",
           "Portions have to be a number and it has to be positive",
           "portions");
@@ -83,7 +83,7 @@ public class CookbookService {
       try {
         int choice;
         do {
-          choice = inputHandler.getValidatedInt(
+          choice = inputManager.getValidatedInt(
               "How would you like to add ingredients? Enter 1: Add manually. "
                   + "Enter 2: Choose from available food storage ingredients.\nEnter your choice: ",
               "Invalid input. Enter 1 or 2", "choice");
@@ -121,20 +121,20 @@ public class CookbookService {
    */
   private void addIngredientsManually(Recipe recipe) {
     try {
-      int totalIngredients = (int) inputHandler.getValidatedDouble(
+      int totalIngredients = (int) inputManager.getValidatedDouble(
           "Enter how many ingredients you want this recipe to have",
           "Total ingredients cannot be negative", "Total ingredients");
       for (int i = 0; i < totalIngredients; i++) {
         System.out.println("Ingredient: " + (i + 1) + " of " + totalIngredients);
-        final String name = inputHandler.getValidatedString(
+        final String name = inputManager.getValidatedString(
             "Enter ingredient name:",
             "Ingredient name cannot be empty/blank", "name");
-        double quantity = inputHandler.getValidatedDouble(
+        double quantity = inputManager.getValidatedDouble(
             "Enter quantity:",
             "Invalid input for quantity", "quantity");
-        final Unit unit = inputHandler.getValidatedUnit(
+        final Unit unit = inputManager.getValidatedUnit(
             "Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-        final double pricePerUnit = inputHandler.getValidatedDouble(
+        final double pricePerUnit = inputManager.getValidatedDouble(
             "Enter price per unit:", "Invalid input for price", "price");
         
         Ingredient ingredient = new Ingredient(name, quantity, unit, pricePerUnit);
@@ -153,7 +153,7 @@ public class CookbookService {
    */
   private void addIngredientsFromStorage(Recipe recipe) {
     try {
-      int totalIngredients = (int) inputHandler.getValidatedDouble(
+      int totalIngredients = (int) inputManager.getValidatedDouble(
           "Enter how many ingredients you want this recipe to have",
           "Total ingredients cannot be negative/other type than int or double",
           "total ingredients");
@@ -190,7 +190,7 @@ public class CookbookService {
       List<Ingredient> ingredients;
       
       do {
-        ingredientKey = inputHandler.getValidatedString(
+        ingredientKey = inputManager.getValidatedString(
             "Enter the ingredient you want",
             "Error: Could not retrieve the ingredient name.", "name").toLowerCase();
         
@@ -211,7 +211,7 @@ public class CookbookService {
               + "How much you want to add to the recipe is an unrealized amount"
               + " so it will not be deducted from the real amount.");
       
-      int requestedQuantity = inputHandler.getValidatedInt(
+      int requestedQuantity = inputManager.getValidatedInt(
           "Enter quantity to add:",
           "Invalid input for quantity.", "requested quantity");
       
@@ -307,7 +307,7 @@ public class CookbookService {
    */
   public void handleSearchRecipe() {
     try {
-      final String name = inputHandler.getValidatedString("Enter name of the recipe:",
+      final String name = inputManager.getValidatedString("Enter name of the recipe:",
           "Recipe name cannot be empty/blank", "name").trim();
       
       if (cookbook == null) {
@@ -336,7 +336,7 @@ public class CookbookService {
    */
   private boolean confirmAdditionExceedingQuantity() {
     try {
-      String proceed = inputHandler.getValidatedString(
+      String proceed = inputManager.getValidatedString(
           "Requested quantity exceeds available ingredients. "
               + "Do you still want to add this ingredient? (yes/no)",
           "Invalid input. Please answer yes or no.", "yes/no input");
@@ -354,7 +354,7 @@ public class CookbookService {
    */
   public void handleRemoveRecipe() {
     try {
-      String name = inputHandler.getValidatedString(
+      String name = inputManager.getValidatedString(
           "Enter the name of the Recipe to be removed from the cookbook: ",
           "Recipe name cannot be empty/blank", "name"
       ).toLowerCase();
@@ -393,7 +393,7 @@ public class CookbookService {
       
       int recipeChoice;
       do {
-        recipeChoice = inputHandler.getValidatedInt(
+        recipeChoice = inputManager.getValidatedInt(
             "Enter the number of the recipe: ",
             "Invalid! Please enter a valid number.",
             "recipe choice"

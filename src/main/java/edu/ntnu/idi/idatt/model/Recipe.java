@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.utils.InputValidation;
+import edu.ntnu.idi.idatt.utils.InputValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +21,11 @@ public class Recipe {
   private final String procedure;
   private final double portions;
   private final ArrayList<Ingredient> ingredientsList;
-  private InputValidation inputValidation = new InputValidation();
+  private InputValidator inputValidator = new InputValidator();
   
   /**
    * Initializes a new Recipe instance with the specified attributes.
-   * An object is created if its passes the validation method by {@link #inputValidation}
+   * An object is created if its passes the validation method by {@link #inputValidator}
    *
    * @param name        the name of the recipe; must not be null or empty.
    * @param description a short description of the recipe; must not be null or empty.
@@ -34,10 +34,10 @@ public class Recipe {
    * @throws IllegalArgumentException if any input is invalid.
    */
   public Recipe(String name, String description, String procedure, double portions) {
-    inputValidation.validateString(name, "Name of the recipe cannot be blank/empty");
-    inputValidation.validateString(description, "Description cannot be blank/empty");
-    inputValidation.validateString(procedure, "Procedure cannot be blank/empty");
-    inputValidation.validateDouble(portions, "Portions cannot negative");
+    inputValidator.validateString(name, "Name of the recipe cannot be blank/empty");
+    inputValidator.validateString(description, "Description cannot be blank/empty");
+    inputValidator.validateString(procedure, "Procedure cannot be blank/empty");
+    inputValidator.validateDouble(portions, "Portions cannot negative");
     
     this.name = name;
     this.description = description;

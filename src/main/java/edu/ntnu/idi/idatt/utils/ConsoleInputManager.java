@@ -19,15 +19,15 @@ import java.util.Scanner;
  *
  * @author TriLe
  */
-public class UserInputHandler {
+public class ConsoleInputManager {
   private final Scanner scanner;
   
   /**
-   * Initializes a new UserInputHandler instance with the provided Scanner.
+   * Initializes a new ConsoleInputManager instance with the provided Scanner.
    *
    * @param scanner the Scanner instance to read user input from.
    */
-  public UserInputHandler(Scanner scanner) {
+  public ConsoleInputManager(Scanner scanner) {
     this.scanner = scanner;
   }
   
@@ -45,7 +45,7 @@ public class UserInputHandler {
       System.out.println(request);
       try {
         String input = scanner.nextLine().trim();
-        InputValidation.validateString(input, fieldName);
+        InputValidator.validateString(input, fieldName);
         return input;
       } catch (IllegalArgumentException e) {
         System.out.println(errorMessage + ": " + e.getMessage());
@@ -67,7 +67,7 @@ public class UserInputHandler {
       System.out.println(request);
       try {
         double number = Double.parseDouble(scanner.next());
-        InputValidation.validateDouble(number, fieldName);
+        InputValidator.validateDouble(number, fieldName);
         return number;
       } catch (IllegalArgumentException e) {
         System.out.println(errorMessage + ": " + e.getMessage());
@@ -89,7 +89,7 @@ public class UserInputHandler {
       System.out.println(request);
       try {
         int number = Integer.parseInt(scanner.next());
-        InputValidation.validateInt(number, fieldName);
+        InputValidator.validateInt(number, fieldName);
         return number;
       } catch (IllegalArgumentException e) {
         System.out.println(errorMessage + ": " + e.getMessage());
@@ -110,7 +110,7 @@ public class UserInputHandler {
       System.out.println(request);
       try {
         Unit unit = Unit.fromSymbol(scanner.next());
-        InputValidation.validationEnum(unit);
+        InputValidator.validationEnum(unit);
         return unit;
       } catch (IllegalArgumentException e) {
         System.out.println(errorMessage + ": " + e.getMessage());
@@ -132,7 +132,7 @@ public class UserInputHandler {
       System.out.println(request);
       try {
         LocalDate localDate = LocalDate.parse(scanner.next());
-        InputValidation.validateDateInThePast(localDate, false);
+        InputValidator.validateDateInThePast(localDate, false);
         return localDate;
       } catch (DateTimeParseException e) {
         System.out.println(errorMessage

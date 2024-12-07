@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.service;
 
-import edu.ntnu.idi.idatt.utils.UserInputHandler;
+import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
@@ -21,17 +21,17 @@ import java.util.List;
  */
 public class FoodStorageService {
   private final FoodStorage foodStorage;
-  private final UserInputHandler inputHandler;
+  private final ConsoleInputManager inputManager;
   
   /**
    * Constructs a FoodStorageService with the specified food storage and input handler.
    *
    * @param foodStorage  the food storage to manage
-   * @param inputHandler the input handler for user input validation
+   * @param inputManager the input handler for user input validation
    */
-  public FoodStorageService(FoodStorage foodStorage, UserInputHandler inputHandler) {
+  public FoodStorageService(FoodStorage foodStorage, ConsoleInputManager inputManager) {
     this.foodStorage = foodStorage;
-    this.inputHandler = inputHandler;
+    this.inputManager = inputManager;
   }
   
   /**
@@ -44,18 +44,18 @@ public class FoodStorageService {
    */
   public void handleAddIngredient() {
     try {
-      final String name = inputHandler.getValidatedString(
+      final String name = inputManager.getValidatedString(
           "Enter ingredient name:",
           "Ingredient name cannot be empty/blank", "name");
-      double quantity = inputHandler.getValidatedDouble(
+      double quantity = inputManager.getValidatedDouble(
           "Enter quantity:",
           "Invalid input for quantity", "quantity");
-      final Unit unit = inputHandler.getValidatedUnit(
+      final Unit unit = inputManager.getValidatedUnit(
           "Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-      final LocalDate expirationDate = inputHandler.getValidatedDate(
+      final LocalDate expirationDate = inputManager.getValidatedDate(
           "Enter a date in the format (yyyy-mm-dd):",
           "Please enter a date in the format yyyy-mm-dd");
-      final double pricePerUnit = inputHandler.getValidatedDouble(
+      final double pricePerUnit = inputManager.getValidatedDouble(
           "Enter the price of the amount of the ingredient added:",
           "Invalid input for price", "price");
       
@@ -76,7 +76,7 @@ public class FoodStorageService {
    */
   public void handleSearchIngredient() {
     try {
-      String name = inputHandler.getValidatedString(
+      String name = inputManager.getValidatedString(
           "Enter name of the ingredient:",
           "Ingredient name cannot be empty/blank", "name").trim();
       
@@ -105,7 +105,7 @@ public class FoodStorageService {
   
   public void handleRemoveIngredient() {
     try {
-      String name = inputHandler.getValidatedString(
+      String name = inputManager.getValidatedString(
           "Enter the name of the Ingredient to be removed from the food storage: ",
           "Ingredient name cannot be empty/blank", "name"
       ).toLowerCase();
@@ -118,7 +118,7 @@ public class FoodStorageService {
           .mapToDouble(Ingredient::getQuantity)
           .sum();
       
-      double quantity = inputHandler.getValidatedDouble(
+      double quantity = inputManager.getValidatedDouble(
           "Enter how much quantity of the Ingredient: " + matchingIngredients.getFirst().getName()
               + "(" + totalQuantity + matchingIngredients.getFirst().getUnit().getSymbol()
               + ") to be removed: ", "Invalid quantity", "quantity"
@@ -188,7 +188,7 @@ public class FoodStorageService {
    * @throws IllegalArgumentException if there is an error while fetching the ingredients
    */
   public void handleViewIngredientsBeforeDate() {
-    LocalDate date = inputHandler.getValidatedDate(
+    LocalDate date = inputManager.getValidatedDate(
         "Enter a date (yyyy-mm-dd) to view Ingredients expiring before it: ",
         "Please enter a date in the format yyyy-mm-dd");
     try {

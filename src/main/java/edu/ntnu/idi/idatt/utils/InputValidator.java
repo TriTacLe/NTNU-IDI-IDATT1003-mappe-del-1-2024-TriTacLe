@@ -21,7 +21,7 @@ import java.util.Scanner;
  *
  * @author TriLe
  */
-public class InputValidation {
+public class InputValidator {
   
   /**
    * Validates that a string input is not null or empty.

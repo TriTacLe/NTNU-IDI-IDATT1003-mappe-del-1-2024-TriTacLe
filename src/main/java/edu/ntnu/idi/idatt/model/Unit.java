@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.utils.InputValidation;
+import edu.ntnu.idi.idatt.utils.InputValidator;
 
 import java.util.Arrays;
 
@@ -21,7 +21,7 @@ public enum Unit {
   private final String symbol;
   private final UnitType type;
   private final Double conversionNumber;
-  private final InputValidation inputValidation = new InputValidation();
+  private final InputValidator inputValidator = new InputValidator();
   
   /**
    * Constructor to initialize a unit with its attributes.
@@ -83,8 +83,8 @@ public enum Unit {
    * @throws IllegalArgumentException if the target unit is null, invalid, or incompatible.
    */
   public Double convertValue(Double value, Unit targetUnit) {
-    inputValidation.validationEnum(targetUnit);
-    inputValidation.validationEnumUnitType(this.type, targetUnit.type);
+    inputValidator.validationEnum(targetUnit);
+    inputValidator.validationEnumUnitType(this.type, targetUnit.type);
     return (value * this.conversionNumber) / targetUnit.conversionNumber;
   }
   
