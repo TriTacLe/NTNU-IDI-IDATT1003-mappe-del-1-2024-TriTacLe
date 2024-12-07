@@ -3,15 +3,38 @@ package edu.ntnu.idi.idatt.storage;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+
+/**
+ * The {@code Cookbook} class represents a collection of recipes.
+ * It provides functionality to add, search, remove,
+ * and suggest recipes based on the available ingredients in a food storage.
+ * This class utilizes a {@code HashMap} to store recipes with their names as keys.
+ *
+ * @author TriLe
+ */
 public class Cookbook {
   private HashMap<String, Recipe> recipes;
   
+  
+  /**
+   * Constructs an empty Cookbook.
+   */
   public Cookbook() {
     this.recipes = new HashMap<>();
   }
   
+  /**
+   * Retrieves all recipes in the cookbook.
+   *
+   * @return a HashMap containing all recipe where
+   * the key is the recipe name and the value is the Recipe instance.
+   */
   public HashMap<String, Recipe> getRecipes() {
     return recipes;
   }
@@ -19,8 +42,10 @@ public class Cookbook {
   /**
    * Adds a recipe to the cookbook.
    *
-   * @param recipe the recipe to add
-   * @return true if the recipe was successfully added, false if it already exists
+   * @param recipe the Recipe object to be added
+   * @return true if the recipe was successfully added,
+   * false if a recipe with the same name already exists
+   * @throws NullPointerException if the recipe parameter is null
    */
   public boolean addRecipeToCookbook(Recipe recipe) {
     if (recipes.containsKey(recipe.getName())) {
@@ -29,27 +54,27 @@ public class Cookbook {
     recipes.put(recipe.getName(), recipe);
     return true;
   }
-
-//  /**
-//   * Displays all recipes in the cookbook.
-//   *
-//   * @return a map of all recipes
-//   */
-//  public HashMap<String, Recipe> getCookbook() {
-//    recipes.forEach((key, value) -> {
-//      System.out.println("Recipe Name: " + key);
-//      System.out.println(value);
-//    });
-//    return recipes;
-//  }
   
+  /**
+   * Searches for a recipe in the cookbook by its name.
+   *
+   * @param nameRecipe the name of the recipe to search for
+   * @return an Optional containing the matching recipe entry if found,
+   * or an empty Optional if not found.
+   */
   public Optional<Map.Entry<String, Recipe>> searchForRecipeInCookbook(String nameRecipe) {
     return recipes.entrySet().stream()
         .filter(entry -> entry.getKey().equalsIgnoreCase(nameRecipe))
         .findFirst();
   }
   
-  
+  /**
+   * Removes a recipe from the cookbook by its name.
+   *
+   * @param name the name of the recipe to remove
+   * @return true if the recipe was successfully removed, false if the recipe does not exist
+   * @throws NullPointerException if the name parameter is null
+   */
   public boolean removeRecipeFromCookbook(String name) {
     String keyToRemove = recipes.keySet().stream()
         .filter(key -> key.equalsIgnoreCase(name))
@@ -64,15 +89,20 @@ public class Cookbook {
   }
   
   /**
-   * Suggests recipes that can be made based on the current food storage.
+   * Suggests recipes that can be prepared based on the
+   * available ingredients in the given {@code FoodStorage}.
+   * A recipe is suggested if all required ingredients are
+   * present in sufficient quantity in the food storage.
    *
-   * @param foodStorage the food storage to compare against
-   * @return a list of suggested recipes
+   * @param foodStorage the FoodStorage to compare against
+   * @return a List of Recipe instances that can be made
+   * @throws NullPointerException if the foodStorage parameter is null
    */
   public List<Recipe> getSuggestedRecipes(FoodStorage foodStorage) {
     List<Recipe> suggestedRecipes = new ArrayList<>();
     
-    if (foodStorage == null || foodStorage.getIngredients() == null || recipes == null || recipes.isEmpty()) {
+    if (foodStorage == null || foodStorage.getIngredients() == null
+        || recipes == null || recipes.isEmpty()) {
       return suggestedRecipes;
     }
     
@@ -97,7 +127,9 @@ public class Cookbook {
                 .mapToDouble(storageIngredient -> {
                   if (!storageIngredient.getUnit().equals(recipeIngredient.getUnit())) {
                     try {
-                      return storageIngredient.getUnit().convertValue(storageIngredient.getQuantity(), recipeIngredient.getUnit());
+                      return storageIngredient.getUnit()
+                          .convertValue(storageIngredient.getQuantity(),
+                              recipeIngredient.getUnit());
                     } catch (IllegalArgumentException e) {
                       return 0.0;
                     }

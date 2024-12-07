@@ -2,31 +2,26 @@ package edu.ntnu.idi.idatt.storage;
 
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Comparator;
-import java.util.Map;
 
 /**
- * The FoodStorage class manages a collection of Ingredients,
- * allowing operations such as....
+ * The FoodStorage class manages a collection of Ingredient instances, allowing these functions:
+ * Adding, removing and searching ingredients.
+ * operations like checking availability for recipes and sorting ingredients.
  *
- * <p>p>
- * Name, getName, as key, and Ingredient object as the value.
- *
- * @author Tri Tac Le
- * @since
+ * @author TriLe
  */
 public class FoodStorage {
-  //private HashMap<String, Ingredient> Ingredients;
   private final HashMap<String, ArrayList<Ingredient>> ingredients;
   
   /**
@@ -37,29 +32,25 @@ public class FoodStorage {
   }
   
   /**
-   * getter
+   * Retrieves the map of ingredients in the storage.
    *
-   * @return Ingredients hastmap
+   * @return A HashMap where the key is the ingredient name
+   *      and the value is a list of Ingredient instances.
    */
   public HashMap<String, ArrayList<Ingredient>> getIngredients() {
     return ingredients;
   }
   
   /**
-   * A method that adds a Ingredient to the storage.
-   * If the Ingredient already exist (check by name) the quantity increases with the quantity of the added Ingredient.
-   * If not it is getting added to the map
+   * Adds an ingredient to the storage. If an ingredient with the same name, expiration date,
+   * and price exists, its quantity will be updated. Otherwise, the ingredient is added.
    *
-   * @param ingredient
+   * @param ingredient The Ingredient to be added to the storage.
+   * @throws IllegalArgumentException if the ingredient is null.
    */
   public void addIngredientToFoodStorage(Ingredient ingredient) {
-    // Update or make a new arrayList for Ingredient arguments name
     ingredients.putIfAbsent(ingredient.getName().toLowerCase(), new ArrayList<>());
     ArrayList<Ingredient> ingredientArrayList = ingredients.get(ingredient.getName().toLowerCase());
-  
-    /*check if Ingredient and its attributes already exist
-    Checks the attributes pricePerUnit, expirationDate and unit
-     */
     Optional<Ingredient> matchingIngredient = ingredientArrayList.stream()
         .filter(existingIngredient ->
             existingIngredient.getExpirationDate().equals(ingredient.getExpirationDate())
@@ -73,32 +64,42 @@ public class FoodStorage {
     }
   }
   
+  /**
+   * Checks if an ingredient exists in the storage by name.
+   *
+   * @param name The name of the ingredient.
+   * @return true if the ingredient exists, false otherwise.
+   */
   public boolean ingredientExist(String name) {
     return ingredients.containsKey(name);
   }
   
   /**
-   * @param nameIngredient that represent the name attribute of the Ingredient. Can be called with getName
-   *                       It also represents the key for the map
+   * Searches for ingredients in the storage by name.
+   *
+   * @param nameIngredient The name of the ingredient to search for.
+   * @return A list of Ingredient instances matching the given name.
    */
   public List<Ingredient> searchForIngredientsInFoodStorage(String nameIngredient) {
     return ingredients.entrySet().stream()
-        //.filter(entry -> entry.getKey().toLowerCase().equals(nameIngredient.toLowerCase()))
         .filter(entry -> entry.getKey().equalsIgnoreCase(nameIngredient))
         .flatMap(entry -> entry.getValue().stream())
         .collect(Collectors.toList());
-//        .findAny()
-//        .orElse(null);
   }
   
-  
   /**
-   * If the Ingredient exists in the map and if the Ingredient's quantity is greater than the amount to remove
-   * Reduce the Ingredient's quantity
-   * If the quantity is less than or equal to the amount to remove, remove the Ingredient from the map.
+   * Removes a specified quantity of an ingredient from the storage.
    *
-   * @param name     name of the Ingredient
-   * @param quantity quantity of the Ingredient
+   * <p>If the Ingredient exists in the map and if the Ingredient's quantity is greater
+   * than the amount to remove, then reduce the Ingredient's quantity
+   * If the quantity is less than or equal to the amount to remove,
+   * remove the Ingredient from the map.</p>
+   *
+   * @param name     The name of the ingredient to remove.
+   * @param quantity The quantity to remove.
+   * @return The actual quantity removed.
+   * @throws IllegalArgumentException if the ingredient does not exist
+   *                                  or if the quantity exceeds availability.
    */
   public double removeIngredientFromFoodStorage(String name, double quantity) {
     name = name.toLowerCase();
@@ -115,10 +116,10 @@ public class FoodStorage {
         .sum();
     
     if (quantity > totalQuantity) {
-      throw new IllegalArgumentException("Invalid quantity to remove: " + quantity + ". Available: " + totalQuantity);
+      throw new IllegalArgumentException("Invalid quantity to remove: "
+          + quantity + ". Available: " + totalQuantity);
     }
-    
-    double initialQuantity = quantity;
+    final double initialQuantity = quantity;
     Iterator<Ingredient> iterator = sortedList.iterator();
     
     while (iterator.hasNext() && quantity > 0) {
@@ -129,7 +130,6 @@ public class FoodStorage {
       } else {
         quantity -= ingredient.getQuantity();
         iterator.remove();
-        //IngredientArrayList.remove(Ingredient);
       }
     }
     ingredientArrayList.clear();
@@ -141,18 +141,25 @@ public class FoodStorage {
     return initialQuantity - quantity;
   }
   
-  
-  public List<Ingredient> getSorteIngredientsByExpirationsDate(List<Ingredient> ingredientArrayList) {
+  /**
+   * Returns a list of ingredients sorted by expiration date.
+   *
+   * @param ingredientArrayList The list of ingredients to sort.
+   * @return A sorted list of ingredients.
+   */
+  private List<Ingredient> getSorteIngredientsByExpirationsDate(
+      List<Ingredient> ingredientArrayList) {
     return ingredientArrayList.stream()
-        .filter(ingredient -> ingredient.getExpirationDate() != null) //Avoid nullpointer when using comparator
+        .filter(ingredient ->
+            ingredient.getExpirationDate() != null) //Avoid nullpointer when using comparator
         .sorted(Comparator.comparing(Ingredient::getExpirationDate))
         .collect(Collectors.toList());
   }
   
   /**
-   * prints out all expired Ingredients plus how much it costs
+   * Retrieves all expired ingredients from the storage.
    *
-   * @return
+   * @return A list of expired ingredients.
    */
   public List<Ingredient> getExpiredIngredients() {
     return ingredients.values().stream()
@@ -164,34 +171,35 @@ public class FoodStorage {
   }
   
   /**
-   * Calculates the total value of Ingredients provided in the stream.
+   * Calculates the total value of a stream of ingredients.
    *
-   * @param ingredientsStream Stream of Ingredients to calculate the total value for.
-   * @return Total value of the Ingredients.
+   * @param ingredientsStream A stream of ingredients to calculate.
+   * @return The total value of the ingredients.
+   * @throws IllegalArgumentException if the ingredientsStream is null.
    */
   public double calculateTotalValue(Stream<Ingredient> ingredientsStream) {
     if (ingredientsStream == null) {
       throw new IllegalArgumentException("Ingredients stream cannot be null");
     }
     return ingredientsStream
-        //.mapToDouble(Ingredient -> Ingredient.getQuantity() * Ingredient.getPerUnitPrice()) // Uncomment if quantity is relevant
         .mapToDouble(Ingredient::getPrice)
         .sum();
   }
   
   /**
-   * Method that checks if Ingredients hashmap is empty.
+   * Checks if the storage is empty.
    *
-   * @return Ingredients.isEmpty a bolean (true/false) value after checking if Ingredients is empty
+   * @return true if the storage is empty, false otherwise.
    */
   public boolean isEmpty() {
     return ingredients.isEmpty();
   }
   
   /**
-   * Using streams to find every Ingredient with a expirationdate before input date-
+   * Retrieves ingredients expiring before a specific date.
    *
-   * @param date Ingredients date
+   * @param date The date to check against.
+   * @return A list of ingredients expiring before the given date.
    */
   public List<Ingredient> getIngredientsExpiringBefore(LocalDate date) {
     return ingredients.values().stream()
@@ -201,6 +209,12 @@ public class FoodStorage {
         .collect(Collectors.toList());
   }
   
+  /**
+   * Retrieves ingredients expiring after a specific date.
+   *
+   * @param date The date to check against.
+   * @return A list of ingredients expiring before the given date.
+   */
   public List<Ingredient> getIngredientsExpiringAfter(LocalDate date) {
     return ingredients.values().stream()
         .flatMap(List::stream)
@@ -210,17 +224,19 @@ public class FoodStorage {
   }
   
   /**
-   * Method that sorts out the Ingredients map alphabetically by name using streams sorted method
+   * Displays the storage ingredients sorted alphabetically by their name.
+   * Outputs ingredient details including their quantity.
    */
   public void getFoodStorageAlphabetically() {
     ingredients.keySet().stream()
-        .sorted(String.CASE_INSENSITIVE_ORDER) //sort key alphabetically case in-sensitive
+        .sorted(String.CASE_INSENSITIVE_ORDER)
         .forEach(key -> {
           double quantity = ingredients.get(key).stream()
               .mapToDouble(Ingredient::getQuantity)
               .sum();
           if (ingredients.get(key).size() > 1) {
-            System.out.println(ingredients.get(key).getFirst().getName() + " (Quantity: " + quantity + "):");
+            System.out.println(ingredients.get(key).getFirst().getName()
+                + " (Quantity: " + quantity + "):");
             ingredients.get(key).forEach(ingredient -> System.out.println("- " + ingredient));
           } else {
             System.out.println(ingredients.get(key).getFirst());
@@ -228,15 +244,29 @@ public class FoodStorage {
         });
   }
   
-  public boolean hasEnoughIngredientsForRecipe(FoodStorage foodStorage, Recipe recipe) {
+  /**
+   * Checks if there are sufficient
+   * ingredients in the storage to make the given recipe.
+   *
+   * @param foodStorage The FoodStorage instance to check against.
+   * @param recipe      The Recipe to evaluate.
+   * @return true if all required ingredients are
+   *        available in sufficient quantities; otherwise false.
+   */
+  public boolean hasEnoughIngredientsForRecipe(
+      FoodStorage foodStorage, Recipe recipe) {
     return recipe.getIngredientsList().stream()
         .allMatch(recipeIngredient -> {
-          double totalAvailable = foodStorage.getIngredients().values().stream()
+          double totalAvailable
+              = foodStorage.getIngredients().values().stream()
               .flatMap(List::stream)
-              .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
+              .filter(storageIngredient ->
+                  storageIngredient.getName().equals(recipeIngredient.getName()))
               .mapToDouble(storageIngredient -> {
                 if (!storageIngredient.getUnit().equals(recipeIngredient.getUnit())) {
-                  return storageIngredient.getUnit().convertValue(storageIngredient.getQuantity(), recipeIngredient.getUnit());
+                  return storageIngredient.getUnit()
+                      .convertValue(storageIngredient.getQuantity(),
+                          recipeIngredient.getUnit());
                 }
                 return storageIngredient.getQuantity();
               })
@@ -245,12 +275,22 @@ public class FoodStorage {
         });
   }
   
-  public Map<String, Double> getIngredientAvailabilityForRecipe(FoodStorage foodStorage, Recipe recipe) {
+  /**
+   * Checks the availability of ingredients required for making the given recipe.
+   *
+   * @param foodStorage The FoodStorage instance to check against.
+   * @param recipe      The Recipe to evaluate.
+   * @return A map containing the ingredient names as
+   *      keys and their total available quantities as values.
+   */
+  public Map<String, Double> getIngredientAvailabilityForRecipe(
+      FoodStorage foodStorage, Recipe recipe) {
     Map<String, Double> availability = new HashMap<>();
     recipe.getIngredientsList().forEach(recipeIngredient -> {
       double totalAvailable = foodStorage.getIngredients().values().stream()
           .flatMap(List::stream)
-          .filter(storageIngredient -> storageIngredient.getName().equals(recipeIngredient.getName()))
+          .filter(storageIngredient ->
+              storageIngredient.getName().equals(recipeIngredient.getName()))
           .mapToDouble(Ingredient::getQuantity)
           .sum();
       availability.put(recipeIngredient.getName(), totalAvailable);
@@ -259,19 +299,17 @@ public class FoodStorage {
   }
   
   /**
-   * returns every Ingredients in Ingredients map, food storage.
+   * Retrieves a list of all ingredients in the storage, formatted as a string.
    *
-   * @return toString
+   * @return A formatted string representation of all ingredients in the storage.
    */
   @Override
   public String toString() {
-    StringBuilder stringBuilder = new StringBuilder(); //Saves all
+    StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("Ingredients in storage:\n");
-    
     for (Map.Entry<String, ArrayList<Ingredient>> entry : ingredients.entrySet()) {
-      //stringBuilder.append(entry.getKey()).append(":\n").append(entry.getValue().toString()).append("\n");
-      
-      entry.getValue().forEach(ingredient -> stringBuilder.append("  - ").append(ingredient).append("\n"));
+      entry.getValue().forEach(ingredient ->
+          stringBuilder.append("  - ").append(ingredient).append("\n"));
     }
     return stringBuilder.toString();
   }

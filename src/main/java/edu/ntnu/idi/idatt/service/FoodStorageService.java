@@ -2,29 +2,62 @@ package edu.ntnu.idi.idatt.service;
 
 import edu.ntnu.idi.idatt.Utils.UserInputHandler;
 import edu.ntnu.idi.idatt.model.Ingredient;
-import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
 
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * <h1>FoodStorageService.</h1>
+ * Service class to handle interactions the between the user interface and food storage.
+ *
+ * <p>This service class provides functionality to manage the food storage.
+ * It handles these operations: adding, searching, removing ingredients, and displaying
+ * food storage information such as expired ingredients and total storage value.
+ * </p>
+ *
+ * @author TriLe
+ */
 public class FoodStorageService {
-  private FoodStorage foodStorage;
-  private UserInputHandler inputHandler;
+  private final FoodStorage foodStorage;
+  private final UserInputHandler inputHandler;
   
+  /**
+   * Constructs a FoodStorageService with the specified food storage and input handler.
+   *
+   * @param foodStorage  the food storage to manage
+   * @param inputHandler the input handler for user input validation
+   */
   public FoodStorageService(FoodStorage foodStorage, UserInputHandler inputHandler) {
     this.foodStorage = foodStorage;
     this.inputHandler = inputHandler;
   }
   
+  /**
+   * Adds a new ingredient to the food storage.
+   *
+   * <p>Validates user inputs for ingredient details and updates the storage accordingly.
+   * </p>
+   *
+   * @throws IllegalArgumentException if any user input is invalid
+   */
   public void handleAddIngredient() {
     try {
-      final String name = inputHandler.getValidatedString("Enter ingredient name:", "Ingredient name cannot be empty/blank", "name");
-      double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
-      final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-      final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format (yyyy-mm-dd):", "Please enter a date in the format yyyy-mm-dd");
-      final double pricePerUnit = inputHandler.getValidatedDouble("Enter the price of the amount of the ingredient added:", "Invalid input for price", "price");
+      final String name = inputHandler.getValidatedString(
+          "Enter ingredient name:",
+          "Ingredient name cannot be empty/blank", "name");
+      double quantity = inputHandler.getValidatedDouble(
+          "Enter quantity:",
+          "Invalid input for quantity", "quantity");
+      final Unit unit = inputHandler.getValidatedUnit(
+          "Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
+      final LocalDate expirationDate = inputHandler.getValidatedDate(
+          "Enter a date in the format (yyyy-mm-dd):",
+          "Please enter a date in the format yyyy-mm-dd");
+      final double pricePerUnit = inputHandler.getValidatedDouble(
+          "Enter the price of the amount of the ingredient added:",
+          "Invalid input for price", "price");
       
       Ingredient ingredient = new Ingredient(name, quantity, unit, expirationDate, pricePerUnit);
       foodStorage.addIngredientToFoodStorage(ingredient);
@@ -36,15 +69,23 @@ public class FoodStorageService {
     }
   }
   
+  /**
+   * Searches for an ingredient in the food storage by name.
+   *
+   * @throws IllegalArgumentException if the food storage is not initialized or the name is invalid
+   */
   public void handleSearchIngredient() {
     try {
-      String name = inputHandler.getValidatedString("Enter name of the ingredient:", "Ingredient name cannot be empty/blank", "name").trim();
+      String name = inputHandler.getValidatedString(
+          "Enter name of the ingredient:",
+          "Ingredient name cannot be empty/blank", "name").trim();
       
       if (foodStorage == null) {
         throw new IllegalArgumentException("Food storage is not initialized.");
       }
       
-      List<Ingredient> searchStatus = foodStorage.searchForIngredientsInFoodStorage(name.toLowerCase());
+      List<Ingredient> searchStatus
+          = foodStorage.searchForIngredientsInFoodStorage(name.toLowerCase());
       if (searchStatus != null && !searchStatus.isEmpty()) {
         System.out.println("Ingredient found: ");
         searchStatus.forEach(ingredient -> System.out.println(" - " + ingredient));
@@ -55,6 +96,12 @@ public class FoodStorageService {
       System.out.println("Invalid input: " + e.getMessage());
     }
   }
+  
+  /**
+   * Removes a specified quantity of an ingredient from the food storage.
+   *
+   * @throws IllegalArgumentException if the ingredient does not exist or the quantity is invalid
+   */
   
   public void handleRemoveIngredient() {
     try {
@@ -79,16 +126,21 @@ public class FoodStorageService {
       
       double removedQuantity = foodStorage.removeIngredientFromFoodStorage(name, quantity);
       
-      System.out.println("Removed " + removedQuantity + matchingIngredients.getFirst().getUnit().getSymbol() + " from " + matchingIngredients.getFirst().getName());
+      System.out.println(
+          "Removed " + removedQuantity + matchingIngredients.getFirst().getUnit().getSymbol()
+              + " from " + matchingIngredients.getFirst().getName());
       
     } catch (IllegalArgumentException e) {
       System.out.println("Error: " + e.getMessage());
     }
   }
   
+  /**
+   * Displays all expired ingredients in the food storage along with their total value.
+   *
+   * @throws IllegalArgumentException if there is an error while fetching expired ingredients
+   */
   public void handleDisplayExpiredIngredients() {
-    /*getExpiredIngredients method are being called from the foodStorage class
-    And the result is being assigned to the expiredIngredients variable*/
     try {
       List<Ingredient> expiredIngredients = foodStorage.getExpiredIngredients();
       
@@ -101,22 +153,28 @@ public class FoodStorageService {
       double totalValue = foodStorage.calculateTotalValue(expiredIngredients.stream());
       
       System.out.println("Expired ingredients:");
-      expiredIngredients.forEach(Ingredient -> System.out.println("- " + Ingredient));
-      System.out.printf("Total value of expired ingredients: %.2f kr%n", totalValue); //2 desimaler
+      expiredIngredients.forEach(ingredient -> System.out.println("- " + ingredient));
+      System.out.printf("Total value of expired ingredients: %.2f kr%n", totalValue);
       System.out.println("Try to conserve more food please!");
     } catch (IllegalArgumentException e) {
       System.out.println("Error while trying to display expired Ingredients: " + e.getMessage());
     }
   }
   
+  /**
+   * Displays the total value of all ingredients in the food storage.
+   *
+   * @throws IllegalArgumentException if there is an error while calculating the total value
+   */
   public void handleTotalValue() {
     try {
       if (foodStorage == null || foodStorage.isEmpty()) {
         System.out.println("Food storage is empty");
         return;
       }
-      double totalValue = foodStorage.calculateTotalValue(foodStorage.getIngredients().values().stream()
-          .flatMap(List::stream));
+      double totalValue = foodStorage
+          .calculateTotalValue(foodStorage.getIngredients().values().stream()
+              .flatMap(List::stream));
       
       System.out.println("The total value of the food storage is: " + totalValue + " kr");
     } catch (IllegalArgumentException e) {
@@ -124,16 +182,22 @@ public class FoodStorageService {
     }
   }
   
+  /**
+   * Displays all ingredients expiring before a specified date.
+   *
+   * @throws IllegalArgumentException if there is an error while fetching the ingredients
+   */
   public void handleViewIngredientsBeforeDate() {
-    LocalDate date = inputHandler.getValidatedDate("Enter a date (yyyy-mm-dd) to view Ingredients expiring before it: ", "Please enter a date in the format yyyy-mm-dd");
+    LocalDate date = inputHandler.getValidatedDate(
+        "Enter a date (yyyy-mm-dd) to view Ingredients expiring before it: ",
+        "Please enter a date in the format yyyy-mm-dd");
     try {
-      List<Ingredient> IngredientsBeforeDate = foodStorage.getIngredientsExpiringBefore(date);
-      if (IngredientsBeforeDate == null || IngredientsBeforeDate.isEmpty()) {
+      List<Ingredient> ingredientsBeforeDate = foodStorage.getIngredientsExpiringBefore(date);
+      if (ingredientsBeforeDate == null || ingredientsBeforeDate.isEmpty()) {
         System.out.println("No Ingredients expire before: " + date);
       } else {
         System.out.println("----Ingredients expiring before date: " + date + "----");
-        //IngredientsBeforeDate.forEach(System.out::println);
-        IngredientsBeforeDate.forEach(Ingredient -> System.out.println("- " + Ingredient));
+        ingredientsBeforeDate.forEach(ingredient -> System.out.println("- " + ingredient));
         
       }
     } catch (IllegalArgumentException e) {
@@ -141,13 +205,20 @@ public class FoodStorageService {
     }
   }
   
+  /**
+   * Displays the food storage sorted alphabetically by ingredient names.
+   *
+   * @throws IllegalArgumentException if there is an error while sorting or displaying the storage
+   */
   public void handleDisplayFoodStorageAlphabetically() {
     System.out.println("----Food storage sorted out alphabetically by name----");
     if (foodStorage == null || foodStorage.isEmpty()) {
       System.out.println("Food storage is empty. These is not Ingredients in food storage.");
     }
     try {
-      foodStorage.getFoodStorageAlphabetically();
+      if (foodStorage != null) {
+        foodStorage.getFoodStorageAlphabetically();
+      }
     } catch (IllegalArgumentException e) {
       System.out.println("Error while displaying the food storage from a-z: " + e.getMessage());
     }
