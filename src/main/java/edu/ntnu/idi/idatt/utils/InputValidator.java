@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.utils;
 
 import edu.ntnu.idi.idatt.model.Unit;
+
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -45,7 +46,7 @@ public class InputValidator {
    * @throws IllegalArgumentException if the number is null or less than zero.
    */
   public static void validateDouble(Double number, String fieldName) {
-    if (number == null || number < 0) {
+    if (number == null || number < 0 || Double.isNaN(number)) {
       throw new IllegalArgumentException(fieldName
           + " cannot be negative/or another type than double");
     }
