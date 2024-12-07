@@ -23,7 +23,7 @@ public class FoodStorageService {
       final String name = inputHandler.getValidatedString("Enter ingredient name:", "Ingredient name cannot be empty/blank", "name");
       double quantity = inputHandler.getValidatedDouble("Enter quantity:", "Invalid input for quantity", "quantity");
       final Unit unit = inputHandler.getValidatedUnit("Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-      final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format (ddMMyyyy):", "Please enter a date in the format ddMMyyyy");
+      final LocalDate expirationDate = inputHandler.getValidatedDate("Enter a date in the format (yyyy-mm-dd):", "Please enter a date in the format yyyy-mm-dd");
       final double pricePerUnit = inputHandler.getValidatedDouble("Enter the price of the amount of the ingredient added:", "Invalid input for price", "price");
       
       Ingredient ingredient = new Ingredient(name, quantity, unit, expirationDate, pricePerUnit);
@@ -125,13 +125,13 @@ public class FoodStorageService {
   }
   
   public void handleViewIngredientsBeforeDate() {
-    LocalDate date = inputHandler.getValidatedDate("Enter a date (ddMMyyyy) to view Ingredients expiring before it: ", "Please enter a date in the format yyyy-mm-dd");
+    LocalDate date = inputHandler.getValidatedDate("Enter a date (yyyy-mm-dd) to view Ingredients expiring before it: ", "Please enter a date in the format yyyy-mm-dd");
     try {
       List<Ingredient> IngredientsBeforeDate = foodStorage.getIngredientsExpiringBefore(date);
       if (IngredientsBeforeDate == null || IngredientsBeforeDate.isEmpty()) {
         System.out.println("No Ingredients expire before: " + date);
       } else {
-        System.out.println("----Ingredients expiring before date: " + date + " ----");
+        System.out.println("----Ingredients expiring before date: " + date + "----");
         //IngredientsBeforeDate.forEach(System.out::println);
         IngredientsBeforeDate.forEach(Ingredient -> System.out.println("- " + Ingredient));
         

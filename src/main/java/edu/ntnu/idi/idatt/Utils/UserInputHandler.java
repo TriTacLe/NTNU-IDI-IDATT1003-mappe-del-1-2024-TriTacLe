@@ -3,7 +3,6 @@ package edu.ntnu.idi.idatt.Utils;
 import edu.ntnu.idi.idatt.model.Unit;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -69,14 +68,12 @@ public class UserInputHandler {
   public LocalDate getValidatedDate(String request, String errorMessage) {
     while (true) {
       System.out.println(request);
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy"); //dayMonthYear
       try {
-        String userInput = scanner.next();
-        LocalDate localDate = LocalDate.parse(userInput, formatter);
+        LocalDate localDate = LocalDate.parse(scanner.next());
         InputValidation.validateDateInThePast(localDate, false);
         return localDate;
       } catch (DateTimeParseException e) {
-        System.out.println(errorMessage + ": Invalid date format. Please enter in dddMMyyyy format.");
+        System.out.println(errorMessage + ": Invalid date format. Please enter in yyyy-mm-dd format.");
       } catch (IllegalArgumentException e) {
         System.out.println(errorMessage + ": " + e.getMessage());
       }
