@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.Utils.InputValidation;
+import edu.ntnu.idi.idatt.utils.InputValidation;
 
 import java.util.Arrays;
 
@@ -24,15 +24,6 @@ public enum Unit {
   private final InputValidation inputValidation = new InputValidation();
   
   /**
-   * Defines types of units used for categorizing measurement units.
-   */
-  public enum UnitType {
-    MASS,
-    VOLUME,
-    NUMBER
-  }
-  
-  /**
    * Constructor to initialize a unit with its attributes.
    *
    * @param symbol           the symbol representing the unit (e.g., "kg", "g").
@@ -46,6 +37,20 @@ public enum Unit {
   }
   
   /**
+   * Finds the corresponding unit based on a symbol.
+   *
+   * @param input the symbol representing the unit (case-insensitive).
+   * @return the matching {@code Unit} enumeration.
+   * @throws IllegalArgumentException if no matching unit is found.
+   */
+  public static Unit fromSymbol(String input) {
+    return Arrays.stream(Unit.values())
+        .filter(unit -> unit.symbol.equalsIgnoreCase(input))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Invalid unit: " + input));
+  }
+  
+  /**
    * Gets the symbol of the unit.
    *
    * @return the symbol representing the unit.
@@ -56,6 +61,9 @@ public enum Unit {
   
   /**
    * Gets the conversion factor of the unit relative to its base type.
+   *
+   * <p>This method is currently unused but may be useful for future extensions
+   * or for accessing the conversion factor.</p>
    *
    * @return the conversion factor of the unit.
    */
@@ -81,17 +89,12 @@ public enum Unit {
   }
   
   /**
-   * Finds the corresponding unit based on a symbol.
-   *
-   * @param input the symbol representing the unit (case-insensitive).
-   * @return the matching {@code Unit} enumeration.
-   * @throws IllegalArgumentException if no matching unit is found.
+   * Defines types of units used for categorizing measurement units.
    */
-  public static Unit fromSymbol(String input) {
-    return Arrays.stream(Unit.values())
-        .filter(unit -> unit.symbol.equalsIgnoreCase(input))
-        .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Invalid unit: " + input));
+  public enum UnitType {
+    MASS,
+    VOLUME,
+    NUMBER
   }
   
 }

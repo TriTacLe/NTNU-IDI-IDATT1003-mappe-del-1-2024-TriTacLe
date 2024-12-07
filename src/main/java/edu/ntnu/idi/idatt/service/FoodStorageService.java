@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.service;
 
-import edu.ntnu.idi.idatt.Utils.UserInputHandler;
+import edu.ntnu.idi.idatt.utils.UserInputHandler;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.FoodStorage;

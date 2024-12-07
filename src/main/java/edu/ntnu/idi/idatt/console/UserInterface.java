@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.console;
 
-import edu.ntnu.idi.idatt.Utils.UserInputHandler;
+import edu.ntnu.idi.idatt.utils.UserInputHandler;
 import edu.ntnu.idi.idatt.data.DummyData;
 import edu.ntnu.idi.idatt.service.CookbookService;
 import edu.ntnu.idi.idatt.service.FoodStorageService;

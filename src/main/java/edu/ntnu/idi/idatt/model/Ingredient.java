@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.Utils.InputValidation;
+import edu.ntnu.idi.idatt.utils.InputValidation;
 
 import java.time.LocalDate;
 
@@ -17,11 +17,11 @@ import java.time.LocalDate;
 public class Ingredient {
   // Attributter
   private final String name;
-  private double quantity;
   private final Unit unit;
-  private LocalDate expirationDate;
   private final double price;
   private final InputValidation inputValidation = new InputValidation();
+  private double quantity;
+  private LocalDate expirationDate;
   
   /**
    * Initialize an Ingredient instance with the specified attributes and performs validation.
@@ -91,12 +91,34 @@ public class Ingredient {
   }
   
   /**
+   * Sets the quantity of the ingredient.
+   *
+   * @param quantity the new quantity of the ingredient
+   * @throws IllegalArgumentException if the quantity is invalid
+   */
+  public void setQuantity(double quantity) {
+    InputValidation.validateDouble(quantity, "quantity");
+    this.quantity = quantity;
+  }
+  
+  /**
    * Retrieves the expiration date of the ingredient.
    *
    * @return the expiration date of the ingredient or{@code null} if not set
    */
   public LocalDate getExpirationDate() {
     return expirationDate;
+  }
+  
+  /**
+   * Sets the expiration date of the ingredient.
+   *
+   * @param expirationDate the new expiration date
+   * @throws IllegalArgumentException if the expiration date is invalid
+   */
+  private void setExpirationDate(LocalDate expirationDate) {
+    InputValidation.validateDate(expirationDate, false);
+    this.expirationDate = expirationDate;
   }
   
   /**
@@ -126,28 +148,6 @@ public class Ingredient {
   public void updateQuantity(double quantity) {
     inputValidation.validateDouble(quantity, "Quantity");
     this.quantity += quantity;
-  }
-  
-  /**
-   * Sets the quantity of the ingredient.
-   *
-   * @param quantity the new quantity of the ingredient
-   * @throws IllegalArgumentException if the quantity is invalid
-   */
-  public void setQuantity(double quantity) {
-    InputValidation.validateDouble(quantity, "quantity");
-    this.quantity = quantity;
-  }
-  
-  /**
-   * Sets the expiration date of the ingredient.
-   *
-   * @param expirationDate the new expiration date
-   * @throws IllegalArgumentException if the expiration date is invalid
-   */
-  private void setExpirationDate(LocalDate expirationDate) {
-    InputValidation.validateDate(expirationDate, false);
-    this.expirationDate = expirationDate;
   }
   
   /**
