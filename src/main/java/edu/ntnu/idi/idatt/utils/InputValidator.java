@@ -59,11 +59,12 @@ public class InputValidator {
    * @param number    The number to validate.
    * @param fieldName The name of the field being validated, used for error messages.
    * @throws IllegalArgumentException if the number is null or less than zero.
-   *                                  Or if the field is quantity (quantity cannot be 0)
+   *                                  Or if field quantity is 0 (quantity cannot be 0)
    *                                  Though price can (free food exists).
+   *                                  Or if field portions is 0 (Recipe cannot be made for 0 people)
    */
   public static void validateDouble(Double number, String fieldName) {
-    if (fieldName == "Quantity") {
+    if (fieldName == "Quantity" || fieldName == "Portions") {
       if (number == null || number <= 0 || Double.isNaN(number)) {
         throw new IllegalArgumentException(fieldName + " cannot be negative or NaN");
       }

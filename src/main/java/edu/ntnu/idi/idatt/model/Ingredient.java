@@ -15,7 +15,6 @@ import java.time.LocalDate;
  * @version 1.2.1
  */
 public class Ingredient {
-  // Attributter
   private final String name;
   private final Unit unit;
   private final double price;
@@ -152,9 +151,8 @@ public class Ingredient {
   public String toString() {
     // TODO Auto-generated method stub
     String expirationDateOutput = (expirationDate != null) ? " Expires: " + expirationDate : "";
-    //String formattedPrice = String.format("%.2f", price);
     
     return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput
-        + " Price: " + price + " kr"; // + ". Todays date: " + LocalDate.now();
+        + " Price: " + price + " kr";
   }
 }

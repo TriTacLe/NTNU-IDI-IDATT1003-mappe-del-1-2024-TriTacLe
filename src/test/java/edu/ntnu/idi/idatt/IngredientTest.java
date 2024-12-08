@@ -1,5 +1,9 @@
 package edu.ntnu.idi.idatt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 
@@ -12,30 +16,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-
 
 @DisplayName("Tests for Ingredient Class")
 class IngredientTest {
   
+  private Ingredient ingredient;
+  
   @BeforeEach
   public void setUp() {
-    Ingredient ingredient = new Ingredient("Protein Bar", 2.0, Unit.KILOGRAM, LocalDate.now().plusDays(5), 10.0);
+    Ingredient ingredient = new Ingredient(
+        "Protein Bar", 2.0,
+        Unit.KILOGRAM, LocalDate.now().plusDays(5), 10.0);
   }
   
   @Nested
   @DisplayName("Positive tests")
   class PositiveTests {
     
-    final Ingredient ingredient = new Ingredient("Protein Bar", 2.0, Unit.KILOGRAM, LocalDate.now().plusDays(5), 10.0);
-    
     @Test
     @DisplayName("Should create Ingredient with valid attributes")
     void shouldCreateIngredientWithValidAttributes() {
       try {
-        Ingredient ingredient = new Ingredient("Protein Bar", 2.5, Unit.PIECES, LocalDate.now().plusDays(10), 3.5);
         assertNotNull(ingredient);
         assertEquals("Protein Bar", ingredient.getName());
         assertEquals(2.5, ingredient.getQuantity());
@@ -51,7 +52,6 @@ class IngredientTest {
     @DisplayName("Should allow creation without expiration date")
     void shouldCreateIngredientWithoutExpirationDate() {
       try {
-        Ingredient ingredient = new Ingredient("Protein Bar", 2.5, Unit.PIECES, LocalDate.now().plusDays(10), 3.5);
         assertNotNull(ingredient);
         assertEquals("Protein Bar", ingredient.getName());
         assertEquals(2.5, ingredient.getQuantity());
@@ -93,7 +93,9 @@ class IngredientTest {
     @Test
     @DisplayName("toString should return formatted string")
     void shouldReturnFormattedToString() {
-      String expectedString = "Protein Bar (2.0 kg) Expires: " + LocalDate.now().plusDays(5) + " Price: 10.0 kr";
+      String expectedString = ""
+          + "Protein Bar (2.0 kg) Expires: "
+          + LocalDate.now().plusDays(5) + " Price: 10.0 kr";
       assertEquals(expectedString, ingredient.toString());
     }
   }
@@ -101,8 +103,6 @@ class IngredientTest {
   @Nested
   @DisplayName("Negative tests")
   class NegativeTests {
-    
-    final Ingredient ingredient = new Ingredient("Protein Bar", 2.0, Unit.KILOGRAM, LocalDate.now().plusDays(5), 10.0);
     
     @ParameterizedTest
     @ValueSource(strings = {"", "   ", "\t", "\n"})
@@ -121,7 +121,9 @@ class IngredientTest {
     @DisplayName("Should throw exception for negative price")
     void shouldThrowExceptionForNegativePrice(double invalidPrice) {
       try {
-        new Ingredient("Protein Bar", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), invalidPrice);
+        new Ingredient(
+            "Protein Bar", 2.5, Unit.KILOGRAM,
+            LocalDate.now().plusDays(10), invalidPrice);
         fail("Expected IllegalArgumentException for invalid price: " + invalidPrice);
       } catch (IllegalArgumentException e) {
         assertEquals("Price cannot be negative or NaN", e.getMessage());
@@ -133,7 +135,7 @@ class IngredientTest {
     @DisplayName("Should throw exception for invalid quantities")
     void shouldThrowExceptionForNegativeQuantity(double invalidQuantity) {
       try {
-        new Ingredient("Protein Bar", invalidQuantity, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
+        ingredient.setQuantity(invalidQuantity);
         fail("Expected IllegalArgumentException for invalid quantity: " + invalidQuantity);
       } catch (IllegalArgumentException e) {
         assertEquals("Quantity cannot be negative or NaN", e.getMessage());

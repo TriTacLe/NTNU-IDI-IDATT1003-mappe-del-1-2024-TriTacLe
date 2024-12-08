@@ -1,116 +1,149 @@
 package edu.ntnu.idi.idatt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 import edu.ntnu.idi.idatt.model.Unit;
-import edu.ntnu.idi.idatt.storage.FoodStorage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@DisplayName("Tests for Recipe Class")
 class RecipeTest {
   
-  private static final double ITEM1_INITIAL_QUANTITY = 20;
-  private static final double ITEM2_INITIAL_QUANTITY = 30;
-  private static final double ITEM3_INITIAL_QUANTITY = 40;
-  private static final double ITEM4_INITIAL_QUANTITY = 20;
-  private static final double ITEM1_ADDITIONAL_QUANTITY = 20;
   private Recipe recipe;
   private Ingredient ingredient1;
   private Ingredient ingredient2;
   private Ingredient ingredient3;
-  private Ingredient ingredient4;
-  private FoodStorage foodStorage;
   
   @BeforeEach
   void setUp() {
-    //ingredients
-    ingredient1 = new Ingredient("Apple", 20, Unit.PIECES, LocalDate.of(2000, 12, 15), ITEM1_INITIAL_QUANTITY);
-    ingredient2 = new Ingredient("Milk", 100, Unit.DESILITRE, LocalDate.of(2024, 12, 15), ITEM2_INITIAL_QUANTITY);
-    ingredient3 = new Ingredient("Sugar", 3000, Unit.GRAM, LocalDate.of(2025, 12, 24), ITEM3_INITIAL_QUANTITY);
-    ingredient4 = new Ingredient("Orange", 5, Unit.PIECES, LocalDate.of(1900, 12, 15), ITEM4_INITIAL_QUANTITY);
-    //recipe
-    recipe = new Recipe("Cake", "Delicious chocolate cake", "Mix all ingredients and bake", 4);
-    //foodstorage
-    foodStorage = new FoodStorage();
-    foodStorage.addIngredientToFoodStorage(ingredient1);
-    foodStorage.addIngredientToFoodStorage(ingredient2);
+    recipe = new Recipe("Pancakes", "Simple pancake recipe", "Mix and cook", 4);
+    ingredient1 = new Ingredient("Flour", 200, Unit.GRAM, 5.0);
+    ingredient2 = new Ingredient("Milk", 1, Unit.LITRE, 15.0);
+    ingredient3 = new Ingredient("Egg", 6, Unit.PIECES, 2.0);
   }
   
-  @Test
-  void testCreateRecipe() {
-    assertNotNull(recipe, "Recipe should be created.");
-    assertEquals("Cake", recipe.getName(), "Name should be 'Cake'");
-    assertEquals("Delicious chocolate cake", recipe.getDescription(), "Description should be 'Delicious chocolate cake'");
-    assertEquals("Mix all ingredients and bake", recipe.getProcedure(), "Procedure should match");
-    assertEquals(4, recipe.getPortions(), "Recipe serves should be 4");
+  @Nested
+  @DisplayName("Positive Tests")
+  class PositiveTests {
+    
+    @Test
+    @DisplayName("Should create Recipe with valid attributes")
+    void shouldCreateRecipeWithValidAttributes() {
+      try {
+        assertNotNull(recipe);
+        assertEquals("Pancakes", recipe.getName());
+        assertEquals("Simple pancake recipe", recipe.getDescription());
+        assertEquals("Mix and cook", recipe.getProcedure());
+        assertEquals(4, recipe.getPortions());
+      } catch (IllegalArgumentException e) {
+        fail("Exception should not have been thrown for valid input: " + e.getMessage());
+      }
+    }
+    
+    @Test
+    @DisplayName("Should add ingredient to recipe")
+    void shouldAddIngredientToRecipe() {
+      try {
+        recipe.addIngredientToRecipe(ingredient1);
+        assertTrue(recipe.getIngredientsList().contains(ingredient1));
+      } catch (IllegalArgumentException e) {
+        fail("Exception should not have been thrown for adding a ingredient to the recipe: "
+            + e.getMessage());
+      }
+    }
+    
+    @Test
+    @DisplayName("Should update quantity if ingredient already exists")
+    void shouldUpdateQuantityForExistingIngredient() {
+      try {
+        recipe.addIngredientToRecipe(ingredient1);
+        Ingredient duplicate = new Ingredient("Flour", 100, Unit.GRAM, 5.0);
+        recipe.addIngredientToRecipe(duplicate);
+        assertEquals(300, ingredient1.getQuantity());
+      } catch (IllegalArgumentException e) {
+        fail("Exception should not have been thrown for adding a ingredient if it already exists: "
+            + e.getMessage());
+      }
+    }
+    
+    
+    @Test
+    @DisplayName("toString should return formatted recipe details")
+    void shouldReturnFormattedToString() {
+      recipe.addIngredientToRecipe(ingredient1);
+      recipe.addIngredientToRecipe(ingredient2);
+      
+      String expected = "Name: Pancakes\n"
+          + "Description: Simple pancake recipe\n"
+          + "Procedure: Mix and cook\n"
+          + "Ingredients: \n"
+          + " - Flour (200.0 g)" + " Price: 5.0 kr\n"
+          + " - Milk (1.0 L)" + " Price: 15.0 kr\n";
+      
+      assertEquals(expected, recipe.toString());
+    }
   }
   
-  @Test
-  void testAddIngredientToRecipe() {
-    // Add ingredient1 to the recipe
-    recipe.addIngredientToRecipe(ingredient1);
-    assertTrue(recipe.getIngredientsList().contains(ingredient1), "Ingredient1 should be added to the recipe.");
+  @Nested
+  @DisplayName("Negative Tests")
+  class NegativeTests {
     
-    // Add ingredient3 (Sugar) to the recipe
-    recipe.addIngredientToRecipe(ingredient3);
-    assertTrue(recipe.getIngredientsList().contains(ingredient3), "Ingredient3 (Sugar) should be added to the recipe.");
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    @DisplayName("Should throw exception for invalid name")
+    void shouldThrowExceptionForInvalidName(String invalidName) {
+      try {
+        new Recipe(invalidName, "Description", "Procedure", 4);
+        fail("Expected IllegalArgumentException for empty name");
+      } catch (IllegalArgumentException e) {
+        assertEquals("Name cannot be empty or blank", e.getMessage());
+      }
+    }
     
-    // Add a new ingredient to the recipe (ingredient4)
-    recipe.addIngredientToRecipe(ingredient4);
-    assertTrue(recipe.getIngredientsList().contains(ingredient4), "Ingredient4 (Orange) should be added to the recipe.");
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    @DisplayName("Should throw exception for invalid description")
+    void shouldThrowExceptionForInvalidDescription(String invalidDescription) {
+      try {
+        new Recipe("Recipe", invalidDescription, "Procedure", 4);
+        fail("Expected IllegalArgumentException for empty description");
+      } catch (IllegalArgumentException e) {
+        assertEquals("Description cannot be empty or blank", e.getMessage());
+      }
+    }
     
-    // Add ingredient1 again (should increase the quantity)
-    Ingredient ingredient1Duplicate = new Ingredient("Apple", 20, Unit.PIECES, LocalDate.of(2000, 12, 15), ITEM1_ADDITIONAL_QUANTITY);
-    recipe.addIngredientToRecipe(ingredient1Duplicate);
-    assertEquals(ITEM1_INITIAL_QUANTITY + ITEM1_ADDITIONAL_QUANTITY, ingredient1.getQuantity(),
-        "Quantity of Apple should be updated to the new total.");
-  }
-  
-  @Test
-  void testHasNotEnoughIngredientsForRecipe() {
-    // Simulate the case where eggs are missing
-    foodStorage.getIngredients().clear();
-    foodStorage.addIngredientToFoodStorage(new Ingredient("Eggs", 10, Unit.PIECES, LocalDate.of(2025, 12, 24), 3));
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    @DisplayName("Should throw exception for invalid procedure")
+    void shouldThrowExceptionForInvalidProcedure(String invalidProcedure) {
+      try {
+        new Recipe("Recipe", "Description", invalidProcedure, 4);
+        fail("Expected IllegalArgumentException for empty procedure");
+      } catch (IllegalArgumentException e) {
+        assertEquals("Procedure cannot be empty or blank", e.getMessage());
+      }
+    }
     
-    recipe.addIngredientToRecipe(ingredient1);  // Apple
-    recipe.addIngredientToRecipe(ingredient2);  // Milk
-    
-    // The recipe should report that there are not enough ingredients
-    foodStorage.hasEnoughIngredientsForRecipe(foodStorage, recipe);
-    // Expected output should indicate insufficient quantities for some ingredients
-  }
-  
-  @Test
-  void testInvalidConstructorArguments() {
-    assertThrows(IllegalArgumentException.class, () -> new Recipe("", "description", "procedure", 4),
-        "Constructor should throw IllegalArgumentException for an empty name.");
-    
-    assertThrows(IllegalArgumentException.class, () -> new Recipe("Recipe", "", "procedure", 4),
-        "Constructor should throw IllegalArgumentException for an empty description.");
-    
-    assertThrows(IllegalArgumentException.class, () -> new Recipe("Recipe", "description", "", 4),
-        "Constructor should throw IllegalArgumentException for an empty procedure.");
-    
-    assertThrows(IllegalArgumentException.class, () -> new Recipe("Recipe", "description", "procedure", -1),
-        "Constructor should throw IllegalArgumentException for negative recipeServes.");
-  }
-  
-  @Test
-  void testToString() {
-    recipe.addIngredientToRecipe(ingredient1);
-    recipe.addIngredientToRecipe(ingredient2);
-    
-    String expectedOutput = "Name: Cake\n" +
-        "Description: Delicious chocolate cake\n" +
-        "Procedure: Mix all ingredients and bake\n" +
-        "Ingredients: \n" +
-        " - Apple(20.0 Pieces) Expires: 2000-12-15 Price: 20.0 kr \n" +
-        " - Milk(100.0 Milliliters) Expires: 2024-12-15 Price: 30.0 kr \n";
-    
-    assertEquals(expectedOutput, recipe.toString(), "The toString method should output the correct recipe details.");
+    @ParameterizedTest
+    @ValueSource(doubles = {-3.5, -100000000.0, 0.0, Double.NaN})
+    @DisplayName("Should throw exception for negative portions")
+    void shouldThrowExceptionForNegativePortions(double invalidPortions) {
+      try {
+        new Recipe("Recipe", "Description", "Procedure", invalidPortions);
+        fail("Expected IllegalArgumentException for invalid portions: " + invalidPortions);
+      } catch (IllegalArgumentException e) {
+        assertEquals("Portions cannot be negative or NaN", e.getMessage());
+      }
+    }
   }
 }

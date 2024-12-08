@@ -34,10 +34,10 @@ public class Recipe {
    * @throws IllegalArgumentException if any input is invalid.
    */
   public Recipe(String name, String description, String procedure, double portions) {
-    inputValidator.validateString(name, "Name of the recipe cannot be blank/empty");
-    inputValidator.validateString(description, "Description cannot be blank/empty");
-    inputValidator.validateString(procedure, "Procedure cannot be blank/empty");
-    inputValidator.validateDouble(portions, "Portions cannot negative");
+    inputValidator.validateString(name, "Name");
+    inputValidator.validateString(description, "Description");
+    inputValidator.validateString(procedure, "Procedure");
+    inputValidator.validateDouble(portions, "Portions");
     
     this.name = name;
     this.description = description;
