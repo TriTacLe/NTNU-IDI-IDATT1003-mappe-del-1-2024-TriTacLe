@@ -35,18 +35,13 @@ public class Ingredient {
    */
   public Ingredient(String name, double quantity, Unit unit,
                     LocalDate expirationDate, double price) {
-    //Input validering
     inputValidator.validateString(name, "Name");
-    //inputValidator.validateDouble(quantity, "Quantity");
     inputValidator.validationEnum(unit);
     inputValidator.validateDouble(price, "Price");
-    
     setExpirationDate(expirationDate);
     setQuantity(quantity);
     this.name = name;
-    //this.quantity = quantity;
     this.unit = unit;
-    //this.expirationDate = expirationDate;
     this.price = price;
   }
   
@@ -61,13 +56,10 @@ public class Ingredient {
    */
   public Ingredient(String name, double quantity, Unit unit, double price) {
     inputValidator.validateString(name, "Name");
-    //inputValidator.validateDouble(quantity, "Quantity");
     inputValidator.validationEnum(unit);
     inputValidator.validateDouble(price, "Price");
-    
     setQuantity(quantity);
     this.name = name;
-    //this.quantity = quantity;
     this.unit = unit;
     this.price = price;
   }
@@ -163,6 +155,6 @@ public class Ingredient {
     //String formattedPrice = String.format("%.2f", price);
     
     return name + " (" + quantity + " " + unit.getSymbol() + ")" + expirationDateOutput
-        + " Price: " + price  + " kr"; // + ". Todays date: " + LocalDate.now();
+        + " Price: " + price + " kr"; // + ". Todays date: " + LocalDate.now();
   }
 }

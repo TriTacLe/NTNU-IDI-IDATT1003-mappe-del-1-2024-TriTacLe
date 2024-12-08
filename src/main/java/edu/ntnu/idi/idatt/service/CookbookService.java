@@ -77,7 +77,7 @@ public class CookbookService {
       final double portions = inputManager.getValidatedDouble(
           "Enter how many people this recipe is for",
           "Portions have to be a number and it has to be positive",
-          "portions");
+          "portions", false);
       
       Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
       try {
@@ -123,7 +123,7 @@ public class CookbookService {
     try {
       int totalIngredients = (int) inputManager.getValidatedDouble(
           "Enter how many ingredients you want this recipe to have",
-          "Total ingredients cannot be negative", "Total ingredients");
+          "Total ingredients cannot be negative", "Total ingredients", false);
       for (int i = 0; i < totalIngredients; i++) {
         System.out.println("Ingredient: " + (i + 1) + " of " + totalIngredients);
         final String name = inputManager.getValidatedString(
@@ -131,11 +131,11 @@ public class CookbookService {
             "Ingredient name cannot be empty/blank", "name");
         double quantity = inputManager.getValidatedDouble(
             "Enter quantity:",
-            "Invalid input for quantity", "quantity");
+            "Invalid input for quantity", "quantity", false);
         final Unit unit = inputManager.getValidatedUnit(
             "Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
         final double pricePerUnit = inputManager.getValidatedDouble(
-            "Enter price per unit:", "Invalid input for price", "price");
+            "Enter price per unit:", "Invalid input for price", "price", true);
         
         Ingredient ingredient = new Ingredient(name, quantity, unit, pricePerUnit);
         recipe.addIngredientToRecipe(ingredient);
@@ -156,7 +156,7 @@ public class CookbookService {
       int totalIngredients = (int) inputManager.getValidatedDouble(
           "Enter how many ingredients you want this recipe to have",
           "Total ingredients cannot be negative/other type than int or double",
-          "total ingredients");
+          "total ingredients", false);
       
       System.out.println(
           "Every ingredient that has not expired and can be used in a recipe:");

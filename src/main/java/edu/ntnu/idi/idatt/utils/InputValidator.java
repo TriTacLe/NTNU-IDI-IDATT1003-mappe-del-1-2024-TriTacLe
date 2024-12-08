@@ -39,32 +39,41 @@ public class InputValidator {
   }
   
   /**
-   * Validates that a number is non-negative.
+   * Validates that an integer is non-negative.
    *
-   * @param number    The number to validate.
+   * @param number    The integer to validate.
    * @param fieldName The name of the field being validated, used for error messages.
-   * @throws IllegalArgumentException if the number is null or less than zero.
+   * @throws IllegalArgumentException if the integer is null or less than zero,
+   *                                  or if the value is zero and the user does not confirm.
    */
-  public static void validateDouble(Double number, String fieldName) {
-    if (number == null || number < 0 || Double.isNaN(number)) {
+  public static void validateInt(Integer number, String fieldName) {
+    if (number == null || number < 0) {
       throw new IllegalArgumentException(fieldName
           + " cannot be negative/or another type than double");
     }
   }
   
   /**
-   * Validates that an integer is non-negative.
+   * Validates that a number is non-negative.
    *
-   * @param number    The integer to validate.
+   * @param number    The number to validate.
    * @param fieldName The name of the field being validated, used for error messages.
-   * @throws IllegalArgumentException if the integer is null or less than zero.
+   * @throws IllegalArgumentException if the number is null or less than zero.
+   *                                  Or if the field is quantity (quantity cannot be 0)
+   *                                  Though price can (free food exists).
    */
-  public static void validateInt(Integer number, String fieldName) {
-    if (number == null || number < 0) {
-      throw new IllegalArgumentException(fieldName
-          + " cannot be negative or another type than int");
+  public static void validateDouble(Double number, String fieldName) {
+    if (fieldName == "Quantity") {
+      if (number == null || number <= 0 || Double.isNaN(number)) {
+        throw new IllegalArgumentException(fieldName + " cannot be negative or NaN");
+      }
+    } else {
+      if (number == null || number < 0 || Double.isNaN(number)) {
+        throw new IllegalArgumentException(fieldName + " cannot be negative or NaN");
+      }
     }
   }
+  
   
   /**
    * Validates that a date is not in the past.

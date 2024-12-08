@@ -12,7 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 
 @DisplayName("Tests for Ingredient Class")
 class IngredientTest {
@@ -121,19 +124,19 @@ class IngredientTest {
         new Ingredient("Protein Bar", 2.5, Unit.KILOGRAM, LocalDate.now().plusDays(10), invalidPrice);
         fail("Expected IllegalArgumentException for invalid price: " + invalidPrice);
       } catch (IllegalArgumentException e) {
-        assertEquals("Price cannot be negative/or another type than double", e.getMessage());
+        assertEquals("Price cannot be negative or NaN", e.getMessage());
       }
     }
     
     @ParameterizedTest
-    @ValueSource(doubles = {-1.0, -100.0, Double.NaN})
+    @ValueSource(doubles = {-1.0, -100.0, 0.0, Double.NaN})
     @DisplayName("Should throw exception for invalid quantities")
     void shouldThrowExceptionForNegativeQuantity(double invalidQuantity) {
       try {
         new Ingredient("Protein Bar", invalidQuantity, Unit.KILOGRAM, LocalDate.now().plusDays(10), 3.5);
         fail("Expected IllegalArgumentException for invalid quantity: " + invalidQuantity);
       } catch (IllegalArgumentException e) {
-        assertEquals("Quantity cannot be negative/or another type than double", e.getMessage());
+        assertEquals("Quantity cannot be negative or NaN", e.getMessage());
       }
     }
     
@@ -156,7 +159,7 @@ class IngredientTest {
         ingredient.setQuantity(-1.0);
         fail("Expected IllegalArgumentException for invalid quantity");
       } catch (IllegalArgumentException e) {
-        assertEquals("Quantity cannot be negative/or another type than double", e.getMessage());
+        assertEquals("Quantity cannot be negative or NaN", e.getMessage());
       }
     }
     

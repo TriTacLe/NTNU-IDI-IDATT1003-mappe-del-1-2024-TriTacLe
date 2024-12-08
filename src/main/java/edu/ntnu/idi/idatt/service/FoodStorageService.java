@@ -46,10 +46,10 @@ public class FoodStorageService {
     try {
       final String name = inputManager.getValidatedString(
           "Enter ingredient name:",
-          "Ingredient name cannot be empty/blank", "name");
+          "Ingredient name cannot be empty/blank", "Name");
       double quantity = inputManager.getValidatedDouble(
           "Enter quantity:",
-          "Invalid input for quantity", "quantity");
+          "Invalid input for quantity", "Quantity", false);
       final Unit unit = inputManager.getValidatedUnit(
           "Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
       final LocalDate expirationDate = inputManager.getValidatedDate(
@@ -57,7 +57,7 @@ public class FoodStorageService {
           "Please enter a date in the format yyyy-mm-dd");
       final double pricePerUnit = inputManager.getValidatedDouble(
           "Enter the price of the amount of the ingredient added:",
-          "Invalid input for price", "price");
+          "Invalid input for price", "Price", true);
       
       Ingredient ingredient = new Ingredient(name, quantity, unit, expirationDate, pricePerUnit);
       foodStorage.addIngredientToFoodStorage(ingredient);
@@ -121,7 +121,7 @@ public class FoodStorageService {
       double quantity = inputManager.getValidatedDouble(
           "Enter how much quantity of the Ingredient: " + matchingIngredients.getFirst().getName()
               + "(" + totalQuantity + matchingIngredients.getFirst().getUnit().getSymbol()
-              + ") to be removed: ", "Invalid quantity", "quantity"
+              + ") to be removed: ", "Invalid quantity", "quantity", false
       );
       
       double removedQuantity = foodStorage.removeIngredientFromFoodStorage(name, quantity);
