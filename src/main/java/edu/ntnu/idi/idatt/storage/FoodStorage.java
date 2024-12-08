@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt.storage;
 
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,7 +36,7 @@ public class FoodStorage {
    * Retrieves the map of ingredients in the storage.
    *
    * @return A HashMap where the key is the ingredient name
-   *      and the value is a list of Ingredient instances.
+   * and the value is a list of Ingredient instances.
    */
   public HashMap<String, ArrayList<Ingredient>> getIngredients() {
     return ingredients;
@@ -49,6 +50,9 @@ public class FoodStorage {
    * @throws IllegalArgumentException if the ingredient is null.
    */
   public void addIngredientToFoodStorage(Ingredient ingredient) {
+    if (ingredient == null) {
+      throw new IllegalArgumentException("Ingredient cannot be null");
+    }
     ingredients.putIfAbsent(ingredient.getName().toLowerCase(), new ArrayList<>());
     ArrayList<Ingredient> ingredientArrayList = ingredients.get(ingredient.getName().toLowerCase());
     Optional<Ingredient> matchingIngredient = ingredientArrayList.stream()
@@ -109,7 +113,7 @@ public class FoodStorage {
       throw new IllegalArgumentException("Ingredient " + name + " does not exist in storage.");
     }
     
-    List<Ingredient> sortedList = getSorteIngredientsByExpirationsDate(ingredientArrayList);
+    List<Ingredient> sortedList = getSortedIngredientsByExpirationsDate(ingredientArrayList);
     
     double totalQuantity = sortedList.stream()
         .mapToDouble(Ingredient::getQuantity)
@@ -147,7 +151,7 @@ public class FoodStorage {
    * @param ingredientArrayList The list of ingredients to sort.
    * @return A sorted list of ingredients.
    */
-  private List<Ingredient> getSorteIngredientsByExpirationsDate(
+  private List<Ingredient> getSortedIngredientsByExpirationsDate(
       List<Ingredient> ingredientArrayList) {
     return ingredientArrayList.stream()
         .filter(ingredient ->
@@ -251,7 +255,7 @@ public class FoodStorage {
    * @param foodStorage The FoodStorage instance to check against.
    * @param recipe      The Recipe to evaluate.
    * @return true if all required ingredients are
-   *        available in sufficient quantities; otherwise false.
+   * available in sufficient quantities; otherwise false.
    */
   public boolean hasEnoughIngredientsForRecipe(
       FoodStorage foodStorage, Recipe recipe) {
@@ -281,7 +285,7 @@ public class FoodStorage {
    * @param foodStorage The FoodStorage instance to check against.
    * @param recipe      The Recipe to evaluate.
    * @return A map containing the ingredient names as
-   *      keys and their total available quantities as values.
+   * keys and their total available quantities as values.
    */
   public Map<String, Double> getIngredientAvailabilityForRecipe(
       FoodStorage foodStorage, Recipe recipe) {

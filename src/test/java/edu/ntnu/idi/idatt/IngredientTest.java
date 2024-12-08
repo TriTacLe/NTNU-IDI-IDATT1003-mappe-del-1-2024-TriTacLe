@@ -30,7 +30,7 @@ class IngredientTest {
   }
   
   @Nested
-  @DisplayName("Positive tests")
+  @DisplayName("Positive tester for FoodStorage")
   class PositiveTests {
     
     @Test

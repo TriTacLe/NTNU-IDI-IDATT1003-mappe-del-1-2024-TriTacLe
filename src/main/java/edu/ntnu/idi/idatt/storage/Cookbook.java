@@ -19,7 +19,7 @@ import java.util.Optional;
  * @author TriLe
  */
 public class Cookbook {
-  private HashMap<String, Recipe> recipes;
+  private final HashMap<String, Recipe> recipes;
   
   
   /**
@@ -48,6 +48,10 @@ public class Cookbook {
    * @throws NullPointerException if the recipe parameter is null
    */
   public boolean addRecipeToCookbook(Recipe recipe) {
+    if (recipe == null) {
+      throw new NullPointerException("Recipe cannot be null");
+    }
+    
     if (recipes.containsKey(recipe.getName())) {
       return false;
     }
@@ -76,6 +80,9 @@ public class Cookbook {
    * @throws NullPointerException if the name parameter is null
    */
   public boolean removeRecipeFromCookbook(String name) {
+    if (recipes.get(name) == null) {
+      throw new IllegalArgumentException("Recipe cannot be empty");
+    }
     String keyToRemove = recipes.keySet().stream()
         .filter(key -> key.equalsIgnoreCase(name))
         .findFirst()
