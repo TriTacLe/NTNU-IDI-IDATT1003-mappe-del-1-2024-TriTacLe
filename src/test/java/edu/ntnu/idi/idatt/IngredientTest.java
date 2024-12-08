@@ -24,9 +24,9 @@ class IngredientTest {
   
   @BeforeEach
   public void setUp() {
-    Ingredient ingredient = new Ingredient(
-        "Protein Bar", 2.0,
-        Unit.KILOGRAM, LocalDate.now().plusDays(5), 10.0);
+    ingredient = new Ingredient(
+        "Protein Bar", 2.5,
+        Unit.KILOGRAM, LocalDate.now().plusDays(5), 75.5);
   }
   
   @Nested
@@ -40,9 +40,9 @@ class IngredientTest {
         assertNotNull(ingredient);
         assertEquals("Protein Bar", ingredient.getName());
         assertEquals(2.5, ingredient.getQuantity());
-        assertEquals(Unit.PIECES, ingredient.getUnit());
-        assertEquals(LocalDate.now().plusDays(10), ingredient.getExpirationDate());
-        assertEquals(3.5, ingredient.getPrice());
+        assertEquals(Unit.KILOGRAM, ingredient.getUnitMeasurement());
+        assertEquals(LocalDate.now().plusDays(5), ingredient.getExpirationDate());
+        assertEquals(75.5, ingredient.getPrice());
       } catch (IllegalArgumentException e) {
         fail("Exception should not have been thrown for valid input: " + e.getMessage());
       }
@@ -55,8 +55,8 @@ class IngredientTest {
         assertNotNull(ingredient);
         assertEquals("Protein Bar", ingredient.getName());
         assertEquals(2.5, ingredient.getQuantity());
-        assertEquals(Unit.PIECES, ingredient.getUnit());
-        assertEquals(3.5, ingredient.getPrice());
+        assertEquals(Unit.KILOGRAM, ingredient.getUnitMeasurement());
+        assertEquals(75.5, ingredient.getPrice());
       } catch (IllegalArgumentException e) {
         fail("Exception should not have been thrown for valid input: " + e.getMessage());
       }
@@ -67,7 +67,7 @@ class IngredientTest {
     void shouldUpdateQuantity() {
       try {
         ingredient.updateQuantity(3.0);
-        assertEquals(5.0, ingredient.getQuantity());
+        assertEquals(5.5, ingredient.getQuantity());
       } catch (IllegalArgumentException e) {
         fail("Exception should not have been thrown while updating quantity: " + e.getMessage());
       }
@@ -94,8 +94,8 @@ class IngredientTest {
     @DisplayName("toString should return formatted string")
     void shouldReturnFormattedToString() {
       String expectedString = ""
-          + "Protein Bar (2.0 kg) Expires: "
-          + LocalDate.now().plusDays(5) + " Price: 10.0 kr";
+          + "Protein Bar (2.5 kg) Expires: "
+          + LocalDate.now().plusDays(5) + " Price: 75.5 kr";
       assertEquals(expectedString, ingredient.toString());
     }
   }
@@ -109,7 +109,7 @@ class IngredientTest {
     @DisplayName("Should throw exception for empty name")
     void shouldThrowExceptionForEmptyName(String invalidName) {
       try {
-        new Ingredient(invalidName, 2.5, Unit.GRAM, LocalDate.now().plusDays(10), 3.5);
+        new Ingredient(invalidName, 2.5, Unit.GRAM, LocalDate.now().plusDays(10), 75.5);
         fail("Expected IllegalArgumentException for empty name");
       } catch (IllegalArgumentException e) {
         assertEquals("Name cannot be empty or blank", e.getMessage());
@@ -117,7 +117,7 @@ class IngredientTest {
     }
     
     @ParameterizedTest
-    @ValueSource(doubles = {-3.5, -100000000.0, Double.NaN})
+    @ValueSource(doubles = {-75.5, -100000000.0, Double.NaN})
     @DisplayName("Should throw exception for negative price")
     void shouldThrowExceptionForNegativePrice(double invalidPrice) {
       try {
@@ -146,7 +146,7 @@ class IngredientTest {
     @DisplayName("Should throw exception for null unit")
     void shouldThrowExceptionForNullUnit() {
       try {
-        new Ingredient("Protein Bar", 2.5, null, LocalDate.now().plusDays(10), 3.5);
+        new Ingredient("Protein Bar", 2.5, null, LocalDate.now().plusDays(10), 75.5);
         fail("Expected IllegalArgumentException for null unit");
       } catch (IllegalArgumentException e) {
         assertEquals("Unit cannot be empty or null: null", e.getMessage());

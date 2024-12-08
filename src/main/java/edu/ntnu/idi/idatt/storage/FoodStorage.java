@@ -267,10 +267,11 @@ public class FoodStorage {
               .filter(storageIngredient ->
                   storageIngredient.getName().equals(recipeIngredient.getName()))
               .mapToDouble(storageIngredient -> {
-                if (!storageIngredient.getUnit().equals(recipeIngredient.getUnit())) {
-                  return storageIngredient.getUnit()
+                if (!storageIngredient.getUnitMeasurement()
+                    .equals(recipeIngredient.getUnitMeasurement())) {
+                  return storageIngredient.getUnitMeasurement()
                       .convertValue(storageIngredient.getQuantity(),
-                          recipeIngredient.getUnit());
+                          recipeIngredient.getUnitMeasurement());
                 }
                 return storageIngredient.getQuantity();
               })

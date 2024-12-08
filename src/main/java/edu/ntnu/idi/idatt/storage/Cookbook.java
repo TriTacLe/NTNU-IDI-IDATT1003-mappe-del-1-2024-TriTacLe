@@ -49,7 +49,7 @@ public class Cookbook {
    */
   public boolean addRecipeToCookbook(Recipe recipe) {
     if (recipe == null) {
-      throw new NullPointerException("Recipe cannot be null");
+      throw new IllegalArgumentException("Recipe cannot be null");
     }
     
     if (recipes.containsKey(recipe.getName())) {
@@ -67,6 +67,9 @@ public class Cookbook {
    * or an empty Optional if not found.
    */
   public Optional<Map.Entry<String, Recipe>> searchForRecipeInCookbook(String nameRecipe) {
+    if (nameRecipe == null) {
+      throw new IllegalArgumentException("Recipe name cannot be null");
+    }
     return recipes.entrySet().stream()
         .filter(entry -> entry.getKey().equalsIgnoreCase(nameRecipe))
         .findFirst();
@@ -80,8 +83,8 @@ public class Cookbook {
    * @throws NullPointerException if the name parameter is null
    */
   public boolean removeRecipeFromCookbook(String name) {
-    if (recipes.get(name) == null) {
-      throw new IllegalArgumentException("Recipe cannot be empty");
+    if (name == null) {
+      throw new IllegalArgumentException("Recipe name cannot be null");
     }
     String keyToRemove = recipes.keySet().stream()
         .filter(key -> key.equalsIgnoreCase(name))
@@ -132,11 +135,11 @@ public class Cookbook {
             
             double availableQuantity = storageIngredients.stream()
                 .mapToDouble(storageIngredient -> {
-                  if (!storageIngredient.getUnit().equals(recipeIngredient.getUnit())) {
+                  if (!storageIngredient.getUnitMeasurement().equals(recipeIngredient.getUnitMeasurement())) {
                     try {
-                      return storageIngredient.getUnit()
+                      return storageIngredient.getUnitMeasurement()
                           .convertValue(storageIngredient.getQuantity(),
-                              recipeIngredient.getUnit());
+                              recipeIngredient.getUnitMeasurement());
                     } catch (IllegalArgumentException e) {
                       return 0.0;
                     }

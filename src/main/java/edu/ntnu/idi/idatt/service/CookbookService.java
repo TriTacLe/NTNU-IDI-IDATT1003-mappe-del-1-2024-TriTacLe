@@ -134,10 +134,10 @@ public class CookbookService {
             "Invalid input for quantity", "quantity", false);
         final Unit unit = inputManager.getValidatedUnit(
             "Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
-        final double pricePerUnit = inputManager.getValidatedDouble(
+        final double price = inputManager.getValidatedDouble(
             "Enter price per unit:", "Invalid input for price", "price", true);
         
-        Ingredient ingredient = new Ingredient(name, quantity, unit, pricePerUnit);
+        Ingredient ingredient = new Ingredient(name, quantity, unit, price);
         recipe.addIngredientToRecipe(ingredient);
       }
     } catch (IllegalArgumentException e) {
@@ -283,11 +283,11 @@ public class CookbookService {
         remainingToUse -= toAllocate;
         
         Ingredient ingredientToAdd = new Ingredient(
-            ingredient.getName(), toAllocate, ingredient.getUnit(), ingredient.getPrice());
+            ingredient.getName(), toAllocate, ingredient.getUnitMeasurement(), ingredient.getPrice());
         recipe.addIngredientToRecipe(ingredientToAdd);
         System.out.println(
             "Added ingredient: " + ingredientToAdd.getName() + " "
-                + "(" + toAllocate + " " + ingredientToAdd.getUnit().getSymbol()
+                + "(" + toAllocate + " " + ingredientToAdd.getUnitMeasurement().getSymbol()
                 + ") to the recipe.");
       }
       
@@ -517,7 +517,7 @@ public class CookbookService {
     System.out.println("Ingredients:");
     recipe.getIngredientsList().forEach(ingredient -> {
       System.out.println(" - " + ingredient.getName() + ": "
-          + ingredient.getQuantity() + " " + ingredient.getUnit().getSymbol());
+          + ingredient.getQuantity() + " " + ingredient.getUnitMeasurement().getSymbol());
     });
     System.out.println();
   }

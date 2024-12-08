@@ -22,6 +22,7 @@ import java.util.List;
 public class FoodStorageService {
   private final FoodStorage foodStorage;
   private final ConsoleInputManager inputManager;
+  private Unit unit;
   
   /**
    * Constructs a FoodStorageService with the specified food storage and input handler.
@@ -29,9 +30,20 @@ public class FoodStorageService {
    * @param foodStorage  the food storage to manage
    * @param inputManager the input handler for user input validation
    */
-  public FoodStorageService(FoodStorage foodStorage, ConsoleInputManager inputManager) {
+  public FoodStorageService(FoodStorage foodStorage, ConsoleInputManager inputManager, Unit unit) {
     this.foodStorage = foodStorage;
     this.inputManager = inputManager;
+    this.unit = unit;
+  }
+  
+  /**
+   * Updates the current currency unit for displaying values.
+   *
+   * @param unit the new currency unit
+   */
+  public void setUnit(Unit unit) {
+    this.unit = unit;
+    Ingredient.setUnitCurrency(unit);
   }
   
   /**
@@ -120,14 +132,14 @@ public class FoodStorageService {
       
       double quantity = inputManager.getValidatedDouble(
           "Enter how much quantity of the Ingredient: " + matchingIngredients.getFirst().getName()
-              + "(" + totalQuantity + matchingIngredients.getFirst().getUnit().getSymbol()
+              + "(" + totalQuantity + matchingIngredients.getFirst().getUnitMeasurement().getSymbol()
               + ") to be removed: ", "Invalid quantity", "quantity", false
       );
       
       double removedQuantity = foodStorage.removeIngredientFromFoodStorage(name, quantity);
       
       System.out.println(
-          "Removed " + removedQuantity + matchingIngredients.getFirst().getUnit().getSymbol()
+          "Removed " + removedQuantity + matchingIngredients.getFirst().getUnitMeasurement().getSymbol()
               + " from " + matchingIngredients.getFirst().getName());
       
     } catch (IllegalArgumentException e) {
@@ -154,7 +166,8 @@ public class FoodStorageService {
       
       System.out.println("Expired ingredients:");
       expiredIngredients.forEach(ingredient -> System.out.println("- " + ingredient));
-      System.out.printf("Total value of expired ingredients: %.2f kr%n", totalValue);
+      System.out.println("Total value of expired ingredients: "
+          + totalValue + " " + unit.getSymbol());
       System.out.println("Try to conserve more food please!");
     } catch (IllegalArgumentException e) {
       System.out.println("Error while trying to display expired Ingredients: " + e.getMessage());
@@ -176,7 +189,7 @@ public class FoodStorageService {
           .calculateTotalValue(foodStorage.getIngredients().values().stream()
               .flatMap(List::stream));
       
-      System.out.println("The total value of the food storage is: " + totalValue + " kr");
+      System.out.println("The total value of the food storage is: " + totalValue + unit.getSymbol());
     } catch (IllegalArgumentException e) {
       System.out.println("Error while getting the total value of food storage: " + e.getMessage());
     }

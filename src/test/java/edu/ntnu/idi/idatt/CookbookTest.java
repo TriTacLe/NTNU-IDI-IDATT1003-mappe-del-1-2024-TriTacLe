@@ -43,7 +43,8 @@ class CookbookTest {
       Recipe recipe = new Recipe("Pasta", "Delicious pasta", "Cook pasta and add sauce", 2);
       cookbook.addRecipeToCookbook(recipe);
       
-      Optional<java.util.Map.Entry<String, Recipe>> result = cookbook.searchForRecipeInCookbook("Pasta");
+      Optional<java.util.Map.Entry<String, Recipe>> result
+          = cookbook.searchForRecipeInCookbook("Pasta");
       assertTrue(result.isPresent());
       assertEquals("Pasta", result.get().getKey());
     }
@@ -109,8 +110,8 @@ class CookbookTest {
     void testAddNullRecipeToCookbook() {
       try {
         cookbook.addRecipeToCookbook(null);
-        fail("Expected NullPointerException for name is null");
-      } catch (NullPointerException e) {
+        fail("Expected IllegalArgumentException for name is null");
+      } catch (IllegalArgumentException e) {
         assertEquals("Recipe cannot be null", e.getMessage());
       }
     }
@@ -118,14 +119,28 @@ class CookbookTest {
     @Test
     @DisplayName("Search Non-existent Recipe")
     void testSearchForNonExistentRecipe() {
-      Optional<java.util.Map.Entry<String, Recipe>> result = cookbook.searchForRecipeInCookbook("NonExistentRecipe");
+      Optional<java.util.Map.Entry<String, Recipe>> result
+          = cookbook.searchForRecipeInCookbook("NonExistentRecipe");
       assertFalse(result.isPresent());
     }
     
     @Test
     @DisplayName("Remove Non-existent Recipe")
     void testRemoveNonExistentRecipe() {
+      boolean result = cookbook.removeRecipeFromCookbook("NonExistentRecipe");
+      assertFalse(result, "Expected false when trying to remove a non-existent recipe");
+      assertEquals(0, cookbook.getRecipes().size(), "Expected cookbook to remain empty");
+    }
     
+    @Test
+    @DisplayName("Search for Recipe with Null Name")
+    void testSearchForRecipeWithNullName() {
+      try {
+        cookbook.searchForRecipeInCookbook(null);
+        fail("Expected IllegalArgumentException for null name");
+      } catch (IllegalArgumentException e) {
+        assertEquals("Recipe name cannot be null", e.getMessage());
+      }
     }
     
     @Test
@@ -135,7 +150,7 @@ class CookbookTest {
         cookbook.removeRecipeFromCookbook(null);
         fail("Expected IllegalArgumentException for name is null");
       } catch (IllegalArgumentException e) {
-        assertEquals("Recipe cannot be empty", e.getMessage());
+        assertEquals("Recipe name cannot be null", e.getMessage());
       }
     }
     
@@ -143,12 +158,18 @@ class CookbookTest {
     @DisplayName("Suggest Recipes with Insufficient Ingredients")
     void testGetSuggestedRecipesInsufficientIngredients() {
       FoodStorage foodStorage = new FoodStorage();
-      foodStorage.addIngredientToFoodStorage(new Ingredient("Tomato", 0.5, Unit.KILOGRAM, LocalDate.now().plusDays(5), 20.0));
-      foodStorage.addIngredientToFoodStorage(new Ingredient("Pasta", 1, Unit.KILOGRAM, LocalDate.now().plusDays(5), 30.0));
+      foodStorage.addIngredientToFoodStorage(new Ingredient(
+          "Tomato", 0.5, Unit.KILOGRAM,
+          LocalDate.now().plusDays(5), 20.0));
+      foodStorage.addIngredientToFoodStorage(new Ingredient(
+          "Pasta", 1, Unit.KILOGRAM,
+          LocalDate.now().plusDays(5), 30.0));
       
       Recipe recipe = new Recipe("PastaDish", "Simple pasta dish", "Cook pasta and add tomato", 2);
-      recipe.addIngredientToRecipe(new Ingredient("Tomato", 1, Unit.KILOGRAM, 20.0));
-      recipe.addIngredientToRecipe(new Ingredient("Pasta", 1, Unit.KILOGRAM, 30.0));
+      recipe.addIngredientToRecipe(new Ingredient(
+          "Tomato", 1, Unit.KILOGRAM, 20.0));
+      recipe.addIngredientToRecipe(new Ingredient(
+          "Pasta", 1, Unit.KILOGRAM, 30.0));
       cookbook.addRecipeToCookbook(recipe);
       
       List<Recipe> suggestedRecipes = cookbook.getSuggestedRecipes(foodStorage);
