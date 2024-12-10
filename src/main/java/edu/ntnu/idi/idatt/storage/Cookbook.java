@@ -2,7 +2,6 @@ package edu.ntnu.idi.idatt.storage;
 
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ public class Cookbook {
    * Retrieves all recipes in the cookbook.
    *
    * @return a HashMap containing all recipe where
-   * the key is the recipe name and the value is the Recipe instance.
+   *        the key is the recipe name and the value is the Recipe instance.
    */
   public HashMap<String, Recipe> getRecipes() {
     return recipes;
@@ -44,7 +43,7 @@ public class Cookbook {
    *
    * @param recipe the Recipe object to be added
    * @return true if the recipe was successfully added,
-   * false if a recipe with the same name already exists
+   *        false if a recipe with the same name already exists
    * @throws NullPointerException if the recipe parameter is null
    */
   public boolean addRecipeToCookbook(Recipe recipe) {
@@ -64,7 +63,7 @@ public class Cookbook {
    *
    * @param nameRecipe the name of the recipe to search for
    * @return an Optional containing the matching recipe entry if found,
-   * or an empty Optional if not found.
+   *        or an empty Optional if not found.
    */
   public Optional<Map.Entry<String, Recipe>> searchForRecipeInCookbook(String nameRecipe) {
     if (nameRecipe == null) {
@@ -135,7 +134,8 @@ public class Cookbook {
             
             double availableQuantity = storageIngredients.stream()
                 .mapToDouble(storageIngredient -> {
-                  if (!storageIngredient.getUnitMeasurement().equals(recipeIngredient.getUnitMeasurement())) {
+                  if (!storageIngredient.getUnitMeasurement()
+                      .equals(recipeIngredient.getUnitMeasurement())) {
                     try {
                       return storageIngredient.getUnitMeasurement()
                           .convertValue(storageIngredient.getQuantity(),

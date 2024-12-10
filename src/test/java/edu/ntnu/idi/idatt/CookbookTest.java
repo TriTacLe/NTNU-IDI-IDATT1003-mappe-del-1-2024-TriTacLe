@@ -1,17 +1,24 @@
 package edu.ntnu.idi.idatt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
-import org.junit.jupiter.api.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Cookbook Tests")
 class CookbookTest {
@@ -108,19 +115,17 @@ class CookbookTest {
     @Test
     @DisplayName("Add Null Recipe")
     void testAddNullRecipeToCookbook() {
-      try {
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
         cookbook.addRecipeToCookbook(null);
-        fail("Expected IllegalArgumentException for name is null");
-      } catch (IllegalArgumentException e) {
-        assertEquals("Recipe cannot be null", e.getMessage());
-      }
+      });
+      assertEquals("Recipe cannot be null", exception.getMessage());
     }
     
     @Test
     @DisplayName("Search Non-existent Recipe")
     void testSearchForNonExistentRecipe() {
-      Optional<java.util.Map.Entry<String, Recipe>> result
-          = cookbook.searchForRecipeInCookbook("NonExistentRecipe");
+      Optional<java.util.Map.Entry<String, Recipe>> result =
+          cookbook.searchForRecipeInCookbook("NonExistentRecipe");
       assertFalse(result.isPresent());
     }
     
@@ -135,23 +140,19 @@ class CookbookTest {
     @Test
     @DisplayName("Search for Recipe with Null Name")
     void testSearchForRecipeWithNullName() {
-      try {
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
         cookbook.searchForRecipeInCookbook(null);
-        fail("Expected IllegalArgumentException for null name");
-      } catch (IllegalArgumentException e) {
-        assertEquals("Recipe name cannot be null", e.getMessage());
-      }
+      });
+      assertEquals("Recipe name cannot be null", exception.getMessage());
     }
     
     @Test
     @DisplayName("Remove Null Recipe")
     void testRemoveNullRecipeFromCookbook() {
-      try {
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
         cookbook.removeRecipeFromCookbook(null);
-        fail("Expected IllegalArgumentException for name is null");
-      } catch (IllegalArgumentException e) {
-        assertEquals("Recipe name cannot be null", e.getMessage());
-      }
+      });
+      assertEquals("Recipe name cannot be null", exception.getMessage());
     }
     
     @Test

@@ -1,12 +1,11 @@
 package edu.ntnu.idi.idatt.service;
 
-import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
-
+import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -283,7 +282,8 @@ public class CookbookService {
         remainingToUse -= toAllocate;
         
         Ingredient ingredientToAdd = new Ingredient(
-            ingredient.getName(), toAllocate, ingredient.getUnitMeasurement(), ingredient.getPrice());
+            ingredient.getName(), toAllocate, ingredient
+            .getUnitMeasurement(), ingredient.getPrice());
         recipe.addIngredientToRecipe(ingredientToAdd);
         System.out.println(
             "Added ingredient: " + ingredientToAdd.getName() + " "

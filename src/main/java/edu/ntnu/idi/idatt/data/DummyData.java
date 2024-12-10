@@ -5,7 +5,6 @@ import edu.ntnu.idi.idatt.model.Recipe;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
-
 import java.time.LocalDate;
 
 /**

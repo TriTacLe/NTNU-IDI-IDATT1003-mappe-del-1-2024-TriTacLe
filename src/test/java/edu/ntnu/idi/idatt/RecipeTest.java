@@ -2,8 +2,8 @@ package edu.ntnu.idi.idatt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
@@ -39,41 +39,27 @@ class RecipeTest {
     @Test
     @DisplayName("Should create Recipe with valid attributes")
     void shouldCreateRecipeWithValidAttributes() {
-      try {
-        assertNotNull(recipe);
-        assertEquals("Pancakes", recipe.getName());
-        assertEquals("Simple pancake recipe", recipe.getDescription());
-        assertEquals("Mix and cook", recipe.getProcedure());
-        assertEquals(4, recipe.getPortions());
-      } catch (IllegalArgumentException e) {
-        fail("Exception should not have been thrown for valid input: " + e.getMessage());
-      }
+      assertNotNull(recipe);
+      assertEquals("Pancakes", recipe.getName());
+      assertEquals("Simple pancake recipe", recipe.getDescription());
+      assertEquals("Mix and cook", recipe.getProcedure());
+      assertEquals(4, recipe.getPortions());
     }
     
     @Test
     @DisplayName("Should add ingredient to recipe")
     void shouldAddIngredientToRecipe() {
-      try {
-        recipe.addIngredientToRecipe(ingredient1);
-        assertTrue(recipe.getIngredientsList().contains(ingredient1));
-      } catch (IllegalArgumentException e) {
-        fail("Exception should not have been thrown for adding a ingredient to the recipe: "
-            + e.getMessage());
-      }
+      recipe.addIngredientToRecipe(ingredient1);
+      assertTrue(recipe.getIngredientsList().contains(ingredient1));
     }
     
     @Test
     @DisplayName("Should update quantity if ingredient already exists")
     void shouldUpdateQuantityForExistingIngredient() {
-      try {
-        recipe.addIngredientToRecipe(ingredient1);
-        Ingredient duplicate = new Ingredient("Flour", 100, Unit.GRAM, 5.0);
-        recipe.addIngredientToRecipe(duplicate);
-        assertEquals(300, ingredient1.getQuantity());
-      } catch (IllegalArgumentException e) {
-        fail("Exception should not have been thrown for adding a ingredient if it already exists: "
-            + e.getMessage());
-      }
+      recipe.addIngredientToRecipe(ingredient1);
+      Ingredient duplicate = new Ingredient("Flour", 100, Unit.GRAM, 5.0);
+      recipe.addIngredientToRecipe(duplicate);
+      assertEquals(300, ingredient1.getQuantity());
     }
     
     
@@ -87,8 +73,8 @@ class RecipeTest {
           + "Description: Simple pancake recipe\n"
           + "Procedure: Mix and cook\n"
           + "Ingredients: \n"
-          + " - Flour (200.0 g)" + " Price: 5.0 kr\n"
-          + " - Milk (1.0 L)" + " Price: 15.0 kr\n";
+          + " - Flour (200.0 g)" + " Price: 5.0 NOK\n"
+          + " - Milk (1.0 L)" + " Price: 15.0 NOK\n";
       
       assertEquals(expected, recipe.toString());
     }
@@ -102,48 +88,40 @@ class RecipeTest {
     @ValueSource(strings = {"", "   "})
     @DisplayName("Should throw exception for invalid name")
     void shouldThrowExceptionForInvalidName(String invalidName) {
-      try {
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
         new Recipe(invalidName, "Description", "Procedure", 4);
-        fail("Expected IllegalArgumentException for empty name");
-      } catch (IllegalArgumentException e) {
-        assertEquals("Name cannot be empty or blank", e.getMessage());
-      }
+      });
+      assertEquals("Name cannot be empty or blank", exception.getMessage());
     }
     
     @ParameterizedTest
     @ValueSource(strings = {"", "   "})
     @DisplayName("Should throw exception for invalid description")
     void shouldThrowExceptionForInvalidDescription(String invalidDescription) {
-      try {
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
         new Recipe("Recipe", invalidDescription, "Procedure", 4);
-        fail("Expected IllegalArgumentException for empty description");
-      } catch (IllegalArgumentException e) {
-        assertEquals("Description cannot be empty or blank", e.getMessage());
-      }
+      });
+      assertEquals("Description cannot be empty or blank", exception.getMessage());
     }
     
     @ParameterizedTest
     @ValueSource(strings = {"", "   "})
     @DisplayName("Should throw exception for invalid procedure")
     void shouldThrowExceptionForInvalidProcedure(String invalidProcedure) {
-      try {
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
         new Recipe("Recipe", "Description", invalidProcedure, 4);
-        fail("Expected IllegalArgumentException for empty procedure");
-      } catch (IllegalArgumentException e) {
-        assertEquals("Procedure cannot be empty or blank", e.getMessage());
-      }
+      });
+      assertEquals("Procedure cannot be empty or blank", exception.getMessage());
     }
     
     @ParameterizedTest
     @ValueSource(doubles = {-3.5, -100000000.0, 0.0, Double.NaN})
     @DisplayName("Should throw exception for negative portions")
     void shouldThrowExceptionForNegativePortions(double invalidPortions) {
-      try {
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
         new Recipe("Recipe", "Description", "Procedure", invalidPortions);
-        fail("Expected IllegalArgumentException for invalid portions: " + invalidPortions);
-      } catch (IllegalArgumentException e) {
-        assertEquals("Portions cannot be negative or NaN", e.getMessage());
-      }
+      });
+      assertEquals("Portions cannot be negative or NaN", exception.getMessage());
     }
   }
 }

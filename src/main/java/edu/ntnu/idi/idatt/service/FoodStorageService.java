@@ -1,10 +1,9 @@
 package edu.ntnu.idi.idatt.service;
 
-import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
-
+import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -132,14 +131,16 @@ public class FoodStorageService {
       
       double quantity = inputManager.getValidatedDouble(
           "Enter how much quantity of the Ingredient: " + matchingIngredients.getFirst().getName()
-              + "(" + totalQuantity + matchingIngredients.getFirst().getUnitMeasurement().getSymbol()
+              + "(" + totalQuantity
+              + matchingIngredients.getFirst().getUnitMeasurement().getSymbol()
               + ") to be removed: ", "Invalid quantity", "quantity", false
       );
       
       double removedQuantity = foodStorage.removeIngredientFromFoodStorage(name, quantity);
       
       System.out.println(
-          "Removed " + removedQuantity + matchingIngredients.getFirst().getUnitMeasurement().getSymbol()
+          "Removed " + removedQuantity
+              + matchingIngredients.getFirst().getUnitMeasurement().getSymbol()
               + " from " + matchingIngredients.getFirst().getName());
       
     } catch (IllegalArgumentException e) {
@@ -189,7 +190,8 @@ public class FoodStorageService {
           .calculateTotalValue(foodStorage.getIngredients().values().stream()
               .flatMap(List::stream));
       
-      System.out.println("The total value of the food storage is: " + totalValue + unit.getSymbol());
+      System.out.println("The total value of the food storage is: "
+          + totalValue + unit.getSymbol());
     } catch (IllegalArgumentException e) {
       System.out.println("Error while getting the total value of food storage: " + e.getMessage());
     }
@@ -209,7 +211,7 @@ public class FoodStorageService {
       if (ingredientsBeforeDate == null || ingredientsBeforeDate.isEmpty()) {
         System.out.println("No Ingredients expire before: " + date);
       } else {
-        System.out.println("----Ingredients expiring before date: " + date + "----");
+        System.out.println("----Ingredients expiring before date: " + date + " ----");
         ingredientsBeforeDate.forEach(ingredient -> System.out.println("- " + ingredient));
         
       }

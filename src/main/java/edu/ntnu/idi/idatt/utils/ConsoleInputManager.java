@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.utils;
 
 import edu.ntnu.idi.idatt.model.Unit;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -30,6 +29,20 @@ public class ConsoleInputManager {
    */
   public ConsoleInputManager(Scanner scanner) {
     this.scanner = scanner;
+  }
+  
+  /**
+   * Helper method that confirms if user wants to use zero as a value.
+   *
+   * @param fieldName the name of the field being validated, used for error messages.
+   * @return true if user confirms zero, false otherwise
+   */
+  private static boolean confirmZero(String fieldName) {
+    System.out.println(fieldName + " is zero. "
+        + "Are you sure you want to continue? Yes to continue, anything else to retry:");
+    Scanner scanner = new Scanner(System.in);
+    String userInput = scanner.nextLine().trim().toLowerCase();
+    return "yes".equals(userInput);
   }
   
   /**
@@ -93,20 +106,6 @@ public class ConsoleInputManager {
         System.out.println(errorMessage + ": " + e.getMessage());
       }
     }
-  }
-  
-  /**
-   * Helper method that confirms if user wants to use zero as a value.
-   *
-   * @param fieldName the name of the field being validated, used for error messages.
-   * @return true if user confirms zero, false otherwise
-   */
-  private static boolean confirmZero(String fieldName) {
-    System.out.println(fieldName + " is zero. "
-        + "Are you sure you want to continue? Yes to continue, anything else to retry:");
-    Scanner scanner = new Scanner(System.in);
-    String userInput = scanner.nextLine().trim().toLowerCase();
-    return "yes".equals(userInput);
   }
   
   /**

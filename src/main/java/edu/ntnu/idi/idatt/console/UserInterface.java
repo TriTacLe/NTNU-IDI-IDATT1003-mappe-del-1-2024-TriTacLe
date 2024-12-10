@@ -1,14 +1,13 @@
 package edu.ntnu.idi.idatt.console;
 
+import edu.ntnu.idi.idatt.data.DummyData;
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Unit;
-import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
-import edu.ntnu.idi.idatt.data.DummyData;
 import edu.ntnu.idi.idatt.service.CookbookService;
 import edu.ntnu.idi.idatt.service.FoodStorageService;
 import edu.ntnu.idi.idatt.storage.Cookbook;
 import edu.ntnu.idi.idatt.storage.FoodStorage;
-
+import edu.ntnu.idi.idatt.utils.ConsoleInputManager;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -32,7 +31,7 @@ public class UserInterface {
    */
   public void init() {
     scanner = new Scanner(System.in);
-    ConsoleInputManager inputManager = new ConsoleInputManager(scanner);
+    final ConsoleInputManager inputManager = new ConsoleInputManager(scanner);
     
     FoodStorage foodStorage = new FoodStorage();
     Cookbook cookbook = new Cookbook();
@@ -43,8 +42,10 @@ public class UserInterface {
     unit = Unit.KR;
     unit.setSymbol("NOK");
     
-    foodStorageService = new FoodStorageService(foodStorage, inputManager, unit); // Pass the selected currency
-    cookbookService = new CookbookService(cookbook, foodStorage, inputManager);
+    foodStorageService =
+        new FoodStorageService(foodStorage, inputManager, unit);
+    cookbookService =
+        new CookbookService(cookbook, foodStorage, inputManager);
   }
   
   /**
@@ -82,10 +83,11 @@ public class UserInterface {
         case 13 -> cookbookService.handleRemoveRecipe();
         case 16 -> chooseCurrency();
         case 14 -> displayHelp();
-        case 15 -> {
-          displayGoodbyeMessage();
-          running = false;
-        }
+        case 15 ->
+          {
+            displayGoodbyeMessage();
+            running = false;
+          }
         default -> System.out.println("\u001B[31mInvalid choice. "
             + "Please try again or type '12' for guidance.\u001B[0m");
       }
@@ -142,7 +144,9 @@ public class UserInterface {
    * Displays the main menu to the user.
    */
   private void displayMenu() {
-    System.out.println("\n\u001B[33m=================== 🍎 FOOD CONSERVATION APP - MAIN MENU 🍎 ===================\u001B[0m");
+    System.out.println(
+        "\n\u001B[33m=================== 🍎 FOOD CONSERVATION APP - "
+            + "MAIN MENU 🍎 ===================\u001B[0m");
     System.out.println("Select an option by entering the corresponding number:");
     
     System.out.println("\u001B[36m📦 Food Storage Management:\u001B[0m");
@@ -168,7 +172,8 @@ public class UserInterface {
     System.out.println(" 16  Choose currency");
     
     System.out.println("\u001B[36mYour current currency:\u001B[0m " + unit.getSymbol());
-    System.out.println("\u001B[33m================================================================================\u001B[0m");
+    System.out.println("\u001B[33m============================="
+        + "===================================================\u001B[0m");
   }
   
   
@@ -196,38 +201,60 @@ public class UserInterface {
    * Displays the help menu with details about each option.
    */
   private void displayHelp() {
-    System.out.println("\n\u001B[33m===================== 🍎 FOOD CONSERVATION APP - HELP MENU 🍎 =====================\u001B[0m");
-    System.out.println("Here’s everything you need to know to navigate and use the app effectively!\n");
+    System.out.println("\n\u001B[33m===================== 🍎 FOOD CONSERVATION APP "
+        + "- HELP MENU 🍎 =====================\u001B[0m");
+    System.out.println("Here’s everything you need to know to"
+        + " navigate and use the app effectively!\n");
     
     System.out.println("\u001B[36m🍴 Food Storage Management:\u001B[0m");
-    System.out.println("   \u001B[32m1: Add Grocery\u001B[0m         - Add a new item or update an existing one.");
-    System.out.println("   \u001B[32m2: Search Grocery\u001B[0m      - Find a specific item in your storage.");
-    System.out.println("   \u001B[32m3: Remove Grocery\u001B[0m      - Remove or decrease the quantity of an item.");
-    System.out.println("   \u001B[32m4: View Expired Items\u001B[0m  - See expired items and their total value.");
-    System.out.println("   \u001B[32m5: View Total Value\u001B[0m    - Get the combined value of all stored items.");
-    System.out.println("   \u001B[32m6: View Items by Date\u001B[0m  - List items expiring before a specific date.");
-    System.out.println("   \u001B[32m7: View All Items\u001B[0m       - Display all groceries sorted alphabetically.\n");
+    System.out.println("   \u001B[32m1: Add Grocery\u001B[0m    "
+        + "     - Add a new item or update an existing one.");
+    System.out.println("   \u001B[32m2: Search Grocery\u001B[0m     "
+        + " - Find a specific item in your storage.");
+    System.out.println("   \u001B[32m3: Remove Grocery\u001B[0m      "
+        + "- Remove or decrease the quantity of an item.");
+    System.out.println("   \u001B[32m4: View Expired Items\u001B[0m "
+        + " - See expired items and their total value.");
+    System.out.println("   \u001B[32m5: View Total Value\u001B[0m  "
+        + "  - Get the combined value of all stored items.");
+    
+    System.out.println("   \u001B[32m6: View Items by Date\u001B[0m "
+        + " - List items expiring before a specific date.");
+    System.out.println("   \u001B[32m7: View All Items\u001B[0m   "
+        + "    - Display all groceries sorted alphabetically.");
     
     System.out.println("\u001B[36m📖 Recipe Management:\u001B[0m");
-    System.out.println("   \u001B[34m8: Add Recipe\u001B[0m          - Save a new recipe in your cookbook.");
-    System.out.println("   \u001B[34m9: Search Recipe\u001B[0m       - Look up a recipe by its name.");
-    System.out.println("  \u001B[34m10: Check Ingredients\u001B[0m   - Ensure you have the required items for a recipe.");
-    System.out.println("  \u001B[34m11: Suggest Recipes\u001B[0m     - Get recipe ideas based on what’s in your storage.");
-    System.out.println("  \u001B[34m12: View Cookbook\u001B[0m       - Browse all your saved recipes.");
-    System.out.println("  \u001B[34m13: Remove Recipe\u001B[0m       - Delete a recipe you no longer need.\n");
+    System.out.println("   \u001B[34m8: Add Recipe\u001B[0m        "
+        + "  - Save a new recipe in your cookbook.");
+    System.out.println("   \u001B[34m9: Search Recipe\u001B[0m     "
+        + "  - Look up a recipe by its name.");
+    System.out.println("  \u001B[34m10: Check Ingredients\u001B[0m  "
+        + " - Ensure you have the required items for a recipe.");
+    System.out.println("  \u001B[34m11: Suggest Recipes\u001B[0m   "
+        + "  - Get recipe ideas based on what’s in your storage.");
+    System.out.println("  \u001B[34m12: View Cookbook\u001B[0m    "
+        + "   - Browse all your saved recipes.");
+    System.out.println("  \u001B[34m13: Remove Recipe\u001B[0m     "
+        + "  - Delete a recipe you no longer need.");
     
     System.out.println("\u001B[36m⚙️ General Options:\u001B[0m");
-    System.out.println("  \u001B[35m14: Help\u001B[0m                - Display this help menu anytime.");
-    System.out.println("  \u001B[35m15: Exit\u001B[0m                - Quit the application.");
-    System.out.println("  \u001B[35m16: Choose Currency\u001B[0m     - Set your preferred currency for displayed prices.\n");
+    System.out.println("  \u001B[35m14: Help\u001B[0m             "
+        + "   - Display this help menu anytime.");
+    System.out.println("  \u001B[35m15: Exit\u001B[0m          "
+        + "      - Quit the application.");
+    System.out.println("  \u001B[35m16: Choose Currency\u001B[0m  "
+        + "   - Set your preferred currency for displayed prices.");
     
-    System.out.println("\u001B[33m=============================== TIPS & TRICKS ===============================\u001B[0m");
+    System.out.println("\u001B[33m==============================="
+        + " TIPS & TRICKS ===============================\u001B[0m");
     System.out.println("\u001B[36m💡 Tips:\u001B[0m");
     System.out.println(" - 🌟 Use \u001B[32moption 14\u001B[0m anytime to come back to this menu.");
     System.out.println(" - 🍃 Plan meals around items nearing expiration to reduce waste.");
     System.out.println(" - 💰 Experiment with recipes based on the ingredients you already have.");
-    System.out.println(" - 💱 Update your currency preference (option 16) for accurate price displays.");
-    System.out.println("\n\u001B[36mReady to make the most of your food? Let’s get started! 🚀\u001B[0m\n");
+    System.out.println(" - 💱 Update your currency preference "
+        + "(option 16) for accurate price displays.");
+    System.out.println("\n\u001B[36mReady to make the most"
+        + " of your food? Let’s get started! 🚀\u001B[0m");
   }
   
   /**

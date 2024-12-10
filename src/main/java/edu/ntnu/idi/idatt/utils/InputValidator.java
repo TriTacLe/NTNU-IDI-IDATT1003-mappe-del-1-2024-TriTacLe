@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.utils;
 
 import edu.ntnu.idi.idatt.model.Unit;
-
 import java.time.LocalDate;
 import java.util.Scanner;
 

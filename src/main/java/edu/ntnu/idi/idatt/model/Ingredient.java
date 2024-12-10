@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
 import edu.ntnu.idi.idatt.utils.InputValidator;
-
 import java.time.LocalDate;
 
 /**
@@ -15,10 +14,10 @@ import java.time.LocalDate;
  * @version 1.2.1
  */
 public class Ingredient {
+  private static Unit unitCurrency = Unit.KR;
   private final String name;
   private final Unit unitMeasurement;
   private final double price;
-  private static Unit unitCurrency = Unit.KR;
   private final InputValidator inputValidator = new InputValidator();
   private double quantity;
   private LocalDate expirationDate;
@@ -142,6 +141,14 @@ public class Ingredient {
     this.quantity += quantity;
   }
   
+  /**
+   * Retrieves the current unit currency for price display.
+   *
+   * @return the current unit currency
+   */
+  public static Unit getUnitCurrency() {
+    return unitCurrency;
+  }
   
   /**
    * Sets the current currency for price conversion.

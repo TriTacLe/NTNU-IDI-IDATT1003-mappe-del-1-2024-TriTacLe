@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
 import edu.ntnu.idi.idatt.utils.InputValidator;
-
 import java.util.Arrays;
 
 /**
@@ -19,7 +18,7 @@ public enum Unit {
   PIECES("pcs", UnitType.NUMBER, 1.0),
   
   /**
-   * Currencies for countries known for high food waste
+   * Currencies for countries known for high food waste.
    */
   KR("NOK", UnitType.CURRENCY, 1.0, "Norway"),
   USD("$", UnitType.CURRENCY, 0.090, "United States"),
@@ -36,14 +35,14 @@ public enum Unit {
   RUS("₽", UnitType.CURRENCY, 9.0, "Russia"),
   ITL("₤", UnitType.CURRENCY, 0.08, "Italy");
   
-  private String symbol;
   private final UnitType type;
   private final Double conversionNumber;
   private final InputValidator inputValidator = new InputValidator();
   private final String country;
+  private String symbol;
   
   /**
-   * Constructor to initialize a currency unit
+   * Constructor to initialize a currency unit.
    *
    * @param symbol           the symbol representing the unit.
    * @param type             the type of the unit.
@@ -145,6 +144,10 @@ public enum Unit {
     return country;
   }
   
+  public UnitType getType() {
+    return type;
+  }
+  
   /**
    * Defines types of units used for categorizing measurement units.
    */
@@ -153,9 +156,5 @@ public enum Unit {
     VOLUME,
     NUMBER,
     CURRENCY
-  }
-  
-  public UnitType getType() {
-    return type;
   }
 }
