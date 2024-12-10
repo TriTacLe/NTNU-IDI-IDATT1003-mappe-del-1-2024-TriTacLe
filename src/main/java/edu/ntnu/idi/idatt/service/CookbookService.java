@@ -45,75 +45,122 @@ public class CookbookService {
   }
   
   /**
-   * Handles the process of adding a recipe to the cookbook.
-   *
-   * <p>Prompts the user to enter recipe details, including name,
-   * description, procedure, and portions.
-   * Ingredients can be added manually or selected from the food storage.
-   * </p>
+   * Handles the process of adding a new recipe to the cookbook.
    */
   public void handleAddRecipeToCookbook() {
+    String recipeName = getRecipeName();
+    Recipe recipe = getRecipeDetails(recipeName);
+    addIngredientsToRecipe(recipe);
+    saveRecipeToCookbook(recipe);
+  }
+  
+  /**
+   * Prompts the user for a unique recipe name.
+   * Will not allow duplicate recipe names.
+   * Helper of handleAddRecipeToCookbook.
+   *
+   *
+   * @return A new recipe name.
+   */
+  private String getRecipeName() {
+    String recipeName;
+    do {
+      recipeName = inputManager.getValidatedString(
+          "Enter recipe name: ",
+          "Recipe name cannot be empty or blank.",
+          "recipe name"
+      );
+      if (cookbook.getRecipes().containsKey(recipeName)) {
+        System.out.println("Recipe \"" + recipeName + "\""
+            + " already exists. Please choose a different name.");
+      }
+    } while (cookbook.getRecipes().containsKey(recipeName));
+    return recipeName;
+  }
+  
+  /**
+   * Gets the details for a new recipe.
+   * Helper of handleAddRecipeToCookbook method.
+   *
+   * @param recipeName The name of the recipe.
+   * @return A new Recipe object with the entered details.
+   */
+  private Recipe getRecipeDetails(String recipeName) {
+    String description = inputManager.getValidatedString(
+        "Enter a description: ",
+        "Description cannot be empty or blank.",
+        "description"
+    );
+    String procedure = inputManager.getValidatedString(
+        "Enter the procedure: ",
+        "Procedure cannot be empty or blank.",
+        "procedure"
+    );
+    double portions = inputManager.getValidatedDouble(
+        "Enter the number of portions this recipe makes: ",
+        "Portions must be a positive number.",
+        "portions",
+        false
+    );
+    return new Recipe(recipeName, description, procedure, portions);
+  }
+  
+  /**
+   * Guides the user to add ingredients to the recipe by adding
+   * manually or choosing existing ingredients from the storage.
+   * Helper of handleAddRecipeToCookbook method.
+   *
+   * @param recipe The Recipe object to which ingredients will be added.
+   */
+  private void addIngredientsToRecipe(Recipe recipe) {
     try {
-      String nameRecipe;
+      int choice;
       do {
-        nameRecipe = inputManager.getValidatedString(
-            "Enter recipe name: ",
-            "Recipe name cannot be empty/blank",
-            "recipe name");
-        if (cookbook.getRecipes().containsKey(nameRecipe)) {
-          System.out.println("Recipe: " + nameRecipe + " already exist");
+        choice = inputManager.getValidatedInt(
+            """
+            How would you like to add ingredients?
+            1: Add manually
+            2: Choose from food storage
+            Enter your choice: """,
+            "Invalid input. Please enter 1 or 2.",
+            "choice"
+        );
+        
+        if (choice == 1) {
+          addIngredientsManually(recipe);
+          break;
+        } else if (choice == 2) {
+          addIngredientsFromStorage(recipe);
+          break;
+        } else {
+          System.out.println("Invalid choice. Please enter 1 or 2.");
         }
-      } while (cookbook.getRecipes().containsKey(nameRecipe));
-      
-      final String description = inputManager.getValidatedString(
-          "Enter a description: ",
-          "Description cannot be empty/blank",
-          "description");
-      final String procedure = inputManager.getValidatedString(
-          "Enter the procedure: ",
-          "Procedure cannot be empty/blank",
-          "procedure");
-      final double portions = inputManager.getValidatedDouble(
-          "Enter how many people this recipe is for",
-          "Portions have to be a number and it has to be positive",
-          "portions", false);
-      
-      Recipe recipe = new Recipe(nameRecipe, description, procedure, portions);
-      try {
-        int choice;
-        do {
-          choice = inputManager.getValidatedInt(
-              "How would you like to add ingredients? Enter 1: Add manually. "
-                  + "Enter 2: Choose from available food storage ingredients.\nEnter your choice: ",
-              "Invalid input. Enter 1 or 2", "choice");
-          if (choice == 1) {
-            addIngredientsManually(recipe);
-            break;
-          } else if (choice == 2) {
-            addIngredientsFromStorage(recipe);
-            break;
-          } else {
-            System.out.println("Invalid choice. Please enter 1 or 2.");
-          }
-        } while (true);
-      } catch (IllegalArgumentException e) {
-        System.out.println("Invalid choice input. Please enter a valid option (1 or 2)");
-      }
-      
-      boolean success = cookbook.addRecipeToCookbook(recipe);
-      if (success) {
-        System.out.println("Recipe added to the cookbook successfully:");
-        System.out.println(recipe);
-      } else {
-        System.out.println("Recipe for " + recipe.getName() + " already exists in the cookbook.");
-      }
+      } while (true);
     } catch (IllegalArgumentException e) {
-      System.out.println("Error while creating recipe: " + e.getMessage());
+      System.out.println("Error while selecting ingredient input method: " + e.getMessage());
+    }
+  }
+  
+  /**
+   * Attempts to add (save) the recipe to the cookbook.
+   * Helper of handleAddRecipeToCookbook method.
+   *
+   * @param recipe The Recipe object to save.
+   */
+  private void saveRecipeToCookbook(Recipe recipe) {
+    boolean isAdded = cookbook.addRecipeToCookbook(recipe);
+    if (isAdded) {
+      System.out.println("Recipe added successfully!");
+      System.out.println(recipe);
+    } else {
+      System.out.println("Failed to add the recipe. A recipe with the name "
+          + "\"" + recipe.getName() + "\" already exists.");
     }
   }
   
   /**
    * Adds ingredients manually (by entering each attribute) to a recipe.
+   * Helper of addIngredientsToRecipe method.
    *
    * @param recipe the recipe to which ingredients will be added
    * @throws IllegalArgumentException if input validation fails
@@ -134,7 +181,7 @@ public class CookbookService {
         final Unit unit = inputManager.getValidatedUnit(
             "Enter unit (kg, g, L, mL, pcs):", "Invalid unit");
         final double price = inputManager.getValidatedDouble(
-            "Enter price per unit:", "Invalid input for price", "price", true);
+            "Enter price:", "Invalid input for price", "price", true);
         
         Ingredient ingredient = new Ingredient(name, quantity, unit, price);
         recipe.addIngredientToRecipe(ingredient);
@@ -146,6 +193,7 @@ public class CookbookService {
   
   /**
    * Adds ingredients to a recipe using available items from the food storage.
+   * Helper of addIngredientsToRecipe method.
    *
    * @param recipe the recipe to which ingredients will be added
    * @throws IllegalArgumentException if input validation fails
@@ -174,7 +222,8 @@ public class CookbookService {
   }
   
   /**
-   * Helper method to handle the addition of an ingredient chosen from the food storage to a recipe.
+   * Method to handle the addition of an ingredient chosen from the food storage to a recipe.
+   * Helper of addIngredientsFromStorage method.
    *
    * <p>This method retrieves an ingredient from the food storage and adds it to the recipe
    * based on user input. It ensures that the requested quantity is available in the food storage.
@@ -184,49 +233,46 @@ public class CookbookService {
    * @throws IllegalArgumentException if input validation fails or the ingredient is not found
    */
   private void handleIngredientAddition(Recipe recipe) {
-    try {
-      String ingredientKey;
-      List<Ingredient> ingredients;
+    String ingredientKey;
+    List<Ingredient> ingredients;
+    
+    do {
+      ingredientKey = inputManager.getValidatedString(
+          "Enter the ingredient you want",
+          "Error: Could not retrieve the ingredient name.", "name").toLowerCase();
       
-      do {
-        ingredientKey = inputManager.getValidatedString(
-            "Enter the ingredient you want",
-            "Error: Could not retrieve the ingredient name.", "name").toLowerCase();
-        
-        ingredients = getIngredientsFromStorage(ingredientKey);
-        if (ingredients == null || ingredients.isEmpty()) {
-          System.out.println("Ingredient not found in storage. Please enter a valid ingredient.");
-        }
-      } while (ingredients == null || ingredients.isEmpty());
-      
-      double totalAvailableQuantity = ingredients.stream()
-          .mapToDouble(Ingredient::getQuantity)
-          .sum();
-      
-      System.out.println(
-          "Total available quantity for " + ingredientKey + ": " + totalAvailableQuantity + ". "
-              + "Please read: Remember this is total quantity of "
-              + ingredientKey + " in the food storage. "
-              + "How much you want to add to the recipe is an unrealized amount"
-              + " so it will not be deducted from the real amount.");
-      
-      int requestedQuantity = inputManager.getValidatedInt(
-          "Enter quantity to add:",
-          "Invalid input for quantity.", "requested quantity");
-      
-      if (requestedQuantity > totalAvailableQuantity && !confirmAdditionExceedingQuantity()) {
-        System.out.println("Ingredient not added to the recipe.");
-        return;
+      ingredients = getIngredientsFromStorage(ingredientKey);
+      if (ingredients == null || ingredients.isEmpty()) {
+        System.out.println("Ingredient not found in storage. Please enter a valid ingredient.");
       }
-      
-      allocateIngredientsToRecipe(recipe, ingredients, requestedQuantity);
-    } catch (IllegalArgumentException e) {
-      System.out.println("Invalid input: " + e.getMessage());
+    } while (ingredients == null || ingredients.isEmpty());
+    
+    double totalAvailableQuantity = ingredients.stream()
+        .mapToDouble(Ingredient::getQuantity)
+        .sum();
+    
+    System.out.println(
+        "Total available quantity for " + ingredientKey + ": " + totalAvailableQuantity + ". "
+            + "Please read: Remember this is total quantity of "
+            + ingredientKey + " in the food storage. "
+            + "How much you want to add to the recipe is an unrealized amount"
+            + " so it will not be deducted from the real amount.");
+    
+    int requestedQuantity = inputManager.getValidatedInt(
+        "Enter quantity to add:",
+        "Invalid input for quantity.", "requested quantity");
+    
+    if (requestedQuantity > totalAvailableQuantity && !confirmAdditionExceedingQuantity()) {
+      System.out.println("Ingredient not added to the recipe.");
+      return;
     }
+    
+    allocateIngredientsToRecipe(recipe, ingredients, requestedQuantity);
   }
   
   /**
-   * Helper method to retrieve the requested ingredient as a list from the food storage.
+   * Method to retrieve the requested ingredient as a list from the food storage.
+   * Helper of handleIngredientAddition method.
    *
    * <p>This method fetches all ingredients in the food storage that match the given key (name)
    * and sorts them by expiration date.
@@ -255,7 +301,8 @@ public class CookbookService {
   }
   
   /**
-   * Helper method to allocate a requested quantity of ingredients to a recipe.
+   * Method to allocate a requested quantity of ingredients to a recipe.
+   * Helper of handleIngredientAddition method.
    *
    * <p>This method calculates the amount of each available ingredient to add to the recipe
    * based on the requested quantity, ensuring no more than what is available is used.
@@ -306,25 +353,21 @@ public class CookbookService {
    * @throws IllegalArgumentException if the input is invalid or the recipe does not exist
    */
   public void handleSearchRecipe() {
-    try {
-      final String name = inputManager.getValidatedString("Enter name of the recipe:",
-          "Recipe name cannot be empty/blank", "name").trim();
-      
-      if (cookbook == null) {
-        throw new IllegalArgumentException("Cookbook is not initialized.");
-      }
-      Optional<Map.Entry<String, Recipe>> recipeSearchResult
-          = cookbook.searchForRecipeInCookbook(name);
-      
-      if (recipeSearchResult.isPresent()) {
-        System.out.println("Recipe found:");
-        Recipe foundRecipe = recipeSearchResult.get().getValue();
-        System.out.println(foundRecipe);
-      } else {
-        System.out.println("Recipe: " + name + " does not exist.");
-      }
-    } catch (IllegalArgumentException e) {
-      System.out.println("Invalid input: " + e.getMessage());
+    final String name = inputManager.getValidatedString("Enter name of the recipe:",
+        "Recipe name cannot be empty/blank", "name").trim();
+    
+    if (cookbook == null) {
+      throw new IllegalArgumentException("Cookbook is not initialized.");
+    }
+    Optional<Map.Entry<String, Recipe>> recipeSearchResult
+        = cookbook.searchForRecipeInCookbook(name);
+    
+    if (recipeSearchResult.isPresent()) {
+      System.out.println("Recipe found:");
+      Recipe foundRecipe = recipeSearchResult.get().getValue();
+      System.out.println(foundRecipe);
+    } else {
+      System.out.println("Recipe: " + name + " does not exist.");
     }
   }
   

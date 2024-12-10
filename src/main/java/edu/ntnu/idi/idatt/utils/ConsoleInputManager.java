@@ -58,7 +58,7 @@ public class ConsoleInputManager {
     while (true) {
       System.out.println(request);
       try {
-        String input = scanner.nextLine().trim();
+        String input = scanner.next().trim();
         InputValidator.validateString(input, fieldName);
         return input;
       } catch (IllegalArgumentException e) {
