@@ -4,7 +4,6 @@ import edu.ntnu.idi.idatt.model.Unit;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-
 /**
  * Utility class for validating various types of input values.
  * Provides methods for ensuring input values meet requirements like being

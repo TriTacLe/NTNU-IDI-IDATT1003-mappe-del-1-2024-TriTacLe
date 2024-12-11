@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.model;
 
 import edu.ntnu.idi.idatt.utils.InputValidator;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,11 +20,10 @@ public class Recipe {
   private final String procedure;
   private final double portions;
   private final ArrayList<Ingredient> ingredientsList;
-  private InputValidator inputValidator = new InputValidator();
   
   /**
    * Initializes a new Recipe instance with the specified attributes.
-   * An object is created if its passes the validation method by {@link #inputValidator}
+   * An object is created if its passes the validation method by InputValidator
    *
    * @param name        the name of the recipe; must not be null or empty.
    * @param description a short description of the recipe; must not be null or empty.
@@ -34,10 +32,10 @@ public class Recipe {
    * @throws IllegalArgumentException if any input is invalid.
    */
   public Recipe(String name, String description, String procedure, double portions) {
-    inputValidator.validateString(name, "Name");
-    inputValidator.validateString(description, "Description");
-    inputValidator.validateString(procedure, "Procedure");
-    inputValidator.validateDouble(portions, "Portions");
+    InputValidator.validateString(name, "Name");
+    InputValidator.validateString(description, "Description");
+    InputValidator.validateString(procedure, "Procedure");
+    InputValidator.validateDouble(portions, "Portions");
     
     this.name = name;
     this.description = description;

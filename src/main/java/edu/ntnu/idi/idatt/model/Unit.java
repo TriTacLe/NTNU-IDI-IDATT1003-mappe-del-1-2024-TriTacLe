@@ -8,6 +8,9 @@ import java.util.Arrays;
  *
  * <p>Each unit is associated with a symbol, a type (e.g., mass, volume, or number) for readability,
  * and a conversion factor for unit conversion. </p>
+ *
+ * @author TriLe
+ *
  */
 public enum Unit {
   GRAM("g", UnitType.MASS, 0.001),
@@ -98,12 +101,11 @@ public enum Unit {
    * non-empty string before setting the symbol.
    *
    * @param symbol the new symbol to assign to the unit. Must be a valid string.
-   * @return the updated symbol after validation.
    * @throws IllegalArgumentException if the symbol is null or empty.
    */
-  public String setSymbol(String symbol) {
+  public void setSymbol(String symbol) {
     InputValidator.validateString(symbol, "Unit symbol");
-    return this.symbol = symbol;
+    this.symbol = symbol;
   }
   
   /**
@@ -130,7 +132,7 @@ public enum Unit {
    * @throws IllegalArgumentException if the target unit is null, invalid, or incompatible.
    */
   public Double convertValue(Double value, Unit targetUnit) {
-    inputValidator.validationEnum(targetUnit);
+    InputValidator.validationEnum(targetUnit);
     inputValidator.validationEnumUnitType(this.type, targetUnit.type);
     return (value * this.conversionNumber) / targetUnit.conversionNumber;
   }

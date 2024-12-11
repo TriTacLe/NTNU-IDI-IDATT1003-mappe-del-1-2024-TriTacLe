@@ -18,7 +18,6 @@ public class Ingredient {
   private final String name;
   private final Unit unitMeasurement;
   private final double price;
-  private final InputValidator inputValidator = new InputValidator();
   private double quantity;
   private LocalDate expirationDate;
   
@@ -34,13 +33,14 @@ public class Ingredient {
    */
   public Ingredient(String name, double quantity, Unit unitMeasurement,
                     LocalDate expirationDate, double price) {
-    inputValidator.validateString(name, "Name");
-    inputValidator.validationEnum(unitMeasurement);
-    inputValidator.validateDouble(price, "Price");
-    setExpirationDate(expirationDate);
+    InputValidator.validateString(name, "Name");
+    InputValidator.validationEnum(unitMeasurement);
+    InputValidator.validateDouble(price, "Price");
+    InputValidator.validateDate(expirationDate, false);
     setQuantity(quantity);
     this.name = name;
     this.unitMeasurement = unitMeasurement;
+    this.expirationDate = expirationDate;
     this.price = price;
   }
   
@@ -54,9 +54,10 @@ public class Ingredient {
    * @throws IllegalArgumentException if any input validation fails
    */
   public Ingredient(String name, double quantity, Unit unitMeasurement, double price) {
-    inputValidator.validateString(name, "Name");
-    inputValidator.validationEnum(unitMeasurement);
-    inputValidator.validateDouble(price, "Price");
+    InputValidator.validateString(name, "Name");
+    InputValidator.validationEnum(unitMeasurement);
+    InputValidator.validateDouble(price, "Price");
+    
     setQuantity(quantity);
     this.name = name;
     this.unitMeasurement = unitMeasurement;
@@ -102,17 +103,6 @@ public class Ingredient {
   }
   
   /**
-   * Sets the expiration date of the ingredient.
-   *
-   * @param expirationDate the new expiration date
-   * @throws IllegalArgumentException if the expiration date is invalid
-   */
-  private void setExpirationDate(LocalDate expirationDate) {
-    InputValidator.validateDate(expirationDate, false);
-    this.expirationDate = expirationDate;
-  }
-  
-  /**
    * Retrieves the unit of measurement of the ingredient.
    *
    * @return the unit of measurement of the ingredient
@@ -137,7 +127,7 @@ public class Ingredient {
    * @throws IllegalArgumentException if the quantity is invalid
    */
   public void updateQuantity(double quantity) {
-    inputValidator.validateDouble(quantity, "Quantity");
+    InputValidator.validateDouble(quantity, "Quantity");
     this.quantity += quantity;
   }
   

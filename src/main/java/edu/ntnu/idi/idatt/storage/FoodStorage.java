@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt.storage;
 
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
+import edu.ntnu.idi.idatt.utils.InputValidator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -69,6 +70,7 @@ public class FoodStorage {
   
   /**
    * Checks if an ingredient exists in the storage by name.
+   * Used in tests
    *
    * @param name The name of the ingredient.
    * @return true if the ingredient exists, false otherwise.
