@@ -5,7 +5,7 @@ package edu.ntnu.idi.idatt.console;
  *
  * <p>Run this class to start the Food Conservation Application.</p>
  */
-public class Main {
+public class App {
   
   /**
    * The main method serves as the application's entry point.

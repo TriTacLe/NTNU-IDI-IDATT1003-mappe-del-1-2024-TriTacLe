@@ -2,7 +2,6 @@ package edu.ntnu.idi.idatt.storage;
 
 import edu.ntnu.idi.idatt.model.Ingredient;
 import edu.ntnu.idi.idatt.model.Recipe;
-import edu.ntnu.idi.idatt.utils.InputValidator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,7 +35,7 @@ public class FoodStorage {
    * Retrieves the map of ingredients in the storage.
    *
    * @return A HashMap where the key is the ingredient name
-   *        and the value is a list of Ingredient instances.
+   *      and the value is a list of Ingredient instances.
    */
   public HashMap<String, ArrayList<Ingredient>> getIngredients() {
     return ingredients;
@@ -256,7 +255,7 @@ public class FoodStorage {
    * @param foodStorage The FoodStorage instance to check against.
    * @param recipe      The Recipe to evaluate.
    * @return true if all required ingredients are
-   *        available in sufficient quantities; otherwise false.
+   *      available in sufficient quantities; otherwise false.
    */
   public boolean hasEnoughIngredientsForRecipe(
       FoodStorage foodStorage, Recipe recipe) {
@@ -287,7 +286,7 @@ public class FoodStorage {
    * @param foodStorage The FoodStorage instance to check against.
    * @param recipe      The Recipe to evaluate.
    * @return A map containing the ingredient names as
-   *        keys and their total available quantities as values.
+   *      keys and their total available quantities as values.
    */
   public Map<String, Double> getIngredientAvailabilityForRecipe(
       FoodStorage foodStorage, Recipe recipe) {

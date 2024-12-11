@@ -19,7 +19,7 @@ public class Ingredient {
   private final Unit unitMeasurement;
   private final double price;
   private double quantity;
-  private LocalDate expirationDate;
+  private final LocalDate expirationDate;
   
   /**
    * Initialize an Ingredient instance with the specified attributes and performs validation.
@@ -38,9 +38,9 @@ public class Ingredient {
     InputValidator.validateDouble(price, "Price");
     InputValidator.validateDate(expirationDate, false);
     setQuantity(quantity);
+    this.expirationDate = expirationDate;
     this.name = name;
     this.unitMeasurement = unitMeasurement;
-    this.expirationDate = expirationDate;
     this.price = price;
   }
   
@@ -57,11 +57,11 @@ public class Ingredient {
     InputValidator.validateString(name, "Name");
     InputValidator.validationEnum(unitMeasurement);
     InputValidator.validateDouble(price, "Price");
-    
     setQuantity(quantity);
     this.name = name;
     this.unitMeasurement = unitMeasurement;
     this.price = price;
+    this.expirationDate = null;
   }
   
   /**
