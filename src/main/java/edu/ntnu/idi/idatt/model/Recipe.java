@@ -92,6 +92,8 @@ public class Recipe {
   /**
    * Adds an ingredient to the recipe. If the ingredient already exists (by name),
    * its quantity is updated. Otherwise, it is added to the list.
+   * Optional used to handle the possibility if a matching ingredient
+   * might not be found in the ingredientsList.
    *
    * @param ingredient the ingredient to be added; must not be null.
    * @throws IllegalArgumentException if the ingredient is null.

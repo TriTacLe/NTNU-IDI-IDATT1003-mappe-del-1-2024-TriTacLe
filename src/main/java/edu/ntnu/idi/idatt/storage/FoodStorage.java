@@ -15,8 +15,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * The FoodStorage class manages a collection of Ingredient instances, allowing these functions:
- * Adding, removing and searching ingredients.
+ * The FoodStorage class manages a collection of Ingredient instances.
+ * These instances are stored in the Arraylist that represent a value in the HashMap
+ * FoodStorage allows these functions:
+ * Adding, removing and searching ingredients,
  * operations like checking availability for recipes and sorting ingredients.
  *
  * @author TriLe
@@ -69,7 +71,7 @@ public class FoodStorage {
   
   /**
    * Checks if an ingredient exists in the storage by name.
-   * Used in tests
+   * Only used in tests (User tests and foodStorageTest)
    *
    * @param name The name of the ingredient.
    * @return true if the ingredient exists, false otherwise.
@@ -155,13 +157,14 @@ public class FoodStorage {
       List<Ingredient> ingredientArrayList) {
     return ingredientArrayList.stream()
         .filter(ingredient ->
-            ingredient.getExpirationDate() != null) //Avoid nullpointer when using comparator
+            ingredient.getExpirationDate() != null) //Avoid null pointer when using comparator
         .sorted(Comparator.comparing(Ingredient::getExpirationDate))
         .collect(Collectors.toList());
   }
   
   /**
    * Retrieves all expired ingredients from the storage.
+   * Chatgpt helped with the issue og using streams on map by implementing flatMap function.
    *
    * @return A list of expired ingredients.
    */
@@ -230,6 +233,9 @@ public class FoodStorage {
   /**
    * Displays the storage ingredients sorted alphabetically by their name.
    * Outputs ingredient details including their quantity.
+   * Chatgpt prompt "How can I make String be case-insensitive".
+   * Result: CASE_INSENSITIVE_ORDER
+   *
    */
   public void getFoodStorageAlphabetically() {
     ingredients.keySet().stream()
@@ -251,6 +257,7 @@ public class FoodStorage {
   /**
    * Checks if there are sufficient
    * ingredients in the storage to make the given recipe.
+   * Chatgpt helped with implementing the converting method
    *
    * @param foodStorage The FoodStorage instance to check against.
    * @param recipe      The Recipe to evaluate.
@@ -305,6 +312,7 @@ public class FoodStorage {
   
   /**
    * Retrieves a list of all ingredients in the storage, formatted as a string.
+   * Chatgpt and W3school assisted in implementing looping through HashMap
    *
    * @return A formatted string representation of all ingredients in the storage.
    */

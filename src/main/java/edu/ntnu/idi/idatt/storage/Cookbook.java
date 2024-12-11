@@ -60,8 +60,9 @@ public class Cookbook {
   
   /**
    * Searches for a recipe in the cookbook by its name.
+   * Chatgpt gave me the idea of implementing Optional type
    *
-   * @param nameRecipe the name of the recipe to search for
+   * @param nameRecipe the name of the recipe to search for.
    * @return an Optional containing the matching recipe entry if found,
    *        or an empty Optional if not found.
    */
@@ -102,6 +103,7 @@ public class Cookbook {
    * available ingredients in the given {@code FoodStorage}.
    * A recipe is suggested if all required ingredients are
    * present in sufficient quantity in the food storage.
+   * Chatgpt helped with implementing streams logic replacing the original for loops.
    *
    * @param foodStorage the FoodStorage to compare against
    * @return a List of Recipe instances that can be made
@@ -111,7 +113,7 @@ public class Cookbook {
     List<Recipe> suggestedRecipes = new ArrayList<>();
     
     if (foodStorage == null || foodStorage.getIngredients() == null
-        || recipes == null || recipes.isEmpty()) {
+        || recipes.isEmpty()) {
       return suggestedRecipes;
     }
     
@@ -120,7 +122,7 @@ public class Cookbook {
       normalizedStorage.put(key.toLowerCase().trim(), value);
     });
     
-    recipes.forEach((recipeName, recipe) -> {
+    recipes.forEach((recipeNamPlaceHolder, recipe) -> {
       boolean canMakeRecipe = recipe.getIngredientsList().stream()
           .allMatch(recipeIngredient -> {
             String ingredientName = recipeIngredient.getName().toLowerCase().trim();

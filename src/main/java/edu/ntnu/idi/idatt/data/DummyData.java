@@ -9,8 +9,10 @@ import java.time.LocalDate;
 
 /**
  * Provides dummy data for initializing the application with predefined
- * {@link Ingredient} and{@link Recipe} instances. The class
- * includes a variety of ingredients and recipe for testing purposes.
+ * chatgpt generated {@link Ingredient} and{@link Recipe} instances.
+ * Purpose: testing.
+ * Chatgpt prompt "Can you make x amount of Recipe and Ingredient instances
+ * + the corresponding classes constructors"
  */
 public class DummyData {
   

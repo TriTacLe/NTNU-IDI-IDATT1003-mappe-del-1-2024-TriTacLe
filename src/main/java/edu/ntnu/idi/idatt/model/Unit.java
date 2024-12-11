@@ -77,7 +77,7 @@ public enum Unit {
    * Finds the corresponding unit based on a symbol.
    *
    * @param input the symbol representing the unit (case-insensitive).
-   * @return the matching {@code Unit} enumeration.
+   * @return the matching Unit.
    * @throws IllegalArgumentException if no matching unit is found.
    */
   public static Unit fromSymbol(String input) {

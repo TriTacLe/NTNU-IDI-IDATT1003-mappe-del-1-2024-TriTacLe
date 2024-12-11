@@ -46,6 +46,7 @@ public class CookbookService {
   
   /**
    * Handles the process of adding a new recipe to the cookbook.
+   * Chatgpt gave me an idea to implement helpers to increase cohesion
    */
   public void handleAddRecipeToCookbook() {
     String recipeName = getRecipeName();
@@ -55,7 +56,7 @@ public class CookbookService {
   }
   
   /**
-   * Prompts the user for a unique recipe name.
+   * Prompts the user for a new recipe name.
    * Will not allow duplicate recipe names.
    * Helper of handleAddRecipeToCookbook.
    *
@@ -303,6 +304,7 @@ public class CookbookService {
   /**
    * Method to allocate a requested quantity of ingredients to a recipe.
    * Helper of handleIngredientAddition method.
+   * Chatgpt helped with implementing math logic by adding the Math.min function
    *
    * <p>This method calculates the amount of each available ingredient to add to the recipe
    * based on the requested quantity, ensuring no more than what is available is used.
@@ -324,7 +326,6 @@ public class CookbookService {
         }
         
         double availableQuantity = ingredient.getQuantity();
-        //Chatgpt gave me the Math.min function
         double toAllocate = Math.min(availableQuantity, remainingToUse);
         remainingToUse -= toAllocate;
         
@@ -379,11 +380,11 @@ public class CookbookService {
    */
   private boolean confirmAdditionExceedingQuantity() {
     try {
-      String proceed = inputManager.getValidatedString(
+      String continueIfWant = inputManager.getValidatedString(
           "Requested quantity exceeds available ingredients. "
               + "Do you still want to add this ingredient? (yes/no)",
           "Invalid input. Please answer yes or no.", "yes/no input");
-      return proceed.equalsIgnoreCase("yes");
+      return continueIfWant.equalsIgnoreCase("yes");
     } catch (IllegalArgumentException e) {
       System.out.println("Invalid input: " + e.getMessage());
       return false;
@@ -520,21 +521,20 @@ public class CookbookService {
    * Displays all recipes in the cookbook.
    *
    * <p>Iterates through all recipes in the cookbook and prints their details
-   * using the {@link #displayRecipe(Recipe)} method.
    * </p>
    *
    * @throws Exception if an unknown error occurs while displaying recipes
    */
   public void handleDisplayCookbook() {
     try {
-      HashMap<String, Recipe> cookbookContents = cookbook.getRecipes();
-      if (cookbookContents.isEmpty()) {
+      HashMap<String, Recipe> cookbookRecipes = cookbook.getRecipes();
+      if (cookbookRecipes.isEmpty()) {
         System.out.println("The cookbook does not contain any recipes.");
         return;
       }
       System.out.println("Recipes in the cookbook: ");
       System.out.println();
-      cookbookContents.forEach((recipeName, recipe) -> {
+      cookbookRecipes.forEach((recipeName, recipe) -> {
         displayRecipe(recipe);
       });
     } catch (Exception e) {

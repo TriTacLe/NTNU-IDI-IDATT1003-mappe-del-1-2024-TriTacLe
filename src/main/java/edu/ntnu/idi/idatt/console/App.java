@@ -1,16 +1,16 @@
 package edu.ntnu.idi.idatt.console;
 
 /**
- * The entry point of the Food Conservation Application.
+ * The initializing of Food Conservation Application.
  *
  * <p>Run this class to start the Food Conservation Application.</p>
+ *
+ * @author TriLe
  */
 public class App {
   
   /**
-   * The main method serves as the application's entry point.
-   *
-   * <p>It initializes the {@link UserInterface},
+   * It initializes the {@link UserInterface}
    * which manages the user's interaction with the application.</p>
    *
    * @param args Command-line arguments passed to the application.

@@ -36,8 +36,7 @@ public class UserInterface {
     FoodStorage foodStorage = new FoodStorage();
     Cookbook cookbook = new Cookbook();
     
-    DummyData dummyData = new DummyData();
-    dummyData.loadDummyData(foodStorage, cookbook);
+    DummyData.loadDummyData(foodStorage, cookbook);
     
     unit = Unit.KR;
     unit.setSymbol("NOK");
@@ -51,16 +50,12 @@ public class UserInterface {
   /**
    * <h2>Main Application Loop.</h2>
    *
-   * <p>Displays the main menu and handles user input to perform various actions.</p>
+   * <p>Displays the banners, the main menu and handles user input to perform different actions
+   * and functionalities.</p>
    */
-  @SuppressWarnings("checkstyle:AvoidEscapedUnicodeCharacters")
   public void start() {
-    System.out.println("\u001B[33m====================================================\u001B[0m");
-    System.out.println("\u001B[34m    \uD83C\uDF31✨Welcome to the"
-        + " \u001B[32mFood Conservation App!✨\uD83C\uDF31        \u001B[0m");
-    System.out.println("\u001B[33m====================================================\u001B[0m");
-    
-    displayAsciiBanner();
+    displayToiletWelcomeBanner();
+    displayIntroBanner();
     boolean running = true;
     
     while (running) {
@@ -99,10 +94,9 @@ public class UserInterface {
    * Displays a list of available currencies for selection and prompts the user to choose one.
    * Updates the symbol of the selected currency if the input is valid.
    *
-   * @return the updated symbol of the selected currency.
    * @throws IllegalArgumentException if the entered currency is invalid or not found in the list.
    */
-  public String chooseCurrency() {
+  public void chooseCurrency() {
     System.out.println("Currency to choose from:");
     for (Unit unit : Unit.values()) {
       if (unit.getType() == Unit.UnitType.CURRENCY) {
@@ -137,11 +131,11 @@ public class UserInterface {
     Ingredient.setUnitCurrency(selectedUnit);
     foodStorageService.setUnit(selectedUnit);
     System.out.println("Chosen unit: " + selectedUnit.getSymbol());
-    return selectedUnit.getSymbol();
   }
   
   /**
    * Displays the main menu to the user.
+   * Chatgpt implemented hex colour codes, emojis and borders
    */
   private void displayMenu() {
     System.out.println(
@@ -179,8 +173,9 @@ public class UserInterface {
   
   /**
    * Prompts the user to enter their menu choice and validates the input.
+   * Chatgpt implemented hex colour codes.
    *
-   * @return The user's menu choice as an integer.
+   * @return the user's choice as an integer.
    */
   private int getUserChoice() {
     while (true) {
@@ -199,6 +194,7 @@ public class UserInterface {
   
   /**
    * Displays the help menu with details about each option.
+   * Chatgpt implemented hex colour codes, emojis and borders
    */
   private void displayHelp() {
     System.out.println("\n\u001B[33m===================== 🍎 FOOD CONSERVATION APP "
@@ -258,9 +254,23 @@ public class UserInterface {
   }
   
   /**
-   * Displays ASCII art for the welcome banner.
+   * Outputs a welcome banner/intro
+   * Toilet generated the borders, figlet generated emojis and chatgpt generated hex colors.
    */
-  private void displayAsciiBanner() {
+  @SuppressWarnings("checkstyle:AvoidEscapedUnicodeCharacters")
+  private void displayToiletWelcomeBanner() {
+    System.out.println();
+    System.out.println("\u001B[33m┌───────────────────────────────────────────────────┐\u001B[0m");
+    System.out.println("\u001B[34m    \uD83C\uDF31✨Welcome to the"
+        + " \u001B[32mFood Conservation App!✨\uD83C\uDF31        \u001B[0m");
+    System.out.println("\u001B[33m└───────────────────────────────────────────────────┘\u001B[0m");
+  }
+  
+  /**
+   * Displays ASCII art for the welcome banner, made by figlet.
+   * Chatgpt implemented hex colour and figlet generated emojis
+   */
+  private void displayIntroBanner() {
     String blue = "\u001B[34m";
     System.out.print("\u001B[32m   🌳     🌲    🌳    \u001B[31m 🍎\u001B[0m");
     System.out.println("\u001B[33m       ☀️       \u001B[0m");
