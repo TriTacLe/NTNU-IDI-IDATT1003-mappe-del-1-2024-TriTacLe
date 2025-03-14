@@ -1,3 +1,4 @@
+# Grade A
 # Portfolio Project - IDATT1003
 
 STUDENT NAME = "Tri Tac Le"  
